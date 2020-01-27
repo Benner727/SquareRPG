@@ -11,10 +11,10 @@ You can clone the repository to a local destination using git:
 Inside the scripts folder, run GenerateProject.bat to get the solution and project files.
 
 ### Setup:
-This project uses SDL2, SDL2 Image, SDL2 TTF, and SDL2 Mixer.
+This project uses SDL2, SDL2 Image, SDL2 TTF, and SDL2 Mixer. <br />
 They have been statically linked in Visual Studio using vcpkg.
 
-Using PowerShell (Administrator):
+PowerShell (Administrator) Commands:
 ```
 cd c:\
 git clone https://github.com/Microsoft/vcpkg.git
