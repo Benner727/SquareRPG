@@ -7,5 +7,5 @@
 		#define SQUARE_API __declspec(dllimport)
 	#endif
 #else
-	#error Square onlu supports Windows!
+	#error Square only supports Windows!
 #endif

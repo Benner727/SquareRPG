@@ -1,5 +1,5 @@
 workspace "SquareRPG"
-	architecture "x86"
+	architecture "x64"
 	startproject "Sandbox"
 
 	configurations
@@ -23,31 +23,6 @@ project "Square"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
-
-	includedirs
-	{
-		"C:/dev/SDL2_image-2.0.4/include",
-		"C:/dev/SDL2_mixer-2.0.4/include",
-		"C:/dev/SDL2_ttf-2.0.14/include",
-		"C:/dev/SDL2-2.0.9/include"
-	}
-	
-	links
-	{
-		"SDL2.lib",
-		"SDL2main.lib",
-		"SDL2_image.lib",
-		"SDL2_ttf.lib",
-		"SDL2_mixer.lib"
-	}
-	
-	libdirs
-	{
-		"C:/dev/SDL2_image-2.0.4/lib/x86",
-		"C:/dev/SDL2_mixer-2.0.4/lib/x86",
-		"C:/dev/SDL2_ttf-2.0.14/lib/x86",
-		"C:/dev/SDL2-2.0.9/lib/x86"
-	}
 	
 	filter "system:windows"
 		cppdialect "C++17"
@@ -66,11 +41,13 @@ project "Square"
 	}
 
 	filter "configurations:Debug"
+		links { "SDL2maind.lib" }
 		defines "SQ_DEBUG"
 		symbols "On"
 
 
 	filter "configurations:Release"
+		links { "SDL2main.lib" }
 		defines "SQ_RELEASE"
 		optimize "On"
 
@@ -92,12 +69,7 @@ project "Sandbox"
 	{
 		"Square/src"
 	}
-
-	links
-	{
-		"Square"
-	}
-
+	
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -109,10 +81,12 @@ project "Sandbox"
 	}
 
 	filter "configurations:Debug"
+		links { "Square", "SDL2maind.lib" }
 		defines "SQ_DEBUG"
 		symbols "On"
 
 
 	filter "configurations:Release"
+		links { "Square", "SDL2main.lib" }
 		defines "SQ_RELEASE"
 		optimize "On"

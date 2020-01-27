@@ -1,5 +1,7 @@
 #include "Application.h"
 
+#include "Engine.h"
+
 namespace Square {
 
 Application::Application()
@@ -13,7 +15,9 @@ Application::~Application()
 
 void Application::Run()
 {
-	while (true);
+	auto& engine = Engine::Instance();
+
+	engine.Run();
 }
 
 }
