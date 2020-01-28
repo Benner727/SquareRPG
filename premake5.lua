@@ -24,6 +24,11 @@ project "Square"
 		"%{prj.name}/src/**.cpp"
 	}
 	
+	includedirs
+	{
+		"%{prj.name}/src"
+	}
+	
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -78,6 +83,11 @@ project "Sandbox"
 	defines
 	{
 		"SQ_PLATFORM_WINDOWS"
+	}
+	
+	postbuildcommands 
+	{
+		("{COPY} %{prj.location}/Assets \"../bin/" .. outputdir .. "/Sandbox/Assets/\"")
 	}
 
 	filter "configurations:Debug"

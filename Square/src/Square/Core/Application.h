@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Core.h"
+#include "Square/Core/Core.h"
+#include "Square/Core/Engine.h"
 
 namespace Square {
 
@@ -10,7 +11,13 @@ namespace Square {
 		Application();
 		virtual ~Application();
 
+		void PushLayer(Layer* layer);
+		void PopLayer(Layer* layer);
+
 		void Run();
+
+	private:
+		Engine& mEngine;
 	};
 
 	//To be defined in CLIENT
