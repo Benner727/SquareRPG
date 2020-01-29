@@ -4,11 +4,12 @@
 #include <memory>
 #include <string>
 
+#include "Square/Core/Core.h"
 #include "Square/Utilities/MathHelper.h"
 
 namespace Square {
 
-	class InputHandler
+	class SQUARE_API InputHandler
 	{
 	public:
 		enum MOUSE_BUTTON { left = 0, right, middle, back, forward };

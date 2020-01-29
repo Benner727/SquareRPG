@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Square/Core/Core.h"
 #include "Square/Entities/Sprite.h"
 #include "Square/Utilities/Timer.h"
 
 namespace Square {
 
-	class AnimatedSprite : public Sprite
+	class SQUARE_API AnimatedSprite : public Sprite
 	{
 	public:
 		enum WRAP_MODE { once = 0, loop = 1 };

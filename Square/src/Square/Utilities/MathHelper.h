@@ -3,6 +3,8 @@
 #include <math.h>
 #include <iostream>
 
+#include "Square/Core/Core.h"
+
 namespace Square {
 
 #define PI 3.14159265
@@ -14,7 +16,7 @@ namespace Square {
 		return (T(0) < val) - (val < T(0));
 	}
 
-	struct Vector2
+	struct SQUARE_API Vector2
 	{
 		float x;
 		float y;

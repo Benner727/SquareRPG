@@ -1,4 +1,4 @@
-#include "AnimatedSprite.h"
+#include "Square/Entities/AnimatedSprite.h"
 
 namespace Square {
 

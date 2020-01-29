@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Square/Core/Core.h"
 #include "Square/Managers/AssetManager.h"
 
 namespace Square {
 
-	class Audio
+	class SQUARE_API Audio
 	{
 	private:
 		static const int FULL_VOLUME = 100;

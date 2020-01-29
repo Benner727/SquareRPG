@@ -3,11 +3,12 @@
 #include <SDL2/SDL_mixer.h>
 #include <map>
 
+#include "Square/Core/Core.h"
 #include "Square/Managers/Graphics.h"
 
 namespace Square {
 
-	class AssetManager
+	class SQUARE_API AssetManager
 	{
 	private:
 		std::unique_ptr<std::string> mBasePath;

@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Square/Core/Core.h"
+
 namespace Square {
 
-	class Layer
+	class SQUARE_API Layer
 	{
 	public:
 		Layer()

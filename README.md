@@ -12,7 +12,7 @@ Inside the scripts folder, run GenerateProject.bat to get the solution and proje
 
 ### Setup:
 This project uses SDL2, SDL2 Image, SDL2 TTF, and SDL2 Mixer. <br />
-They have been statically linked in Visual Studio using vcpkg.
+They have been linked in Visual Studio using vcpkg.
 
 PowerShell (Administrator) Commands:
 ```

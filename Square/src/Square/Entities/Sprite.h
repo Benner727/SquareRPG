@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Square/Core/Core.h"
 #include "Square/Entities/GameObject.h"
 #include "Square/Managers/AssetManager.h"
 
 namespace Square {
 
-	class Sprite : public GameObject
+	class SQUARE_API Sprite : public GameObject
 	{
 	protected:
 		static const int FLASH_FRAMES = 6;
@@ -34,7 +35,7 @@ namespace Square {
 		Sprite(const char& c, const std::string& fontpath, int size, SDL_Color color);
 		~Sprite();
 
-		const Vector2& ScaledDimensions();
+		Vector2 ScaledDimensions();
 
 		void Flip(SDL_RendererFlip flip);
 		void Color(SDL_Color color);

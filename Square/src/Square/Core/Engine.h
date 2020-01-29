@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Square/Core/Core.h"
 #include "Square/Managers/Audio.h";
 #include "Square/Managers/InputHandler.h"
 #include "Square/Utilities/Timer.h"
@@ -9,7 +10,7 @@
 
 namespace Square {
 
-	class Engine
+	class SQUARE_API Engine
 	{
 	private:
 		const int FRAME_RATE = 60;

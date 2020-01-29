@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Square/Core/Core.h"
 #include "Square/Utilities/MathHelper.h"
 
 namespace Square {
 
-	class GameObject
+	class SQUARE_API GameObject
 	{
 	public:
 		enum SPACE { local = 0, world = 1 };

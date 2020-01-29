@@ -2,11 +2,12 @@
 
 #include <vector>
 
+#include "Square/Core/Core.h"
 #include "Square/Entities/Sprite.h"
 
 namespace Square {
 
-	class Text : public GameObject
+	class SQUARE_API Text : public GameObject
 	{
 	private:
 		std::vector<std::shared_ptr<Sprite>> mSprites;

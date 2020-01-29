@@ -7,16 +7,17 @@
 #include <iostream>
 #include <string>
 
+#include "Square/Core/Core.h"
 #include "Square/Utilities/MathHelper.h"
 
 namespace Square {
 
-	class Graphics
+	class SQUARE_API Graphics
 	{
 	public:
 		static const int SCREEN_WIDTH = 768;
 		static const int SCREEN_HEIGHT = 512;
-		const char* WINDOW_TITLE = "Platformer Demo";
+		const char* WINDOW_TITLE = "SquareRPG";
 
 	private:
 		static bool sInitialized;

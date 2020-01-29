@@ -1,4 +1,4 @@
-#include "Text.h"
+#include "Square/Entities/Text.h"
 
 namespace Square {
 

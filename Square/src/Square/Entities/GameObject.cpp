@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "Square/Entities/GameObject.h"
 
 namespace Square {
 

@@ -2,9 +2,11 @@
 
 #include <SDL2/SDL.h>
 
+#include "Square/Core/Core.h"
+
 namespace Square {
 
-	class Timer
+	class SQUARE_API Timer
 	{
 	private:
 		Uint32 mStartTicks;

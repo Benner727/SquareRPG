@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "Square/Core/Application.h"
 
 namespace Square {
 

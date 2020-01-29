@@ -1,4 +1,4 @@
-#include "Sprite.h"
+#include "Square/Entities/Sprite.h"
 
 namespace Square {
 
@@ -73,7 +73,7 @@ namespace Square {
 	{
 	}
 
-	const Vector2& Sprite::ScaledDimensions()
+	Vector2 Sprite::ScaledDimensions()
 	{
 		Vector2 scaledDimensions = Scale();
 		scaledDimensions.x *= mWidth;

@@ -34,11 +34,11 @@ project "Square"
 		staticruntime "On"
 		systemversion "latest"
 
-	defines
-	{
-		"SQ_PLATFORM_WINDOWS",
-		"SQ_BUILD_DLL"
-	}
+		defines
+		{
+			"SQ_PLATFORM_WINDOWS",
+			"SQ_BUILD_DLL"
+		}
 	
 	postbuildcommands
 	{
@@ -48,13 +48,17 @@ project "Square"
 	filter "configurations:Debug"
 		links { "SDL2maind.lib" }
 		defines "SQ_DEBUG"
+		runtime "Release"
 		symbols "On"
+		buildoptions "/MDd"
 
 
 	filter "configurations:Release"
 		links { "SDL2main.lib" }
 		defines "SQ_RELEASE"
+		runtime "Release"
 		optimize "On"
+		buildoptions "/MD"
 
 project "Sandbox"
 	location "Sandbox"
@@ -79,24 +83,37 @@ project "Sandbox"
 		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
-
-	defines
-	{
-		"SQ_PLATFORM_WINDOWS"
-	}
-	
+		
+		defines
+		{
+			"SQ_PLATFORM_WINDOWS"
+		}
+		
 	postbuildcommands 
 	{
 		("{COPY} %{prj.location}/Assets \"../bin/" .. outputdir .. "/Sandbox/Assets/\"")
 	}
 
 	filter "configurations:Debug"
-		links { "Square", "SDL2maind.lib" }
 		defines "SQ_DEBUG"
+		runtime "Debug"
 		symbols "On"
-
+		buildoptions "/MDd"
+		
+		links 
+		{ 
+			"Square",
+			"SDL2maind.lib"
+		}
 
 	filter "configurations:Release"
-		links { "Square", "SDL2main.lib" }
 		defines "SQ_RELEASE"
+		runtime "Release"
 		optimize "On"
+		buildoptions "/MD"
+		
+		links 
+		{ 
+			"Square",
+			"SDL2main.lib"
+		}
