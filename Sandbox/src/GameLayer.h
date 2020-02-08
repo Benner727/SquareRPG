@@ -6,13 +6,8 @@ class GameLayer : public Square::Layer
 {
 public:
 	GameLayer();
+	virtual ~GameLayer() = default;
 
-	~GameLayer();
-
-private:
-	Square::Text* mText;
-
-public:
-	void OnUpdate() override;
-	void OnRender() override;
+	virtual void OnUpdate() override;
+	virtual void OnRender() override;
 };

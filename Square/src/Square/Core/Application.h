@@ -9,7 +9,7 @@ namespace Square {
 	{
 	public:
 		Application();
-		virtual ~Application();
+		virtual ~Application() = default;
 
 		void PushLayer(Layer* layer);
 		void PopLayer(Layer* layer);

@@ -1,5 +1,5 @@
 workspace "SquareRPG"
-	architecture "x64"
+	architecture "x86_64"
 	startproject "Sandbox"
 
 	configurations
@@ -62,8 +62,8 @@ project "Square"
 
 project "Sandbox"
 	location "Sandbox"
-	kind "ConsoleApp"	
 	language "c++"
+	kind "ConsoleApp"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -91,14 +91,14 @@ project "Sandbox"
 		
 	postbuildcommands 
 	{
-		("{COPY} %{prj.location}/Assets \"../bin/" .. outputdir .. "/Sandbox/Assets/\"")
+		("{COPY} %{prj.location}/Assets %{cfg.targetdir}/Assets")
 	}
 
 	filter "configurations:Debug"
 		defines "SQ_DEBUG"
 		runtime "Debug"
 		symbols "On"
-		buildoptions "/MDd"
+		buildoptions "/MDd"	
 		
 		links 
 		{ 
@@ -110,7 +110,7 @@ project "Sandbox"
 		defines "SQ_RELEASE"
 		runtime "Release"
 		optimize "On"
-		buildoptions "/MD"
+		buildoptions "/MD"	
 		
 		links 
 		{ 

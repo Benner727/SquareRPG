@@ -9,10 +9,6 @@ namespace Square {
 	}
 
 
-	Application::~Application()
-	{
-	}
-
 	void Application::PushLayer(Layer* layer)
 	{
 		mEngine.PushLayer(layer);
