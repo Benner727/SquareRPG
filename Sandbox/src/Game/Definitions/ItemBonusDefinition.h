@@ -2,8 +2,6 @@
 
 #include <array>
 
-class ItemRepository;
-
 class ItemBonusDefinition
 {
 public:

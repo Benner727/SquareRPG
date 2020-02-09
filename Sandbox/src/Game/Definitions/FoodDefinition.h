@@ -1,7 +1,5 @@
 #pragma once
 
-class ItemRepository;
-
 class FoodDefinition
 {
 private:

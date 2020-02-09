@@ -4,8 +4,6 @@
 
 #include "SkillBoost.h"
 
-class ItemRepository;
-
 class PotionDefinition
 {
 private:

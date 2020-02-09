@@ -8,6 +8,7 @@ class Food : public Item
 private:
 	FoodDefinition* mFoodDefinition;
 
+protected:
 	Food(int index, int amount = 1) 
 		: Item(index, amount) 
 	{ 

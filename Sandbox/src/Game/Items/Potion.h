@@ -8,6 +8,7 @@ class Potion : public Item
 private:
 	PotionDefinition* mPotionDefinition;
 
+protected:
 	Potion(int index, int amount = 1) 
 		: Item(index, amount) 
 	{

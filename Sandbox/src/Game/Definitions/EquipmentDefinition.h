@@ -4,8 +4,6 @@
 
 #include "Game/Definitions/SkillRequirement.h"
 
-class ItemRepository;
-
 class EquipmentDefinition
 {
 private:

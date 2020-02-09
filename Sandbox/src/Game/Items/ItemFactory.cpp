@@ -31,6 +31,20 @@ Item* ItemFactory::GetItem(int index, int amount)
 		item = new Potion(index, amount);
 		dynamic_cast<Potion*>(item)->mPotionDefinition = mItemRepository.FindPotionDefinition(index);
 	}
+	else if (mItemRepository.FindEquipmentDefinition(index))
+	{
+		if (mItemRepository.FindWeaponDefinition(index))
+		{
+			item = new Weapon(index, amount);
+
+			dynamic_cast<Weapon*>(item)->mWeaponDefinition = mItemRepository.FindWeaponDefinition(index);
+			dynamic_cast<Weapon*>(item)->mRangedDefinition = mItemRepository.FindRangedDefinition(index);
+		}
+		else
+			item = new Equipment(index, amount);
+
+		dynamic_cast<Equipment*>(item)->mEquipmentDefinition = mItemRepository.FindEquipmentDefinition(index);
+	}
 	else
 	{
 		item = new Item(index, amount);

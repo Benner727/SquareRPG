@@ -2,8 +2,6 @@
 
 #include <vector>
 
-class ItemRepositort;
-
 class RangedDefinition
 {
 private:

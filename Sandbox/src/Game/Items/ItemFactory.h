@@ -6,6 +6,8 @@
 #include "Game/Items/Item.h"
 #include "Game/Items/Food.h"
 #include "Game/Items/Potion.h"
+#include "Equipment.h"
+#include "Weapon.h"
 
 class ItemFactory
 {

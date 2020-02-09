@@ -1,7 +1,5 @@
 #pragma once
 
-class ItemRepository;
-
 class WeaponDefinition
 {
 private:

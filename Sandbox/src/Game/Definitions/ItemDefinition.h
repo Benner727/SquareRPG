@@ -2,8 +2,6 @@
 
 #include <string>
 
-class ItemRepository;
-
 class ItemDefinition
 {
 private:
