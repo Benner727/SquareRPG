@@ -100,6 +100,12 @@ void Inventory::Swap(int firstSlot, int secondSlot)
 	}
 }
 
+void Inventory::SetNull(int slot)
+{
+	if (slot > -1 && slot < INVENTORY_SIZE)
+		mItems[slot] = nullptr;
+}
+
 Item* Inventory::GetItem(int slot) const
 {
 	if (slot > -1 && slot < INVENTORY_SIZE)

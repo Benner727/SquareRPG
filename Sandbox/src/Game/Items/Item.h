@@ -34,7 +34,4 @@ public:
 	inline void Remove(int amount = 1) { mAmount -= amount; }
 
 	void Render();
-
-	friend std::istream& operator >> (std::istream& in, Item& obj);
-	friend std::ostream& operator << (std::ostream& in, const Item& obj);
 };

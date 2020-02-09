@@ -17,6 +17,7 @@ public:
 	virtual void Add(Item* item) = 0;
 
 	virtual void Remove(int slot, int amount = 1) = 0;
+	virtual void SetNull(int slot) = 0;
 
 	virtual Item* GetItem(int slot) const = 0;
 

@@ -1,25 +1,28 @@
 #pragma once
 
 #include "Game/Player/IItemContainer.h"
+#include "Game/Items/Weapon.h"
 
-class Inventory : public IItemContainer
+class Gear : public IItemContainer
 {
 public:
-	static const int INVENTORY_SIZE = 20;
+	enum EquipmentSlot { head, cape, neck, weapon, chest, shield, 
+		legs, gloves, boots, ring, ammo, TOTAL_SLOTS};
+
+	static const int GEAR_SIZE = EquipmentSlot::TOTAL_SLOTS;
 
 private:
-	Item* mItems[INVENTORY_SIZE];
+	Item* mItems[GEAR_SIZE];
 
 public:
-	Inventory();
-	~Inventory();
+	Gear();
+	~Gear();
 
 	bool CanAdd(Item* item) const;
 	void Add(Item* item);
 
 	void Remove(int slot, int amount = 1);
 	void Replace(int slot, Item* item);
-	void Swap(int firstSlot, int secondSlot);
 
 	void SetNull(int slot);
 

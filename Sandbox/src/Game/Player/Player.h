@@ -3,6 +3,7 @@
 #include "Square.h"
 
 #include "Game/Player/Inventory.h"
+#include "Game/Player/Gear.h"
 
 class Player : public Square::GameObject
 {
@@ -15,6 +16,7 @@ private:
 	float mCombatDelay;
 
 	Inventory mInventory;
+	Gear mGear;
 
 	void HandleDelays();
 
@@ -23,6 +25,7 @@ public:
 	~Player();
 
 	inline Inventory& Inventory() { return mInventory; }
+	inline Gear& Gear() { return mGear; }
 
 	inline bool HasEatDelay() const { return (mEatDelay > 0.0f); }
 	void SetEatDelay();
