@@ -1,4 +1,4 @@
-#pragma once
+#pragma warning( disable : 4251 )
 
 #ifdef SQ_PLATFORM_WINDOWS
 	#ifdef SQ_BUILD_DLL

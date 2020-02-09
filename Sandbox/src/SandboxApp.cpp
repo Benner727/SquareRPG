@@ -2,6 +2,10 @@
 #include <Square/Core/EntryPoint.h>
 
 #include "GameLayer.h"
+#include "Game/Items/ItemFactory.h"
+#include "Game/Player/Player.h"
+#include "Game/Commands/EatCommand.h"
+#include "Game/Commands/CommandManager.h"
 
 class Sandbox : public Square::Application
 {
