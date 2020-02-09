@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "SkillData.h"
+#include "SkillBoost.h"
 
 class ItemRepository;
 
@@ -12,15 +12,15 @@ private:
 	int mIndex;
 	int mReplaceIndex;
 	bool mRestoreOnly;
-	std::vector<SkillData> mSkillData;
+	std::vector<SkillBoost> mSkillBoost;
 
 	PotionDefinition(int index, int replaceIndex, bool restoreOnly,
-		std::vector<SkillData> skillData)
+		std::vector<SkillBoost> skillBoost)
 	{
 		mIndex = index;
 		mReplaceIndex = replaceIndex;
 		mRestoreOnly = restoreOnly;
-		mSkillData = skillData;
+		mSkillBoost = skillBoost;
 	}
 
 	~PotionDefinition() = default;
@@ -31,5 +31,5 @@ public:
 	inline int Index() const { return mIndex; }
 	inline int ReplaceIndex() const { return mReplaceIndex; }
 	inline bool RestoreOnly() const { return mRestoreOnly; }
-	inline std::vector<SkillData> SkillData() const { return mSkillData; }
+	inline std::vector<SkillBoost> SkillBoost() const { return mSkillBoost; }
 };

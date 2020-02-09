@@ -1,6 +1,6 @@
 #pragma once
 
-class SkillData
+class SkillBoost
 {
 private:
 	int mSkillIndex;
@@ -8,14 +8,14 @@ private:
 	double mModifier;
 
 public:
-	SkillData(int skillIndex, int add, int modifier)
+	SkillBoost(int skillIndex, int add, int modifier)
 	{
 		mSkillIndex = skillIndex;
 		mAdd = add;
 		mModifier = modifier;
 	}
 
-	~SkillData() = default;
+	~SkillBoost() = default;
 
 	inline int SkillIndex() const { return mSkillIndex; }
 	inline int Add() const { return mAdd; }

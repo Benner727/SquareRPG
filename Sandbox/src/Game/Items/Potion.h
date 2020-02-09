@@ -21,5 +21,5 @@ public:
 
 	inline int ReplaceIndex() const { return mPotionDefinition->ReplaceIndex(); }
 	inline bool RestoreOnly() const { return mPotionDefinition->RestoreOnly(); }
-	inline std::vector<SkillData> SkillData() const { return mPotionDefinition->SkillData(); }
+	inline std::vector<SkillBoost> SkillBoost() const { return mPotionDefinition->SkillBoost(); }
 };
