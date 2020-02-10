@@ -23,7 +23,14 @@ public:
 
 		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Inventory().GetItem(activeSlot)))
 		{
-			// Add check if player has required levels
+			for (auto requirement : equipment->Requirements())
+			{
+				if (mPlayer->Skills().Level(requirement.Level()) < requirement.Level())
+				{
+					// Add message saying player doesn't have required level
+					return false;
+				}
+			}
 
 			if (Weapon* weapon = dynamic_cast<Weapon*>(equipment))
 			{

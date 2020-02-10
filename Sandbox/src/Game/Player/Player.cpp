@@ -36,11 +36,6 @@ void Player::SetDrinkDelay()
 	}
 }
 
-void Player::Heal(int amount)
-{
-	// To do
-}
-
 void Player::HandleDelays()
 {
 	if (mEatDelay > 0.0f)
@@ -56,6 +51,8 @@ void Player::HandleDelays()
 void Player::Update()
 {
 	HandleDelays();
+
+	mSkills.Update();
 }
 
 void Player::Render()

@@ -21,7 +21,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Potion* food = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot)))
 			return !mPlayer->HasDrinkDelay();
 
 		return false;
@@ -34,7 +34,8 @@ public:
 
 		mPlayer->SetDrinkDelay();
 
-		// Add code to boost stats here
+		for (auto skillBoost : potion->SkillBoost())
+			mPlayer->Skills().BoostSkill(skillBoost.SkillIndex(), skillBoost.Add(), skillBoost.Modifier(), potion->RestoreOnly());
 
 		if (potion->ReplaceIndex() != -1)
 			mPlayer->Inventory().Replace(activeSlot, ItemFactory::Instance().GetItem(potion->ReplaceIndex()));

@@ -33,7 +33,7 @@ public:
 		Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot));
 
 		mPlayer->SetEatDelay();
-		mPlayer->Heal(food->HealAmount());
+		mPlayer->Skills().Heal(food->HealAmount());
 		
 		if (food->ReplaceIndex() != -1)
 			mPlayer->Inventory().Replace(activeSlot, ItemFactory::Instance().GetItem(food->ReplaceIndex()));

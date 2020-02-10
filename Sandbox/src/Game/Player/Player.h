@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Square.h"
+#include <Square.h>
 
+#include "Skills.h"
 #include "Game/Player/Inventory.h"
 #include "Game/Player/Gear.h"
 
@@ -15,6 +16,8 @@ private:
 	bool mInCombat;
 	float mCombatDelay;
 
+	Skills mSkills;
+
 	Inventory mInventory;
 	Gear mGear;
 
@@ -24,12 +27,13 @@ public:
 	Player();
 	~Player();
 
+	inline Skills& Skills() { return mSkills; }
+
 	inline Inventory& Inventory() { return mInventory; }
 	inline Gear& Gear() { return mGear; }
 
 	inline bool HasEatDelay() const { return (mEatDelay > 0.0f); }
 	void SetEatDelay();
-	void Heal(int amount);
 
 	inline bool HasDrinkDelay() const { return (mDrinkDelay > 0.0f); }
 	void SetDrinkDelay();
