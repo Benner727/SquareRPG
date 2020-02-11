@@ -37,6 +37,7 @@ public:
 		{
 			mPlayer->Gear().SetNull(activeSlot);
 			mPlayer->Inventory().Add(equipment);
+			mPlayer->CalculateBonuses();
 		}
 
 		mPlayer->Inventory().ActiveSlot(-1);

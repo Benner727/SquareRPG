@@ -94,6 +94,8 @@ public:
 					mPlayer->Gear().SetNull(Gear::EquipmentSlot::shield);
 				}
 			}
+
+			mPlayer->CalculateBonuses();
 		}
 
 		mPlayer->Inventory().ActiveSlot(-1);

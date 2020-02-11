@@ -21,6 +21,8 @@ private:
 	Inventory mInventory;
 	Gear mGear;
 
+	StatBonus mStatBonus;
+
 	void HandleDelays();
 
 public:
@@ -32,6 +34,8 @@ public:
 	inline Inventory& Inventory() { return mInventory; }
 	inline Gear& Gear() { return mGear; }
 
+	inline StatBonus& StatBonus() { return mStatBonus; }
+
 	inline bool HasEatDelay() const { return (mEatDelay > 0.0f); }
 	void SetEatDelay();
 
@@ -42,6 +46,8 @@ public:
 	inline bool HasCombatDelay() const { return (mCombatDelay > 0.0f); }
 
 	inline void ResetDelays() { mCombatDelay = mEatDelay = mDrinkDelay = 0.0f; }
+
+	void CalculateBonuses();
 
 	void Update();
 	void Render();

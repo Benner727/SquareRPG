@@ -1,20 +1,14 @@
 #pragma once
 
-#include <array>
+#include "Game/Player/StatBonus.h"
 
 class ItemBonusDefinition
 {
-public:
-	enum ItemBonus { 
-		MeleeAttack, MagicAttack, RangeAttack, 
-		MeleeDefense, MagicDefense, RangeDefense, 
-		Strength, Prayer, TOTAL_BONUSES };
-
 private:
 	int mIndex;
-	std::array<int,TOTAL_BONUSES> mBonuses;
+	StatBonus mBonuses;
 
-	ItemBonusDefinition(int index, std::array<int, TOTAL_BONUSES> bonuses)
+	ItemBonusDefinition(int index, std::array<int, StatBonus::BonusIndex::TOTAL_BONUSES> bonuses)
 	{
 		mIndex = index;
 		mBonuses = bonuses;
@@ -26,5 +20,5 @@ private:
 
 public:
 	inline int Index() const { return mIndex; }
-	inline std::array<int, TOTAL_BONUSES> Bonuses() const { return mBonuses; }
+	inline StatBonus Bonuses() const { return mBonuses; }
 };

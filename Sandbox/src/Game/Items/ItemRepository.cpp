@@ -176,11 +176,11 @@ void ItemRepository::LoadItemBonusDefinitions()
 	{
 		std::istringstream iss(line);
 		int index;
-		std::array<int, ItemBonusDefinition::ItemBonus::TOTAL_BONUSES> bonuses;
+		std::array<int, StatBonus::BonusIndex::TOTAL_BONUSES> bonuses;
 
 		iss >> index;
 
-		for (int i = 0; i < ItemBonusDefinition::ItemBonus::TOTAL_BONUSES; i++)
+		for (int i = 0; i < StatBonus::BonusIndex::TOTAL_BONUSES; i++)
 			iss >> bonuses[i];
 
 		mItemBonusDefinitions[index] = new ItemBonusDefinition(index, bonuses);

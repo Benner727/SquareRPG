@@ -26,5 +26,5 @@ public:
 	inline int Index() const { return mEquipmentDefinition->Index(); }
 	inline int Slot() const { return mEquipmentDefinition->Slot(); }
 	inline std::vector<SkillRequirement> Requirements() { return mEquipmentDefinition->Requirements(); }
-	inline std::array<int, ItemBonusDefinition::ItemBonus::TOTAL_BONUSES> Bonuses() const { return mItemBonusDefinition->Bonuses(); }
+	inline StatBonus Bonuses() const { return mItemBonusDefinition->Bonuses(); }
 };

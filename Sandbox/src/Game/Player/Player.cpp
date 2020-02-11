@@ -48,6 +48,17 @@ void Player::HandleDelays()
 		mCombatDelay -= Square::Timer::Instance().DeltaTime();
 }
 
+void Player::CalculateBonuses()
+{
+	for (int i = 0; i < Gear::GEAR_SIZE; i++)
+	{
+		if (Equipment* equipment = dynamic_cast<Equipment*>(mGear.GetItem(i)))
+		{
+			mStatBonus += equipment->Bonuses();
+		}
+	}
+}
+
 void Player::Update()
 {
 	HandleDelays();
