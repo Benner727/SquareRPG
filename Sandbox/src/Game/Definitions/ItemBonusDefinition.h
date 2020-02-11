@@ -9,9 +9,9 @@ private:
 	StatBonus mBonuses;
 
 	ItemBonusDefinition(int index, std::array<int, StatBonus::BonusIndex::TOTAL_BONUSES> bonuses)
+		: mBonuses(bonuses)
 	{
 		mIndex = index;
-		mBonuses = bonuses;
 	}
 
 	~ItemBonusDefinition() = default;

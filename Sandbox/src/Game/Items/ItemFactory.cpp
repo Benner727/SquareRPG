@@ -43,6 +43,7 @@ Item* ItemFactory::GetItem(int index, int amount)
 		else
 			item = new Equipment(index, amount);
 
+		dynamic_cast<Equipment*>(item)->mItemBonusDefinition = mItemRepository.FindItemBonusDefinition(index);
 		dynamic_cast<Equipment*>(item)->mEquipmentDefinition = mItemRepository.FindEquipmentDefinition(index);
 	}
 	else

@@ -50,6 +50,8 @@ void Player::HandleDelays()
 
 void Player::CalculateBonuses()
 {
+	mStatBonus.Reset();
+
 	for (int i = 0; i < Gear::GEAR_SIZE; i++)
 	{
 		if (Equipment* equipment = dynamic_cast<Equipment*>(mGear.GetItem(i)))
