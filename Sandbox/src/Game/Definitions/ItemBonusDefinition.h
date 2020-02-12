@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/Player/StatBonus.h"
+#include "Game/Definitions/StatBonus.h"
 
 class ItemBonusDefinition
 {

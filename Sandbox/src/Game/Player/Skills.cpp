@@ -12,7 +12,18 @@ static const int EXP_FOR_LEVEL[] = { 0, 83, 174, 276, 388, 512, 650, 801, 969, 1
 
 Skills::Skills()
 {
+	mCombatLevel = 1;
+}
 
+void Skills::CalculateCombatLevel()
+{
+	int base = (mSkills[SkillIndex::defense].Level() + mSkills[SkillIndex::hitpoints].Level() + floor(mSkills[SkillIndex::prayer].Level() * 0.5f)) * 0.25f;
+
+	int melee = (mSkills[SkillIndex::attack].Level() + mSkills[SkillIndex::strength].Level()) * 0.325f;
+	int range = (floor(mSkills[SkillIndex::ranged].Level() * 1.5f)) * 0.325f;
+	int mage = (floor(mSkills[SkillIndex::magic].Level() * 1.5f)) * 0.325f;
+
+	mCombatLevel = base + std::max(melee, std::max(range, mage));
 }
 
 void Skills::AddExperience(int skill, int amount)
@@ -31,8 +42,14 @@ void Skills::AddExperience(int skill, int amount)
 	}
 
 	mSkills[skill].Experience(experience);
-	mSkills[skill].EffectiveLevel(effectiveLevel);
-	mSkills[skill].Level(level);
+
+	if (mSkills[skill].Level() != level)
+	{
+		mSkills[skill].EffectiveLevel(effectiveLevel);
+		mSkills[skill].Level(level);
+
+		CalculateCombatLevel();
+	}
 }
 
 void Skills::Heal(int amount)

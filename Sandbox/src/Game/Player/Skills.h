@@ -2,6 +2,8 @@
 
 #include <Square.h>
 
+#include <algorithm>
+
 #include "Skill.h"
 
 class Skills
@@ -12,6 +14,9 @@ public:
 
 private:
 	Skill mSkills[SkillIndex::TOTAL_SKILLS];
+	int mCombatLevel;
+
+	void CalculateCombatLevel();
 
 public:
 	Skills();
@@ -20,6 +25,8 @@ public:
 	inline int Experience(int index) const { return mSkills[index].Experience(); }
 	inline int EffectiveLevel(int index) const { return mSkills[index].EffectiveLevel(); }
 	inline int Level(int index) const { return mSkills[index].Level(); }
+
+	inline int CombatLevel() const { return mCombatLevel; }
 
 	void AddExperience(int skill, int amount);
 
