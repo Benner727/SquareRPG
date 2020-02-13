@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Square/Core/Core.h"
-#include "Square/Managers/Audio.h";
+#include "Square/Managers/Audio.h"
 #include "Square/Managers/InputHandler.h"
 #include "Square/Utilities/Timer.h"
 #include "Square/Core/Layer.h"

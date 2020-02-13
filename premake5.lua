@@ -76,7 +76,8 @@ project "Sandbox"
 
 	includedirs
 	{
-		"Square/src"
+		"Square/src",
+		"Sandbox/src"
 	}
 	
 	filter "system:windows"

@@ -1,0 +1,5 @@
+"Coins" 1 1 1 1 "Coins.png"
+"Food" 2 0 3 1 "Food.png"
+"Potion" 3 0 5 2 "Potion.png"
+"Sword" 4 0 1 1 "Sword.png"
+"Shield" 5 0 1 1 "Shield.png"
