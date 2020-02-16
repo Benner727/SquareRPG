@@ -30,15 +30,17 @@ public:
 	void Execute()
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
-		Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot));
-
-		mPlayer->SetEatDelay();
-		mPlayer->Skills().Heal(food->HealAmount());
 		
-		if (food->ReplaceIndex() != -1)
-			mPlayer->Inventory().Replace(activeSlot, ItemFactory::Instance().GetItem(food->ReplaceIndex()));
-		else
-			mPlayer->Inventory().Remove(activeSlot);
+		if (Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot)))
+		{
+			mPlayer->SetEatDelay();
+			mPlayer->Skills().Heal(food->HealAmount());
+
+			if (food->ReplaceIndex() != -1)
+				mPlayer->Inventory().Replace(activeSlot, ItemFactory::Instance().GetItem(food->ReplaceIndex()));
+			else
+				mPlayer->Inventory().Remove(activeSlot);
+		}
 
 		mPlayer->Inventory().ActiveSlot(-1);
 	}

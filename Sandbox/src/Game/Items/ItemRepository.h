@@ -4,9 +4,10 @@
 
 #include <map>
 #include <fstream>
-#include <sstream>
 #include <iomanip>
 #include <iostream>
+
+#include "Game/Utility.h"
 
 #include "Game/Definitions/ItemDefinition.h"
 #include "Game/Definitions/FoodDefinition.h"

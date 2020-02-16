@@ -29,6 +29,8 @@ public:
 	inline bool Stackable() const { return mItemDefinition->Stackable(); }
 	inline int AlchemyPrice() const { return mItemDefinition->AlchemyPrice(); }
 	inline int GeneralPrice() const { return mItemDefinition->GeneralPrice(); }
+	inline std::vector<std::string> InventoryActions() const { return mItemDefinition->InventoryActions(); }
+	inline std::vector<std::string> GroundActions() const { return mItemDefinition->GroundActions(); }
 
 	inline void Add(int amount = 1) { mAmount += amount; }
 	inline void Remove(int amount = 1) { mAmount -= amount; }
