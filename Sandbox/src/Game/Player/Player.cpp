@@ -5,6 +5,8 @@ Player::Player()
 	mSprite = nullptr;
 	//mSprite->Parent(this);
 
+	mCombatStance = 1;
+
 	mEatDelay = 0.0f;
 	mDrinkDelay = 0.0f;
 

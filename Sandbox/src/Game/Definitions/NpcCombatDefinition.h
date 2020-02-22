@@ -24,12 +24,12 @@ private:
 	int mCombatStyle;
 	int mWeakness;
 	std::array<int, 5> mStats;
-	std::array<int, 5> mBonuses;
+	std::array<int, 6> mBonuses;
 
 	NpcCombatDefinition(int index, float respawnTime, bool aggressive, 
 		bool poisonous, int level, int hitpoints, int maxHit, 
 		float attackSpeed, int combatStyles, int weakness,
-		std::array<int, 5> stats, std::array<int, 5> bonuses)
+		std::array<int, 5> stats, std::array<int, 6> bonuses)
 	{
 		mIndex = index;
 		mRespawnTime = respawnTime;
@@ -61,5 +61,5 @@ public:
 	inline int CombatStyle() const { return mCombatStyle; }
 	inline int Weakness() const { return mWeakness; }
 	inline std::array<int, 5> Stats() const { return mStats; }
-	inline std::array<int, 5> Bonuses() const { return mBonuses; }
+	inline std::array<int, 6> Bonuses() const { return mBonuses; }
 };

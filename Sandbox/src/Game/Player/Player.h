@@ -10,6 +10,9 @@ class Player : public Square::GameObject
 {
 private:
 	Square::Sprite* mSprite;
+
+	int mCombatStance;
+
 	float mEatDelay;
 	float mDrinkDelay;
 
@@ -35,6 +38,9 @@ public:
 	inline Gear& Gear() { return mGear; }
 
 	inline StatBonus& StatBonus() { return mStatBonus; }
+
+	inline int CombatStance() const { return mCombatStance; }
+	inline void CombatStance(int combatStance) { mCombatStance = combatStance; }
 
 	inline bool HasEatDelay() const { return (mEatDelay > 0.0f); }
 	void SetEatDelay();

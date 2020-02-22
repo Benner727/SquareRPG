@@ -45,7 +45,7 @@ public:
 	inline int CombatStyle() const { return mNpcCombatDefinition->CombatStyle(); }
 	inline int Weakness() const { return mNpcCombatDefinition->Weakness(); }
 	inline std::array<int, 5> Stats() const { return mStats; }
-	inline std::array<int, 5> Bonuses() const { return mNpcCombatDefinition->Bonuses(); }
+	inline std::array<int, 6> Bonuses() const { return mNpcCombatDefinition->Bonuses(); }
 
 	inline void Damage(int amount) { mRemainingHitpoints -= amount; if (mRemainingHitpoints < 0) mRemainingHitpoints = 0; }
 	inline void Heal(int amount) { mRemainingHitpoints += amount; if (mRemainingHitpoints > Hitpoints()) mRemainingHitpoints = Hitpoints(); }
