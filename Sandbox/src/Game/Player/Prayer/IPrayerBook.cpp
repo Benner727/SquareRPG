@@ -59,5 +59,5 @@ float IPrayerBook::PrayerDrain() const
 			drainRate += aura.DrainRate();
 	}
 
-	return drainRate;
+	return (1.0f / drainRate);
 }

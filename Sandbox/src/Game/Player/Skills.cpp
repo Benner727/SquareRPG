@@ -111,7 +111,7 @@ void Skills::Update()
 {
 	for (int i = 0; i < SkillIndex::TOTAL_SKILLS; i++)
 	{
-		if (mSkills[i].EffectiveLevel() != mSkills[i].Level())
+		if (mSkills[i].EffectiveLevel() != mSkills[i].Level() && i != SkillIndex::prayer)
 		{
 			if (mSkills[i].UpdateTimer() <= 0.0f)
 			{

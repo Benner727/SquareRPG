@@ -28,13 +28,13 @@ public:
 		
 		mActivated = false;
 
-		mSprite = new Square::Sprite(spritePath);
-		mSprite->Parent(this);
+		//mSprite = new Square::Sprite(spritePath);
+		//mSprite->Parent(this);
 	}
 
 	~Aura()
 	{
-		delete mSprite;
+		//delete mSprite;
 	}
 
 	inline int Index() const { return mIndex; }

@@ -35,8 +35,8 @@ namespace CombatFormulas
 			}
 		}
 
-		if (player.CombatStance() == 1) hiddenAttack += 3;
-		else if (player.CombatStance() == 4) hiddenAttack += 1;
+		if (player.CombatStance() == CombatOption::melee_accurate) hiddenAttack += 3;
+		else if (player.CombatStance() == CombatOption::melee_controlled) hiddenAttack += 1;
 
 		return hiddenAttack;
 	}
@@ -70,8 +70,8 @@ namespace CombatFormulas
 			}
 		}
 
-		if (player.CombatStance() == 2) hiddenStrength += 3;
-		else if (player.CombatStance() == 4) hiddenStrength += 1;
+		if (player.CombatStance() == CombatOption::melee_aggressive) hiddenStrength += 3;
+		else if (player.CombatStance() == CombatOption::melee_controlled) hiddenStrength += 1;
 
 		return hiddenStrength;
 	}
@@ -80,8 +80,8 @@ namespace CombatFormulas
 	{
 		float hiddenDefense = player.Skills().EffectiveLevel(Skills::defense);
 
-		if (player.CombatStance() == 3) hiddenDefense += 3;
-		else if (player.CombatStance() == 4) hiddenDefense += 1;
+		if (player.CombatStance() == CombatOption::melee_defensive) hiddenDefense += 3;
+		else if (player.CombatStance() == CombatOption::melee_controlled) hiddenDefense += 1;
 
 		for (const auto& aura : player.PrayerBook().PrayerAuras())
 		{
@@ -134,8 +134,8 @@ namespace CombatFormulas
 			}
 		}
 
-		if (player.CombatStance() == 1) hiddenRanged += 3;
-		else if (player.CombatStance() == 3) hiddenRanged += 1;
+		if (player.CombatStance() == CombatOption::ranged_accurate) hiddenRanged += 3;
+		else if (player.CombatStance() == CombatOption::ranged_longrange) hiddenRanged += 1;
 
 		return hiddenRanged;
 	}
@@ -163,8 +163,8 @@ namespace CombatFormulas
 			}
 		}
 
-		if (player.CombatStance() == 1) hiddenMagic += 3;
-		else if (player.CombatStance() == 2) hiddenMagic += 1;
+		if (player.CombatStance() == CombatOption::magic_standard) hiddenMagic += 3;
+		else if (player.CombatStance() == CombatOption::magic_defensive) hiddenMagic += 1;
 
 		return hiddenMagic;
 	}

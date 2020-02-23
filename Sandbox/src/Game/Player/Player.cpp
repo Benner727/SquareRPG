@@ -8,15 +8,13 @@ Player::Player()
 	mSpellBook = new StandardSpellBook();
 	mPrayerBook = new StandardPrayerBook();
 
-	mCombatStance = 1;
+	mCombatStance = CombatOption::melee_accurate;
 
 	mEatDelay = 0.0f;
 	mDrinkDelay = 0.0f;
 
 	mInCombat = false;
 	mCombatDelay = 0.0f;
-
-	mAutoCast = false;
 }
 
 Player::~Player()
@@ -66,6 +64,27 @@ void Player::HandleDelays()
 		mCombatDelay -= Square::Timer::Instance().DeltaTime();
 }
 
+void Player::HandlePrayer()
+{
+	static float prayerDrain = 0.0f;
+	
+	if (mSkills.EffectiveLevel(Skills::SkillIndex::prayer) > 0)
+	{
+		prayerDrain += mPrayerBook->PrayerDrain()
+			* (1.0f - ((float)mStatBonus.Bonus(StatBonus::Prayer) / 61.0f))
+			* Square::Timer::Instance().DeltaTime();
+
+		if (prayerDrain >= 1.0f)
+		{
+			mSkills.DrainSkill(Skills::SkillIndex::prayer, (int)prayerDrain);
+			prayerDrain -= (int)prayerDrain;
+		}
+
+		if (mSkills.EffectiveLevel(Skills::SkillIndex::prayer) < 1)
+			mPrayerBook->ToggleAllOff();
+	}
+}
+
 void Player::CalculateBonuses()
 {
 	mStatBonus.Reset();
@@ -84,6 +103,8 @@ void Player::Update()
 	HandleDelays();
 
 	mSkills.Update();
+
+	HandlePrayer();
 }
 
 void Player::Render()
