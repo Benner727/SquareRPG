@@ -6,7 +6,7 @@ class NpcFighter : public Npc
 {
 private:
 	int mRemainingHitpoints;
-	std::array<int, 5> mStats;
+	std::array<int, NpcStats::TOTAL_STATS> mStats;
 
 	NpcCombatDefinition* mNpcCombatDefinition;
 	NpcDropDefinition* mNpcDropDefinition;
@@ -44,8 +44,8 @@ public:
 	inline float AttackSpeed() const { return mNpcCombatDefinition->AttackSpeed(); }
 	inline int CombatStyle() const { return mNpcCombatDefinition->CombatStyle(); }
 	inline int Weakness() const { return mNpcCombatDefinition->Weakness(); }
-	inline std::array<int, 5> Stats() const { return mStats; }
-	inline std::array<int, 6> Bonuses() const { return mNpcCombatDefinition->Bonuses(); }
+	inline std::array<int, NpcStats::TOTAL_STATS> Stats() const { return mStats; }
+	inline std::array<int, NpcBonus::TOTAL_BONUSES> Bonuses() const { return mNpcCombatDefinition->Bonuses(); }
 
 	inline void Damage(int amount) { mRemainingHitpoints -= amount; if (mRemainingHitpoints < 0) mRemainingHitpoints = 0; }
 	inline void Heal(int amount) { mRemainingHitpoints += amount; if (mRemainingHitpoints > Hitpoints()) mRemainingHitpoints = Hitpoints(); }

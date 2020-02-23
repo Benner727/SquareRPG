@@ -5,6 +5,9 @@ Player::Player()
 	mSprite = nullptr;
 	//mSprite->Parent(this);
 
+	mSpellBook = new StandardSpellBook();
+	mPrayerBook = new StandardPrayerBook();
+
 	mCombatStance = 1;
 
 	mEatDelay = 0.0f;
@@ -12,11 +15,16 @@ Player::Player()
 
 	mInCombat = false;
 	mCombatDelay = 0.0f;
+
+	mAutoCast = false;
 }
 
 Player::~Player()
 {
 	delete mSprite;
+
+	delete mSpellBook;
+	delete mPrayerBook;
 
 }
 
@@ -36,6 +44,14 @@ void Player::SetDrinkDelay()
 		mCombatDelay += 1.8f - mEatDelay;
 		mDrinkDelay = 1.8f;
 	}
+}
+
+void Player::SetCombatDelay()
+{
+	if (Weapon* weapon = dynamic_cast<Weapon*>(mGear.GetItem(Gear::EquipmentSlot::weapon)))
+		mCombatDelay += weapon->Speed();
+	else
+		mCombatDelay += 2.4f;
 }
 
 void Player::HandleDelays()

@@ -5,6 +5,8 @@
 #include "Skills.h"
 #include "Game/Player/Inventory.h"
 #include "Game/Player/Gear.h"
+#include "Game/Player/Magic/StandardSpellBook.h"
+#include "Game/Player/Prayer/StandardPrayerBook.h"
 
 class Player : public Square::GameObject
 {
@@ -19,12 +21,17 @@ private:
 	bool mInCombat;
 	float mCombatDelay;
 
+	bool mAutoCast;
+
 	Skills mSkills;
 
 	Inventory mInventory;
 	Gear mGear;
 
 	StatBonus mStatBonus;
+
+	ISpellBook* mSpellBook;
+	IPrayerBook* mPrayerBook;
 
 	void HandleDelays();
 
@@ -39,6 +46,9 @@ public:
 
 	inline StatBonus& StatBonus() { return mStatBonus; }
 
+	inline ISpellBook& SpellBook() { return *mSpellBook; }
+	inline IPrayerBook& PrayerBook() { return *mPrayerBook; }
+
 	inline int CombatStance() const { return mCombatStance; }
 	inline void CombatStance(int combatStance) { mCombatStance = combatStance; }
 
@@ -50,6 +60,10 @@ public:
 
 	inline void InCombat(bool inCombat) { mInCombat = inCombat; }
 	inline bool HasCombatDelay() const { return (mCombatDelay > 0.0f); }
+	void SetCombatDelay();
+
+	inline void AutoCast(bool autoCast) { mAutoCast = autoCast; }
+	inline bool AutoCast() const { return mAutoCast; }
 
 	inline void ResetDelays() { mCombatDelay = mEatDelay = mDrinkDelay = 0.0f; }
 

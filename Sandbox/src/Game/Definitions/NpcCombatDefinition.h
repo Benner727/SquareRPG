@@ -2,12 +2,24 @@
 
 #include <array>
 
-enum CombatStyle : uint8_t
+enum class CombatStyle : uint8_t
 {
 	none = 0x00,
 	melee = 0x01,
 	ranged = 0x02,
 	magic = 0x04
+};
+
+enum NpcStats
+{
+	attack, strength, defense, magic, ranged, TOTAL_STATS
+};
+
+enum NpcBonus
+{
+	MeleeAttack, MagicAttack, RangedAttack,
+	MeleeDefense, MagicDefense, RangedDefense,
+	TOTAL_BONUSES
 };
 
 class NpcCombatDefinition
@@ -23,13 +35,13 @@ private:
 	float mAttackSpeed;
 	int mCombatStyle;
 	int mWeakness;
-	std::array<int, 5> mStats;
-	std::array<int, 6> mBonuses;
+	std::array<int, NpcStats::TOTAL_STATS> mStats;
+	std::array<int, NpcBonus::TOTAL_BONUSES> mBonuses;
 
 	NpcCombatDefinition(int index, float respawnTime, bool aggressive, 
 		bool poisonous, int level, int hitpoints, int maxHit, 
 		float attackSpeed, int combatStyles, int weakness,
-		std::array<int, 5> stats, std::array<int, 6> bonuses)
+		std::array<int, NpcStats::TOTAL_STATS> stats, std::array<int, NpcBonus::TOTAL_BONUSES> bonuses)
 	{
 		mIndex = index;
 		mRespawnTime = respawnTime;
@@ -60,6 +72,6 @@ public:
 	inline float AttackSpeed() const { return mAttackSpeed; }
 	inline int CombatStyle() const { return mCombatStyle; }
 	inline int Weakness() const { return mWeakness; }
-	inline std::array<int, 5> Stats() const { return mStats; }
-	inline std::array<int, 6> Bonuses() const { return mBonuses; }
+	inline std::array<int, NpcStats::TOTAL_STATS> Stats() const { return mStats; }
+	inline std::array<int, NpcBonus::TOTAL_BONUSES> Bonuses() const { return mBonuses; }
 };
