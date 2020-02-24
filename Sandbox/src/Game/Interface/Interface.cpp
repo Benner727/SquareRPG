@@ -1,7 +1,7 @@
 #include "Interface.h"
 
-Interface::Interface(Player player) :
-	mPlayer(player), mMenu(), mInventory(&player.Inventory()),
+Interface::Interface(Player& player) :
+	mPlayer(player), mMenu(), mInventory(player.Inventory()),
 	mInputHandler(Square::InputHandler::Instance())
 {
 	mMenu.Parent(this);
