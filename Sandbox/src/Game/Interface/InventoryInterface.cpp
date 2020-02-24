@@ -2,7 +2,7 @@
 
 #include "Menu.h"
 
-InventoryInterface::InventoryInterface(Inventory& inventory) :
+InventoryInterface::InventoryInterface(Inventory* inventory) :
 	mPosition(Square::Vector2(
 		Square::Graphics::SCREEN_WIDTH - CONTAINER_WIDTH / 2,
 		Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT / 2 - Menu::MENU_HEIGHT)),
@@ -36,7 +36,7 @@ void InventoryInterface::HandleClick(Square::Vector2 position)
 	int col = (position.y - (Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT - Menu::MENU_HEIGHT)) / BUTTON_HEIGHT;
 	int slotIndex = row + col * 4;
 
-	mInventory.ActiveSlot(slotIndex);
+	mInventory->ActiveSlot(slotIndex);
 }
 
 void InventoryInterface::Render()
@@ -58,7 +58,7 @@ void InventoryInterface::Render()
 			(BUTTON_WIDTH-CONTAINER_WIDTH)/2 + (row*BUTTON_WIDTH),
 			(BUTTON_HEIGHT-CONTAINER_HEIGHT)/2 + (col*BUTTON_HEIGHT));
 
-		if (mInventory.ActiveSlot() == slot)
+		if (mInventory->ActiveSlot() == slot)
 		{
 			mButtonSelected.Pos(position);
 			mButtonSelected.Render();
@@ -69,7 +69,7 @@ void InventoryInterface::Render()
 			mButtonUnselected.Render();
 		}
 
-		Item* item = mInventory.GetItem(slot);
+		Item* item = mInventory->GetItem(slot);
 		if (item)
 		{
 			item->Render();
