@@ -23,10 +23,10 @@ private:
 	Square::Sprite mButtonSelected;
 	Square::Vector2 mPosition;
 
-	Inventory* mInventory;
+	Inventory& mInventory;
 
 public:
-	InventoryInterface(Inventory* inventory);
+	InventoryInterface(Inventory& inventory);
 	~InventoryInterface();
 
 	bool MouseIsOver(Square::Vector2 position);

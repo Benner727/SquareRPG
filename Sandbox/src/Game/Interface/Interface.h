@@ -9,7 +9,7 @@
 class Interface : public Square::GameObject
 {
 private:
-	Player mPlayer;
+	Player& mPlayer;
 	Menu mMenu;
 	InventoryInterface mInventory;
 
@@ -21,7 +21,7 @@ private:
 	void InitializeBackground();
 
 public:
-	Interface(Player player = Player());
+	Interface(Player& player);
 	~Interface();
 
 	void HandleInput();
