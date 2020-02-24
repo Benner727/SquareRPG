@@ -164,6 +164,12 @@ void Inventory::RemoveItem(int index, int amount)
 	} while (amount > 0);
 }
 
+void Inventory::RemoveItems(std::vector<Item*> items)
+{
+	for (const auto& item : items)
+		RemoveItem(item->Index(), item->Amount());
+}
+
 void Inventory::Clear()
 {
 	for (int i = 0; i < INVENTORY_SIZE; i++)

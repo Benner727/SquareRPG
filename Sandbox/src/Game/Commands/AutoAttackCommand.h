@@ -4,6 +4,7 @@
 #include "Game/Combat/MeleeFormulas.h"
 #include "Game/Combat/RangedFormulas.h"
 #include "Game/Combat/MagicFormulas.h"
+#include "Game/Combat/CombatExperience.h"
 
 class AutoAttackCommand : public ICommand
 {
@@ -82,6 +83,14 @@ public:
 			attackRoll = RangedFormulas::AttackRoll(*mPlayer);
 			defenseRoll = RangedFormulas::DefenseRoll(*mNpc);
 			damage = RangedFormulas::BaseDamage(*mPlayer);
+
+			if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			{
+				if (weapon->Type() == 1)
+					mPlayer->Gear().Remove(Gear::EquipmentSlot::ammo);
+				else
+					mPlayer->Gear().Remove(Gear::EquipmentSlot::weapon);
+			}
 		}
 		else if (mPlayer->CombatStance() == CombatOption::magic_standard ||
 			mPlayer->CombatStance() == CombatOption::magic_defensive)
@@ -89,6 +98,8 @@ public:
 			attackRoll = MagicFormulas::AttackRoll(*mPlayer);
 			defenseRoll = MagicFormulas::DefenseRoll(*mNpc);
 			damage = MagicFormulas::BaseDamage(*mPlayer);
+
+			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()].CastReq());
 		}
 		else
 		{
@@ -102,7 +113,8 @@ public:
 			Random rand;
 			rand.Init();
 
-			damage = (int)(damage * rand.Float()) + 1;
+			damage = std::min((int)(damage * rand.Float()) + 1, mNpc->RemainingHitpoints());
+			AddCombatExperience(mPlayer, damage);
 		}
 		else
 			damage = 0;
