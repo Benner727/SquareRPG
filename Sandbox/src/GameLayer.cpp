@@ -4,7 +4,7 @@
 #include "Game/Player/Player.h"
 
 GameLayer::GameLayer() :
-	mPlayer(Player()), mInterface(Interface(mPlayer))
+	mInterface(mPlayer)
 {
 
 }

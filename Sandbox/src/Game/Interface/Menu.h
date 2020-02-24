@@ -18,7 +18,6 @@ public:
 
 private:
 	const Square::Vector2 mPosition;
-	//std::vector<Square::Sprite> mInputs;
 	Square::Sprite mMenu;
 	Square::Sprite mButtonUnselected;
 	Square::Sprite mButtonSelected;
