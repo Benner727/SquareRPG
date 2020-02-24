@@ -3,11 +3,10 @@
 #include <Square.h>
 
 #include "IInputContainer.h"
-#include "Button.h"
 
 class Menu : public IInputContainer
 {
-private:
+public:
 	const std::string MENU_PATH = "Graphics/menu.png";
 	const std::string BUTTON_UNSELECTED = "Graphics/resting-menu-button.png";
 	const std::string BUTTON_SELECTED = "Graphics/selected-menu-button.png";
@@ -17,6 +16,7 @@ private:
 	static const int BUTTON_WIDTH = 64;
 	static const int BUTTON_HEIGHT = 64;
 
+private:
 	const Square::Vector2 mPosition;
 	//std::vector<Square::Sprite> mInputs;
 	Square::Sprite mMenu;
@@ -31,6 +31,8 @@ private:
 public:
 	Menu();
 	~Menu();
+
+	int ActiveSlot() { return mActiveSlot; }
 
 	bool MouseIsOver(Square::Vector2 position);
 	void HandleClick(Square::Vector2 position);

@@ -39,7 +39,6 @@ void Menu::Render()
 {
 	mMenu.Render();
 
-
 	for (int slot = 0; slot < MenuSlot::TOTAL_SLOTS; slot++)
 	{
 		Square::Vector2 buttonPosition = Square::Vector2(-MENU_WIDTH/2 + BUTTON_WIDTH/2 + (slot*BUTTON_WIDTH), 0);
