@@ -30,6 +30,7 @@ namespace Square {
 		int mFlashFrames;
 
 	public:
+		Sprite();
 		Sprite(const std::string& filename);
 		Sprite(const std::string& filename, int x, int y, int w, int h);
 		Sprite(const char& c, const std::string& fontpath, int size, SDL_Color color);
@@ -45,6 +46,9 @@ namespace Square {
 		void Flash();
 
 		virtual void Render();
+
+		// This does not copy it's base class!
+		Sprite& operator=(Sprite other);
 	};
 
 }
