@@ -19,7 +19,7 @@ void Interface::InitializeBackground()
 
 void Interface::HandleInput()
 {
-	std::cout << mPlayer.Inventory().ActiveSlot() << "\n";
+	//std::cout << mPlayer.Inventory().ActiveSlot() << "\n";
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
 		if (mMenu.MouseIsOver(mInputHandler.MousePos()))

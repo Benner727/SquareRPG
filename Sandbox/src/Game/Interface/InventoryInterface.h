@@ -5,7 +5,7 @@
 #include "Game/Interface/IInputContainer.h"
 #include "Game/Player/Inventory.h"
 
-class InventoryInterface : public IInputContainer
+class InventoryContainer : public IInputContainer
 {
 public:
 	const std::string CONTAINER_PATH = "Graphics/opened-menu.png";
@@ -18,18 +18,12 @@ public:
 	static const int BUTTON_HEIGHT = 64;
 
 private:
-	Square::Sprite mContainer;
-	Square::Sprite mButtonUnselected;
-	Square::Sprite mButtonSelected;
-	Square::Vector2 mPosition;
-
 	Inventory& mInventory;
 
 public:
-	InventoryInterface(Inventory& inventory);
-	~InventoryInterface();
+	InventoryContainer(Inventory& inventory);
+	~InventoryContainer();
 
-	bool MouseIsOver(Square::Vector2 position);
 	void HandleClick(Square::Vector2 position);
 	void Render();
 };

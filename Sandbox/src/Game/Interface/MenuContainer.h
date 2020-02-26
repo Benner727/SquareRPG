@@ -4,7 +4,7 @@
 
 #include "IInputContainer.h"
 
-class Menu : public IInputContainer
+class MenuContainer : public IInputContainer
 {
 public:
 	const std::string MENU_PATH = "Graphics/menu.png";
@@ -17,23 +17,16 @@ public:
 	static const int BUTTON_HEIGHT = 64;
 
 private:
-	const Square::Vector2 mPosition;
-	Square::Sprite mMenu;
-	Square::Sprite mButtonUnselected;
-	Square::Sprite mButtonSelected;
-	int mActiveSlot = -1;
-
 	enum MenuSlot {
 		skills, combat, inventory, equipment, TOTAL_SLOTS
 	};
 
 public:
-	Menu();
-	~Menu();
+	MenuContainer();
+	~MenuContainer();
 
 	int ActiveSlot() { return mActiveSlot; }
 
-	bool MouseIsOver(Square::Vector2 position);
 	void HandleClick(Square::Vector2 position);
 	void Render();
 
