@@ -3,14 +3,18 @@
 #include "Menu.h"
 
 InventoryInterface::InventoryInterface(Inventory& inventory) :
-	mPosition(Square::Vector2(
-		Square::Graphics::SCREEN_WIDTH - CONTAINER_WIDTH / 2,
-		Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT / 2 - Menu::MENU_HEIGHT)),
 	mContainer(Square::Sprite(CONTAINER_PATH, 0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT)),
 	mButtonSelected(Square::Sprite(BUTTON_UNSELECTED, 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)),
 	mButtonUnselected(Square::Sprite(BUTTON_SELECTED, 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)),
 	mInventory(inventory)
 {
+
+	mWidth = CONTAINER_WIDTH;
+	mHeight = CONTAINER_HEIGHT;
+	mPosition = Square::Vector2(
+		Square::Graphics::SCREEN_WIDTH - CONTAINER_WIDTH / 2,
+		Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT / 2 - Menu::MENU_HEIGHT);
+
 	mContainer.Pos(mPosition);
 	mButtonSelected.Parent(&mContainer);
 	mButtonUnselected.Parent(&mContainer);
@@ -18,16 +22,6 @@ InventoryInterface::InventoryInterface(Inventory& inventory) :
 
 InventoryInterface::~InventoryInterface()
 {
-}
-
-bool InventoryInterface::MouseIsOver(Square::Vector2 position)
-{
-	return (
-		position.x >= mPosition.x - CONTAINER_WIDTH / 2 &&
-		position.x <= mPosition.x + CONTAINER_WIDTH / 2 &&
-		position.y >= mPosition.y - CONTAINER_HEIGHT / 2 &&
-		position.y <= mPosition.y + CONTAINER_HEIGHT / 2
-	);
 }
 
 void InventoryInterface::HandleClick(Square::Vector2 position)
