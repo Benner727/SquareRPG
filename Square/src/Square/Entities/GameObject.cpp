@@ -16,10 +16,6 @@ namespace Square {
 		mScale = VEC2_ONE;
 	}
 
-	GameObject::~GameObject()
-	{
-	}
-
 	Vector2 GameObject::PrevPos()
 	{
 		return mPrevPos;

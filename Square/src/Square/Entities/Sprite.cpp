@@ -27,8 +27,17 @@ namespace Square {
 		: mGraphics(Graphics::Instance())
 	{
 		mTexture = AssetManager::Instance().GetTexture(filename);
-		SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
-		SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+
+		if (mTexture)
+		{
+			SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
+			SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+		}
+		else
+		{
+			mWidth = 0;
+			mHeight = 0;
+		}
 
 		mClipped = false;
 
@@ -47,7 +56,11 @@ namespace Square {
 		: mGraphics(Graphics::Instance())
 	{
 		mTexture = AssetManager::Instance().GetTexture(filename);
-		SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+
+		if (mTexture)
+		{
+			SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+		}
 
 		mClipped = true;
 
@@ -74,8 +87,17 @@ namespace Square {
 		: mGraphics(Graphics::Instance())
 	{
 		mTexture = AssetManager::Instance().GetText(std::string(1, c), fontpath, size, { 255, 255, 255 });
-		SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
-		SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+
+		if (mTexture)
+		{
+			SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
+			SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+		}
+		else
+		{
+			mWidth = 0;
+			mHeight = 0;
+		}
 
 		mClipped = false;
 
@@ -88,10 +110,6 @@ namespace Square {
 		mFlash = false;
 		mFlashColor = { 0, 0, 0, 255 };
 		mFlashFrames = 0;
-	}
-
-	Sprite::~Sprite()
-	{
 	}
 
 	Vector2 Sprite::ScaledDimensions()

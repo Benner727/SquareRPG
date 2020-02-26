@@ -15,43 +15,37 @@ private:
 	inline bool HasAmmo() const
 	{
 		bool hasAmmo = true;
-
-		if (mPlayer->CombatStance() == CombatOption::ranged_accurate ||
+		bool hasRangedCombatStance = 
+			(mPlayer->CombatStance() == CombatOption::ranged_accurate ||
 			mPlayer->CombatStance() == CombatOption::ranged_rapid ||
-			mPlayer->CombatStance() == CombatOption::ranged_longrange)
+			mPlayer->CombatStance() == CombatOption::ranged_longrange);
+
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
 		{
-			if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			if (weapon->Type() == 1)
 			{
-				if (weapon->Type() == 1)
+				hasAmmo = false;
+				for (const auto& ammo : weapon->AmmoIndex())
 				{
-					hasAmmo = false;
-					for (const auto& ammo : weapon->AmmoIndex())
+					if (mPlayer->Gear().HasItem(ammo))
 					{
-						if (mPlayer->Gear().HasItem(ammo))
-						{
-							hasAmmo = true;
-							break;
-						}
+						hasAmmo = true;
+						break;
 					}
 				}
 			}
 		}
 
-		return hasAmmo;
+		return hasAmmo && hasRangedCombatStance;
 	}
 
 	inline bool HasRunes() const
 	{
-		bool hasRunes = true;
+		bool hasMagicCombatStance = (mPlayer->CombatStance() == CombatOption::magic_standard || mPlayer->CombatStance() == CombatOption::magic_defensive);
+		bool hasActiveSpell = (mPlayer->SpellBook().ActiveSpell() != -1);
+		bool hasRunes = mPlayer->Inventory().HasItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()].CastReq());
 
-		if (mPlayer->CombatStance() == CombatOption::magic_standard ||
-			mPlayer->CombatStance() == CombatOption::magic_defensive)
-		{
-			if (mPlayer->SpellBook().ActiveSpell() != -1)
-				hasRunes = mPlayer->Inventory().HasItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()].CastReq());
-		}
-
-		return hasRunes;
+		return hasMagicCombatStance && hasActiveSpell && hasRunes;
 	}
 
 public:
@@ -76,9 +70,7 @@ public:
 		float attackRoll = 0.0f;
 		float defenseRoll = 0.0f;
 
-		if (mPlayer->CombatStance() == CombatOption::ranged_accurate ||
-			mPlayer->CombatStance() == CombatOption::ranged_rapid ||
-			mPlayer->CombatStance() == CombatOption::ranged_longrange)
+		if (HasAmmo())
 		{
 			attackRoll = RangedFormulas::AttackRoll(*mPlayer);
 			defenseRoll = RangedFormulas::DefenseRoll(*mNpc);
@@ -92,8 +84,7 @@ public:
 					mPlayer->Gear().Remove(Gear::EquipmentSlot::weapon);
 			}
 		}
-		else if (mPlayer->CombatStance() == CombatOption::magic_standard ||
-			mPlayer->CombatStance() == CombatOption::magic_defensive)
+		else if (HasRunes())
 		{
 			attackRoll = MagicFormulas::AttackRoll(*mPlayer);
 			defenseRoll = MagicFormulas::DefenseRoll(*mNpc);

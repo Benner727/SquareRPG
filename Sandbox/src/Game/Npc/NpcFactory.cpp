@@ -40,8 +40,8 @@ Npc* NpcFactory::GetNpc(int index)
 		npc = new Npc(index);
 
 	npc->mNpcDefinition = mNpcRepository.FindNpcDefinition(index);
-	//npc->mSprite = new Square::Sprite(npc->mNpcDefinition->SpritePath());
-	//npc->mSprite->Parent(npc);
+	npc->mSprite = new Square::Sprite(npc->mNpcDefinition->SpritePath());
+	npc->mSprite->Parent(npc);
 
 	return npc;
 }

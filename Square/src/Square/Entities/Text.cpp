@@ -2,6 +2,11 @@
 
 namespace Square {
 
+	Text::Text()
+	{
+		mReversed = false;
+	}
+
 	Text::Text(const std::string& text, const std::string& fontpath, int size, SDL_Color color)
 	{
 		float width = 0;
@@ -21,10 +26,6 @@ namespace Square {
 		}
 
 		mReversed = false;
-	}
-
-	Text::~Text()
-	{
 	}
 
 	Vector2 Text::ScaledDimensions()
@@ -94,6 +95,14 @@ namespace Square {
 	{
 		for (const auto& sprite : mSprites)
 			sprite->Render();
+	}
+
+	Text& Text::operator=(Text other)
+	{
+		mSprites = other.mSprites;
+		mReversed = other.mReversed;
+
+		return *this;
 	}
 
 }

@@ -34,7 +34,8 @@ namespace Square {
 		Sprite(const std::string& filename);
 		Sprite(const std::string& filename, int x, int y, int w, int h);
 		Sprite(const char& c, const std::string& fontpath, int size, SDL_Color color);
-		~Sprite();
+		
+		virtual ~Sprite() = default;
 
 		Vector2 ScaledDimensions();
 
