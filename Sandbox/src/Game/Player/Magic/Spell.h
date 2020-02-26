@@ -29,6 +29,19 @@ public:
 		mSprite->Parent(this);
 	}
 
+	Spell(const Spell& other)
+	{
+		mIndex = other.mIndex;
+		mName = other.mName;
+		mLevelReq = other.mLevelReq;
+		mCastReq = other.mCastReq;
+		mDamage = other.mDamage;
+		mBaseExperience = other.mBaseExperience;
+		
+		mSprite = new Square::Sprite();
+		*mSprite = *other.mSprite;
+	}
+
 	~Spell()
 	{
 		delete mSprite;

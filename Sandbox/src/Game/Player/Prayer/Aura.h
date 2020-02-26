@@ -32,6 +32,19 @@ public:
 		mSprite->Parent(this);
 	}
 
+	Aura(const Aura& other)
+	{
+		mIndex = other.mIndex;
+		mName = other.mName;
+		mLevelReq = other.mLevelReq;
+		mDrainRate = other.mDrainRate;
+		mAuraType = other.mAuraType;
+		mActivated = other.mActivated;
+
+		mSprite = new Square::Sprite();
+		*mSprite = *other.mSprite;
+	}
+
 	~Aura()
 	{
 		delete mSprite;

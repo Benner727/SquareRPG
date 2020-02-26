@@ -7,14 +7,10 @@
 class IPrayerBook
 {
 protected:
-	std::vector<Aura*> mAuras;
+	std::vector<Aura> mAuras;
 
 public:
-	virtual ~IPrayerBook()
-	{
-		for (auto& aura : mAuras)
-			delete aura;
-	}
+	virtual ~IPrayerBook() = default;
 
 	virtual void Toggle(int index, int prayerLevel);
 	void ToggleAllOff();
@@ -22,5 +18,5 @@ public:
 	bool Activated(int index) const;
 	float PrayerDrain() const;
 
-	inline const std::vector<const Aura*> &PrayerAuras() const { return *reinterpret_cast<const std::vector<const Aura*>*>(&mAuras); }
+	inline std::vector<Aura> PrayerAuras() const { return mAuras; }
 };
