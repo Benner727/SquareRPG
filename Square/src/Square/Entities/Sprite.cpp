@@ -2,12 +2,42 @@
 
 namespace Square {
 
+	Sprite::Sprite()
+		: mGraphics(Graphics::Instance())
+	{
+		mTexture = nullptr;
+
+		mClipped = false;
+
+		mWidth = 0;
+		mHeight = 0;
+
+		mRenderRect.w = mWidth;
+		mRenderRect.h = mHeight;
+
+		mFlip = SDL_FLIP_NONE;
+		mColor = { 255, 255, 255, 255 };
+
+		mFlash = false;
+		mFlashColor = { 0, 0, 0, 255 };
+		mFlashFrames = 0;
+	}
+
 	Sprite::Sprite(const std::string& filename)
 		: mGraphics(Graphics::Instance())
 	{
 		mTexture = AssetManager::Instance().GetTexture(filename);
-		SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
-		SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+
+		if (mTexture)
+		{
+			SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
+			SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+		}
+		else
+		{
+			mWidth = 0;
+			mHeight = 0;
+		}
 
 		mClipped = false;
 
@@ -26,7 +56,11 @@ namespace Square {
 		: mGraphics(Graphics::Instance())
 	{
 		mTexture = AssetManager::Instance().GetTexture(filename);
-		SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+
+		if (mTexture)
+		{
+			SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+		}
 
 		mClipped = true;
 
@@ -53,8 +87,17 @@ namespace Square {
 		: mGraphics(Graphics::Instance())
 	{
 		mTexture = AssetManager::Instance().GetText(std::string(1, c), fontpath, size, { 255, 255, 255 });
-		SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
-		SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+
+		if (mTexture)
+		{
+			SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mWidth, &mHeight);
+			SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_BLEND);
+		}
+		else
+		{
+			mWidth = 0;
+			mHeight = 0;
+		}
 
 		mClipped = false;
 
@@ -67,10 +110,6 @@ namespace Square {
 		mFlash = false;
 		mFlashColor = { 0, 0, 0, 255 };
 		mFlashFrames = 0;
-	}
-
-	Sprite::~Sprite()
-	{
 	}
 
 	Vector2 Sprite::ScaledDimensions()
@@ -109,37 +148,61 @@ namespace Square {
 
 	void Sprite::Render()
 	{
-		Vector2 pos = Pos(world);
-		Vector2 scale = Scale(world);
-
-		mRenderRect.x = (int)(pos.x - mWidth * scale.x * 0.5f);
-		mRenderRect.y = (int)(pos.y - mHeight * scale.y * 0.5f);
-
-		mRenderRect.w = (int)(mWidth * scale.x);
-		mRenderRect.h = (int)(mHeight * scale.y);
-
-		if (mFlash && mFlashFrames >= 0)
+		if (mTexture)
 		{
-			SDL_SetTextureColorMod(mTexture.get(), mFlashColor.r, mFlashColor.g, mFlashColor.b);
-			SDL_SetTextureAlphaMod(mTexture.get(), mFlashColor.a);
-			mFlashFrames++;
-		}
-		else
-		{
-			SDL_SetTextureColorMod(mTexture.get(), mColor.r, mColor.g, mColor.b);
-			SDL_SetTextureAlphaMod(mTexture.get(), mColor.a);
-			if (mFlashFrames < 0) mFlashFrames++;
-		}
+			Vector2 pos = Pos(world);
+			Vector2 scale = Scale(world);
 
-		mGraphics.DrawTexture(mTexture, (mClipped) ? &mClipRect : nullptr, &mRenderRect, Rotation(world), mFlip);
+			mRenderRect.x = (int)(pos.x - mWidth * scale.x * 0.5f);
+			mRenderRect.y = (int)(pos.y - mHeight * scale.y * 0.5f);
 
-		if (mFlash && mFlashFrames >= FLASH_FRAMES)
-		{
-			mFlash = false;
-			mFlashFrames = -FLASH_FRAMES * 2.5f;
+			mRenderRect.w = (int)(mWidth * scale.x);
+			mRenderRect.h = (int)(mHeight * scale.y);
+
+			if (mFlash && mFlashFrames >= 0)
+			{
+				SDL_SetTextureColorMod(mTexture.get(), mFlashColor.r, mFlashColor.g, mFlashColor.b);
+				SDL_SetTextureAlphaMod(mTexture.get(), mFlashColor.a);
+				mFlashFrames++;
+			}
+			else
+			{
+				SDL_SetTextureColorMod(mTexture.get(), mColor.r, mColor.g, mColor.b);
+				SDL_SetTextureAlphaMod(mTexture.get(), mColor.a);
+				if (mFlashFrames < 0) mFlashFrames++;
+			}
+
+			mGraphics.DrawTexture(mTexture, (mClipped) ? &mClipRect : nullptr, &mRenderRect, Rotation(world), mFlip);
+
+			if (mFlash && mFlashFrames >= FLASH_FRAMES)
+			{
+				mFlash = false;
+				mFlashFrames = -FLASH_FRAMES * 2.5f;
+			}
+
+			SDL_SetTextureColorMod(mTexture.get(), 255, 255, 255);
 		}
+	}
 
-		SDL_SetTextureColorMod(mTexture.get(), 255, 255, 255);
+	Sprite& Sprite::operator=(Sprite other)
+	{
+		mTexture = other.mTexture;
+
+		mClipped = other.mClipped;
+
+		mWidth = other.mWidth;
+		mHeight = other.mHeight;
+
+		mRenderRect = other.mRenderRect;
+
+		mFlip = other.mFlip;
+		mColor = other.mColor;
+
+		mFlash = other.mFlash;
+		mFlashColor = other.mFlashColor;
+		mFlashFrames = other.mFlashFrames;
+
+		return *this;
 	}
 
 }

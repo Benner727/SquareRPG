@@ -29,6 +29,7 @@ public:
 	bool HasItems(std::vector<Item*> items) const;
 
 	void RemoveItem(int index, int amount = 1);
+	void RemoveItems(std::vector<Item*> items);
 
 	void Clear();
 };

@@ -22,7 +22,8 @@ namespace Square {
 
 	public:
 		GameObject(Vector2 pos = VEC2_ZERO);
-		virtual ~GameObject();
+		
+		virtual ~GameObject() = default;
 
 		Vector2 PrevPos();
 		void Pos(Vector2 pos);

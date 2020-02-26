@@ -33,6 +33,7 @@ namespace Square {
 		bool mAnimationDone;
 
 	public:
+		AnimatedSprite();
 		AnimatedSprite(const std::string& filename, int x, int y, int w, int h, int frameCount, float animationSpeed, ANIM_DIR animationDirection);
 		~AnimatedSprite();
 
@@ -47,6 +48,9 @@ namespace Square {
 		bool IsAnimating() const;
 
 		void Update();
+
+		// This does not copy it's base class!
+		AnimatedSprite& operator=(AnimatedSprite other);
 	};
 
 }

@@ -2,6 +2,26 @@
 
 namespace Square {
 
+	AnimatedSprite::AnimatedSprite()
+		: Sprite(), mTimer(Timer::Instance())
+	{
+		mStartX = 0;
+		mStartY = 0;
+
+		mCurrentFrame = 0;
+		mFrameCount = 0;
+		mAnimationSpeed = 0.0f;
+		mTimePerFrame = 0.0f;
+		mAnimationTimer = 0.0f;
+
+		mAnimationDirection = ANIM_DIR::horizontal;
+
+		mAnimationDone = true;
+		mPaused = false;
+
+		mWrapMode = loop;
+	}
+
 	AnimatedSprite::AnimatedSprite(const std::string& filename, int x, int y, int w, int h, int frameCount, float animationSpeed, ANIM_DIR animationDir)
 		: Sprite(filename, x, y, w, h), mTimer(Timer::Instance())
 	{
@@ -96,6 +116,27 @@ namespace Square {
 				mClipRect.y = mStartY + mCurrentFrame * mHeight;
 			}
 		}
+	}
+
+	AnimatedSprite& AnimatedSprite::operator=(AnimatedSprite other)
+	{
+		mStartX = other.mStartX;
+		mStartY = other.mStartY;
+
+		mCurrentFrame = other.mCurrentFrame;
+		mFrameCount = other.mFrameCount;
+		mAnimationSpeed = other.mAnimationSpeed;
+		mTimePerFrame = other.mTimePerFrame;
+		mAnimationTimer = other.mAnimationTimer;
+
+		mAnimationDirection = other.mAnimationDirection;
+
+		mAnimationDone = other.mAnimationDone;
+		mPaused = other.mPaused;
+
+		mWrapMode = other.mWrapMode;
+
+		return *this;
 	}
 
 }

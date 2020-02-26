@@ -6,8 +6,8 @@ class StatBonus
 {
 public:
 	enum BonusIndex {
-		MeleeAttack, MagicAttack, RangeAttack,
-		MeleeDefense, MagicDefense, RangeDefense,
+		MeleeAttack, MagicAttack, RangedAttack,
+		MeleeDefense, MagicDefense, RangedDefense,
 		Strength, Prayer, TOTAL_BONUSES
 	};
 

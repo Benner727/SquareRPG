@@ -81,16 +81,16 @@ void NpcRepository::LoadNpcCombatDefinitions()
 		float attackSpeed;
 		int combatStyle;
 		int weakness;
-		std::array<int, 5> stats;
-		std::array<int, 5> bonuses;
+		std::array<int, NpcStats::TOTAL_STATS> stats;
+		std::array<int, NpcBonus::TOTAL_BONUSES> bonuses;
 
 		iss >> index >> respawnTime >> aggressive >> poisonous >> level >> hitpoints >> maxHit
 			>> attackSpeed >> combatStyle >> weakness;
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < NpcStats::TOTAL_STATS; i++)
 			iss >> stats[i];
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < NpcBonus::TOTAL_BONUSES; i++)
 			iss >> bonuses[i];
 
 		mNpcCombatDefinitions[index] = new NpcCombatDefinition(index, respawnTime, aggressive, poisonous, 

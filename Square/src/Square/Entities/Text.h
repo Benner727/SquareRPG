@@ -15,8 +15,10 @@ namespace Square {
 		bool mReversed;
 
 	public:
+		Text();
 		Text(const std::string& text, const std::string& fontpath, int size, SDL_Color color);
-		~Text();
+		
+		virtual ~Text() = default;
 
 		Vector2 ScaledDimensions();
 
@@ -27,6 +29,8 @@ namespace Square {
 		void Flash();
 
 		void Render();
+
+		Text& operator=(Text other);
 	};
 
 }
