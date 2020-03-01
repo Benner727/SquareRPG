@@ -52,8 +52,8 @@ Item* ItemFactory::GetItem(int index, int amount)
 	}
 
 	item->mItemDefinition = mItemRepository.FindItemDefinition(index);
-	//item->mSprite = new Square::Sprite(item->mItemDefinition->SpritePath());
-	//item->mSprite->Parent(item);
+	item->mSprite = new Square::Sprite(item->mItemDefinition->SpritePath());
+	item->mSprite->Parent(item);
 
 	return item;
 }

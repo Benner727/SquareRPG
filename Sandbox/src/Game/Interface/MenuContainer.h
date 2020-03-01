@@ -21,14 +21,19 @@ private:
 		skills, combat, inventory, equipment, TOTAL_SLOTS
 	};
 
+
 public:
 	MenuContainer();
 	~MenuContainer();
 
+	void LeftClick(Square::Vector2 position);
+	void RightClick(Square::Vector2 position);
+	void Drag(Square::Vector2 position);
+	void Hover(Square::Vector2 position);
+
 	int ActiveSlot() { return mActiveSlot; }
 
-	void HandleClick(Square::Vector2 position);
+	void Update();
 	void Render();
 
 };
-
