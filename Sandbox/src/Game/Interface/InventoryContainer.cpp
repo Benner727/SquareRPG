@@ -3,7 +3,8 @@
 #include "MenuContainer.h"
 
 InventoryContainer::InventoryContainer(Inventory& inventory) :
-	mInventory(inventory)
+	mInventory(inventory),
+	mInputHandler(Square::InputHandler::Instance())
 {
 	mWidth = CONTAINER_WIDTH;
 	mHeight = CONTAINER_HEIGHT;
@@ -24,16 +25,28 @@ InventoryContainer::~InventoryContainer()
 {
 }
 
-void InventoryContainer::LeftClick(Square::Vector2 position)
+int InventoryContainer::SlotIndex(Square::Vector2 position)
 {
 	int row = (position.x - (Square::Graphics::SCREEN_WIDTH - CONTAINER_WIDTH)) / BUTTON_WIDTH;
 	int col = (position.y - (Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT - MenuContainer::MENU_HEIGHT)) / BUTTON_HEIGHT;
 	int slotIndex = row + col * 4;
+	return slotIndex;
+}
 
-	Item* mItem = mInventory.GetItem(slotIndex);
-	if (mItem)
+void InventoryContainer::LeftClick(Square::Vector2 position)
+{
+	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
-		mInventory.ActiveSlot(slotIndex);
+		int slotIndex = SlotIndex(position);
+		Item* mItem = mInventory.GetItem(slotIndex);
+		if (mItem)
+		{
+			mInventory.ActiveSlot(slotIndex);
+		}
+		else
+		{
+			mInventory.ActiveSlot(-1);
+		}
 	}
 }
 
@@ -43,14 +56,46 @@ void InventoryContainer::RightClick(Square::Vector2 position)
 
 void InventoryContainer::Drag(Square::Vector2 position)
 {
+	if (mInputHandler.MouseButtonDown(Square::InputHandler::MOUSE_BUTTON::left))
+	{
+		mDragPosition = position;
+	}
+	else if (mInputHandler.MouseButtonReleased(Square::InputHandler::MOUSE_BUTTON::left))
+	{
+		int swapIndex = SlotIndex(position);
+		if (swapIndex != mInventory.ActiveSlot() && mInventory.GetItem(swapIndex))
+		{
+			mInventory.Swap(mInventory.ActiveSlot(), swapIndex);
+		}
+
+		mDragPosition = Square::Vector2(-1, -1);
+		mInventory.ActiveSlot(-1);
+	}
 }
 
 void InventoryContainer::Hover(Square::Vector2 position)
 {
+	int slotIndex = SlotIndex(position);
+	mActiveSlot = (mInventory.GetItem(slotIndex)) ? slotIndex : -1;
 }
 
 void InventoryContainer::Update()
 {
+	Square::Vector2 position = mInputHandler.MousePos();
+
+	if (MouseIsOver(position))
+	{
+		Hover(position);
+		LeftClick(position);
+		Drag(position);
+	}
+	else
+	{
+		mDragPosition = Square::Vector2(-1, -1);
+		mInventory.ActiveSlot(-1);
+		mActiveSlot = -1;
+	}
+
 }
 
 void InventoryContainer::Render()
@@ -72,7 +117,7 @@ void InventoryContainer::Render()
 			(BUTTON_WIDTH-CONTAINER_WIDTH)/2 + (row*BUTTON_WIDTH),
 			(BUTTON_HEIGHT-CONTAINER_HEIGHT)/2 + (col*BUTTON_HEIGHT));
 
-		if (mInventory.ActiveSlot() == slot)
+		if (mActiveSlot == slot || mInventory.ActiveSlot() == slot)
 		{
 			mButtonSelected.Pos(position);
 			mButtonSelected.Render();
@@ -86,8 +131,17 @@ void InventoryContainer::Render()
 		Item* item = mInventory.GetItem(slot);
 		if (item)
 		{
-			item->Parent(&mContainer);
-			item->Pos(position);
+			if (mInventory.ActiveSlot() == slot && mDragPosition.x != -1 && mDragPosition.y != -1)
+			{
+				item->Parent(nullptr);
+				item->Pos(mDragPosition);
+			}
+			else
+			{
+				item->Parent(&mContainer);
+				item->Pos(position);
+			}
+
 			item->Render();
 		}
 

@@ -21,6 +21,11 @@ MenuContainer::~MenuContainer()
 {
 }
 
+int MenuContainer::SlotIndex(Square::Vector2 position)
+{
+	return -1;
+}
+
 void MenuContainer::LeftClick(Square::Vector2 position)
 {
 	int relativeX = position.x - (Square::Graphics::SCREEN_WIDTH - MENU_WIDTH);

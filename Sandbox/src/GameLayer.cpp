@@ -9,7 +9,7 @@ GameLayer::GameLayer() :
 GameLayer::~GameLayer()
 {
 	Item* mItem1 = mItemFactory.GetItem(2, 1);
-	Item* mItem2 = mItemFactory.GetItem(2, 1);
+	Item* mItem2 = mItemFactory.GetItem(4, 1);
 	mPlayer.Inventory().Add(mItem1);
 	mPlayer.Inventory().Add(mItem2);
 }

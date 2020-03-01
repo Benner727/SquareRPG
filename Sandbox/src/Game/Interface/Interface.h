@@ -5,6 +5,7 @@
 #include "Game/Player/Player.h"
 #include "MenuContainer.h"
 #include "InventoryContainer.h"
+#include "Tooltip.h"
 
 class Interface : public Square::GameObject
 {
@@ -17,6 +18,7 @@ private:
 
 	Square::InputHandler& mInputHandler;
 	//std::vector<Square::Sprite> mBackgroundSprites;
+	Tooltip mTooltip;
 
 	void InitializeBackground();
 
