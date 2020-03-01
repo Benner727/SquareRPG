@@ -1,12 +1,13 @@
 #include "GameLayer.h"
 
-#include "Game/Interface/Interface.h"
-#include "Game/Player/Player.h"
 
 GameLayer::GameLayer() :
-	mInterface(mPlayer)
+	mInterface(mPlayer), mItemFactory(ItemFactory::Instance())
 {
-	
+	Item* mItem1 = mItemFactory.GetItem(2, 1);
+	Item* mItem2 = mItemFactory.GetItem(2, 1);
+	mPlayer.Inventory().Add(mItem1);
+	mPlayer.Inventory().Add(mItem2);
 }
 
 

@@ -3,15 +3,15 @@
 #include <Square.h>
 
 #include "Game/Player/Player.h"
-#include "Menu.h"
-#include "InventoryInterface.h"
+#include "MenuContainer.h"
+#include "InventoryContainer.h"
 
 class Interface : public Square::GameObject
 {
 private:
 	Player& mPlayer;
-	Menu mMenu;
-	InventoryInterface mInventory;
+	MenuContainer mMenu;
+	InventoryContainer mInventory;
 
 	int mActiveMenu = -1;
 
