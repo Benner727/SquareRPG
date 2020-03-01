@@ -19,11 +19,13 @@ public:
 
 private:
 	Inventory& mInventory;
+	Square::InputHandler& mInputHandler;
 
 public:
 	InventoryContainer(Inventory& inventory);
 	~InventoryContainer();
 
+	int SlotIndex(Square::Vector2 position);
 	void LeftClick(Square::Vector2 position);
 	void RightClick(Square::Vector2 position);
 	void Drag(Square::Vector2 position);
