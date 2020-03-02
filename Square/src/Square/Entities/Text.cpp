@@ -30,7 +30,7 @@ namespace Square {
 			mReversed = false;
 		}
 		else
-			std::cout << "Error: You cannot have a text sprite containing 0 characters!" << std::endl;
+			LOG(ERROR) << "Error: You cannot have a text sprite containing 0 characters!";
 	}
 
 	Vector2 Text::ScaledDimensions()

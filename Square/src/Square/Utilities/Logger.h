@@ -10,10 +10,11 @@
 namespace Square {
 
 	enum Severity {
-		INFO = 0,
-		WARNING = 1,
-		ERROR = 2,
-		FATAL = 3,
+		DEBUG = 0,
+		INFO = 1,
+		WARNING = 2,
+		ERROR = 3,
+		FATAL = 4,
 		NUM_SEVERITIES
 	};
 
@@ -24,6 +25,8 @@ namespace Square {
 		~LogMessage();
 
 	protected:
+		static const char* LOG_FILE;
+
 		void Print();
 
 	private:
@@ -34,6 +37,7 @@ namespace Square {
 		int mLine;
 	};
 
+#define LOG_DEBUG if(_DEBUG) Square::LogMessage(Square::DEBUG, __FILE__, __FUNCTION__, __LINE__).flush()
 #define LOG_INFO Square::LogMessage(Square::INFO, __FILE__, __FUNCTION__, __LINE__).flush()
 #define LOG_WARNING Square::LogMessage(Square::WARNING, __FILE__, __FUNCTION__, __LINE__).flush()
 #define LOG_ERROR Square::LogMessage(Square::ERROR, __FILE__, __FUNCTION__, __LINE__).flush()
