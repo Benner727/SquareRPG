@@ -44,10 +44,10 @@ namespace Square {
 
 		int flags = MIX_INIT_OGG | MIX_INIT_MP3;
 		if (!Mix_Init(flags) & flags)
-			std::cout << "Mixer Initialization Error: " << Mix_GetError() << std::endl;
+			LOG(ERROR) << "Mixer Initialization Error: " << Mix_GetError();
 
 		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
-			std::cout << "Mixer Initialization Error: " << Mix_GetError() << std::endl;
+			LOG(ERROR) << "Mixer Initialization Error: " << Mix_GetError();
 
 		SFXVolume(50, 1); //Player shooting
 		SFXVolume(25, 2); //Player reloading

@@ -34,7 +34,7 @@ namespace Square {
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
-			std::cout << "SDL Initialization Error: " << SDL_GetError() << std::endl;
+			LOG(ERROR) << "SDL Initialization Error: " << SDL_GetError();
 			return false;
 		}
 
@@ -42,7 +42,7 @@ namespace Square {
 
 		if (!mWindow)
 		{
-			std::cout << "Window Creation Error: " << SDL_GetError() << std::endl;
+			LOG(ERROR) << "Window Creation Error: " << SDL_GetError();
 			return false;
 		}
 
@@ -50,7 +50,7 @@ namespace Square {
 
 		if (!mRenderer)
 		{
-			std::cout << "Renderer Creation Error: " << SDL_GetError() << std::endl;
+			LOG(ERROR) << "Renderer Creation Error: " << SDL_GetError();
 			return false;
 		}
 
@@ -61,13 +61,13 @@ namespace Square {
 		int flags = IMG_INIT_PNG;
 		if (!(IMG_Init(flags) & flags))
 		{
-			std::cout << "IMG Initialization Error: " << IMG_GetError() << std::endl;
+			LOG(ERROR) << "IMG Initialization Error: " << IMG_GetError();
 			return false;
 		}
 
 		if (TTF_Init() < 0)
 		{
-			std::cout << "TTF Initialization Error: " << TTF_GetError() << std::endl;
+			LOG(ERROR) << "TTF Initialization Error: " << TTF_GetError();
 			return false;
 		}
 
@@ -82,14 +82,14 @@ namespace Square {
 
 		if (!surface)
 		{
-			std::cout << "Image Load Error: Path " << path.c_str() << " - Error " << IMG_GetError() << std::endl;
+			LOG(ERROR) << "Image Load Error: Path " << path.c_str() << " - Error " << IMG_GetError();
 			return std::shared_ptr<SDL_Texture>();
 		}
 
 		std::shared_ptr<SDL_Texture> tex(SDL_CreateTextureFromSurface(mRenderer.get(), surface.get()), SDL_DestroyTexture);
 		if (!tex)
 		{
-			std::cout << "Create Texture Error: " << SDL_GetError() << std::endl;
+			LOG(ERROR) << "Create Texture Error: " << SDL_GetError();
 			return std::shared_ptr<SDL_Texture>();
 		}
 
@@ -101,14 +101,14 @@ namespace Square {
 		std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> surface(TTF_RenderText_Solid(font.lock().get(), text.c_str(), color), SDL_FreeSurface);
 		if (!surface)
 		{
-			std::cout << "Text Render Error: " << TTF_GetError() << std::endl;
+			LOG(ERROR) << "Text Render Error: " << TTF_GetError();
 			return std::shared_ptr<SDL_Texture>();
 		}
 
 		std::shared_ptr<SDL_Texture> tex(SDL_CreateTextureFromSurface(mRenderer.get(), surface.get()), SDL_DestroyTexture);
 		if (!tex)
 		{
-			std::cout << "Text Texture Creation Error: " << SDL_GetError() << std::endl;
+			LOG(ERROR) << "Text Texture Creation Error: " << SDL_GetError();
 			return std::shared_ptr<SDL_Texture>();
 		}
 

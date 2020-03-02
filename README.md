@@ -1,5 +1,5 @@
 # SquareRPG
-RuneScape inspired RPG written in C+ using custom built Square Engine
+RuneScape inspired RPG written in C++ using custom built Square Engine
 
 ## Getting Started
 Visual Studio 2019 is recommended. This build currently only works with Windows OS.
