@@ -19,7 +19,6 @@ public:
 
 private:
 	Inventory& mInventory;
-	Square::InputHandler& mInputHandler;
 
 public:
 	InventoryContainer(Inventory& inventory);

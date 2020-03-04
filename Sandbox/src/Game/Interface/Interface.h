@@ -17,8 +17,6 @@ private:
 	int mActiveMenu = -1;
 
 	Square::InputHandler& mInputHandler;
-	//std::vector<Square::Sprite> mBackgroundSprites;
-	Tooltip mTooltip;
 
 	void InitializeBackground();
 

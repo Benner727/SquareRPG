@@ -47,6 +47,20 @@ void MenuContainer::Hover(Square::Vector2 position)
 
 void MenuContainer::Update()
 {
+	Square::Vector2 position = mInputHandler.MousePos();
+
+	if (MouseIsOver(position))
+	{
+		Hover(position);
+		LeftClick(position);
+		Drag(position);
+	}
+	else
+	{
+		mDragPosition = Square::Vector2(-1, -1);
+		mActiveSlot = -1;
+	}
+
 }
 
 void MenuContainer::Render()

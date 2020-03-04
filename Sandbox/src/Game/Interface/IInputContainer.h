@@ -17,6 +17,7 @@ protected:
 	Square::Sprite mContainer;
 	Square::Sprite mButtonUnselected;
 	Square::Sprite mButtonSelected;
+	Square::InputHandler& mInputHandler = Square::InputHandler::Instance()
 
 	int mActiveSlot = -1;
 	Square::Vector2 mDragPosition = Square::Vector2(-1, -1);
