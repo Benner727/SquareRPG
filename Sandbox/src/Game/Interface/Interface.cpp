@@ -2,12 +2,10 @@
 
 Interface::Interface(Player& player) :
 	mPlayer(player), mMenu(), mInventory(player.Inventory()),
-	mInputHandler(Square::InputHandler::Instance()),
-	mTooltip("hello")
+	mInputHandler(Square::InputHandler::Instance())
 {
 	mMenu.Parent(this);
 	mInventory.Parent(this);
-	mTooltip.Text().Parent(this);
 	InitializeBackground();
 }
 
@@ -17,7 +15,6 @@ Interface::~Interface()
 
 void Interface::InitializeBackground()
 {
-	mTooltip.Pos(Square::Vector2(100, 100));
 }
 
 void Interface::HandleInput()
@@ -38,7 +35,6 @@ void Interface::HandleInput()
 void Interface::Render()
 {
 	mMenu.Render();
-	//mTooltip.Text().Render();
 
 	if (mActiveMenu >= 0)
 	{
