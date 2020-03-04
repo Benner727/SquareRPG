@@ -48,8 +48,8 @@ namespace Square {
 
 		virtual void Render();
 
-		// This does not copy it's base class!
 		Sprite& operator=(Sprite other);
+		Sprite(const Sprite& other);
 	};
 
 }

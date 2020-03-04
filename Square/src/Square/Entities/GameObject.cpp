@@ -7,7 +7,7 @@ namespace Square {
 	{
 		mPrevPos = VEC2_ZERO;
 
-		mRotation = 0;
+		mRotation = 0.0f;
 
 		mActive = true;
 
@@ -155,6 +155,36 @@ namespace Square {
 	void GameObject::Render()
 	{
 
+	}
+
+	GameObject& GameObject::operator=(GameObject other)
+	{
+		mPos = other.mPos;
+		mPrevPos = other.mPrevPos;
+
+		mRotation = other.mRotation;
+
+		mActive = other.mActive;
+
+		mParent = other.mParent;
+
+		mScale = other.mScale;
+
+		return *this;
+	}
+
+	GameObject::GameObject(const GameObject& other)
+	{
+		mPos = other.mPos;
+		mPrevPos = other.mPrevPos;
+
+		mRotation = other.mRotation;
+
+		mActive = other.mActive;
+
+		mParent = other.mParent;
+
+		mScale = other.mScale;
 	}
 
 }

@@ -104,10 +104,19 @@ namespace Square {
 
 	Text& Text::operator=(Text other)
 	{
+		GameObject::operator=(other);
+
 		mSprites = other.mSprites;
 		mReversed = other.mReversed;
 
 		return *this;
+	}
+
+	Text::Text(const Text& other)
+		: GameObject(other)
+	{
+		mSprites = other.mSprites;
+		mReversed = other.mReversed;
 	}
 
 }
