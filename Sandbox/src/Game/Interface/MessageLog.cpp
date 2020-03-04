@@ -1,4 +1,4 @@
-#include "Game/Interface/Message.h"
+#include "Game/Interface/MessageLog.h"
 
 MessageLog::MessageLog(int width, int height)
 	: mWidth(width), mHeight(height)
