@@ -33,7 +33,7 @@ int InventoryContainer::SlotIndex(Square::Vector2 position)
 	return slotIndex;
 }
 
-void InventoryContainer::LeftClick(Square::Vector2 position)
+void InventoryContainer::LeftClick(Square::Vector2 position) // THE ITEM DRAGS TO YOU (100ms) -- record timer when you click and record the release
 {
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
@@ -54,7 +54,7 @@ void InventoryContainer::RightClick(Square::Vector2 position)
 {
 }
 
-void InventoryContainer::Drag(Square::Vector2 position)
+void InventoryContainer::Drag(Square::Vector2 position) // BE ABLE TO DRAG AROUND THE INVENTORY
 {
 	if (mInputHandler.MouseButtonDown(Square::InputHandler::MOUSE_BUTTON::left))
 	{
