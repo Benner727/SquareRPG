@@ -11,11 +11,13 @@ private:
 	std::vector<Square::Text*> mText;
 	int mWidth;
 	int mHeight;
+	std::string mFontPath;
+	int mFontSize;
 
 	void AddMessage(Square::Text* message);
 
 public:
-	MessageLog(int width, int height);
+	MessageLog(int width, int height, std::string fontPath, int fontSize);
 	~MessageLog();
 
 	void AddMessage(std::string text, SDL_Color color);

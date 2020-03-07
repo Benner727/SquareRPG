@@ -1,7 +1,7 @@
 #include "Game/Interface/MessageLog.h"
 
-MessageLog::MessageLog(int width, int height)
-	: mWidth(width), mHeight(height)
+MessageLog::MessageLog(int width, int height, std::string fontPath, int fontSize)
+	: mWidth(width), mHeight(height), mFontPath(fontPath), mFontSize(fontSize)
 {
 }
 
@@ -51,7 +51,7 @@ void MessageLog::AddMessage(std::string text, SDL_Color color)
 		{
 			while (result[i].size() > mWidth)
 			{
-				AddMessage(new Square::Text(message, "UI/VeraMono.ttf", 16, color));
+				AddMessage(new Square::Text(message, mFontPath, mFontSize, color));
 				message.clear();
 				message += result[i].substr(0, mWidth);
 
@@ -61,7 +61,7 @@ void MessageLog::AddMessage(std::string text, SDL_Color color)
 
 			if (result[i].size())
 			{
-				AddMessage(new Square::Text(message, "UI/VeraMono.ttf", 16, color));
+				AddMessage(new Square::Text(message, mFontPath, mFontSize, color));
 				message.clear();
 				currentLineLength = 0;
 				i--;
@@ -69,7 +69,7 @@ void MessageLog::AddMessage(std::string text, SDL_Color color)
 		}
 
 		if (result[i].size() && i == result.size() - 1)
-			AddMessage(new Square::Text(message, "UI/VeraMono.ttf", 16, color));
+			AddMessage(new Square::Text(message, mFontPath, mFontSize, color));
 	}
 }
 
