@@ -139,4 +139,24 @@ namespace Square {
 		return *this;
 	}
 
+	AnimatedSprite::AnimatedSprite(const AnimatedSprite& other)
+		: Sprite(other), mTimer(Timer::Instance())
+	{
+		mStartX = other.mStartX;
+		mStartY = other.mStartY;
+
+		mCurrentFrame = other.mCurrentFrame;
+		mFrameCount = other.mFrameCount;
+		mAnimationSpeed = other.mAnimationSpeed;
+		mTimePerFrame = other.mTimePerFrame;
+		mAnimationTimer = other.mAnimationTimer;
+
+		mAnimationDirection = other.mAnimationDirection;
+
+		mAnimationDone = other.mAnimationDone;
+		mPaused = other.mPaused;
+
+		mWrapMode = other.mWrapMode;
+	}
+
 }

@@ -49,8 +49,8 @@ namespace Square {
 
 		void Update();
 
-		// This does not copy it's base class!
 		AnimatedSprite& operator=(AnimatedSprite other);
+		AnimatedSprite(const AnimatedSprite& other);
 	};
 
 }

@@ -6,7 +6,7 @@ class GameLayer : public Square::Layer
 {
 public:
 	GameLayer();
-	virtual ~GameLayer() = default;
+	virtual ~GameLayer();
 
 	virtual void OnUpdate() override;
 	virtual void OnRender() override;

@@ -46,6 +46,9 @@ namespace Square {
 
 		virtual void Update();
 		virtual void Render();
+
+		GameObject& operator=(GameObject other);
+		GameObject(const GameObject& other);
 	};
 
 }
