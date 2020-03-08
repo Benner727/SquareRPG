@@ -2,8 +2,8 @@
 
 Player::Player()
 {
-	mSprite = nullptr;
-	//mSprite->Parent(this);
+	mSprite = new Square::Sprite("Player.png");
+	mSprite->Parent(this);
 
 	mSpellBook = new StandardSpellBook();
 	mPrayerBook = new StandardPrayerBook();
@@ -17,6 +17,11 @@ Player::Player()
 	mCombatDelay = 0.0f;
 
 	mTarget = nullptr;
+
+	mMoving = false;
+	mMoveSpeed = 16.0f;
+	mMapPosition = { 0, 0, 0 };
+	Pos(Square::Vector2(16.0, 16.0));
 }
 
 Player::~Player()
@@ -91,6 +96,17 @@ void Player::HandlePrayer()
 	}
 }
 
+void Player::HandleMovement()
+{
+	if (mMoving)
+	{
+		Square::Vector2 endPosition = Square::Vector2(mMapPosition.x * 32 + 16, mMapPosition.y * 32 + 16);
+		Square::Vector2 direction = (endPosition - Pos()).Normalize();
+		float angle = atan2(direction.y, direction.x) * RAD_TO_DEG;
+		Translate(Square::RotateVector(mMoveSpeed * Square::Timer::Instance().DeltaTime(), angle));
+	}
+}
+
 void Player::CalculateBonuses()
 {
 	mStatBonus.Reset();
@@ -104,6 +120,12 @@ void Player::CalculateBonuses()
 	}
 }
 
+void Player::MoveTo(Direction dir)
+{
+	mMoving = true;
+	mMapPosition.Translate(dir);
+}
+
 void Player::Update()
 {
 	HandleDelays();
@@ -111,6 +133,8 @@ void Player::Update()
 	mSkills.Update();
 
 	HandlePrayer();
+
+	HandleMovement();
 }
 
 void Player::Render()

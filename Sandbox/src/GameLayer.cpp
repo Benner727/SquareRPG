@@ -33,5 +33,6 @@ void GameLayer::OnUpdate()
 void GameLayer::OnRender()
 {
 	map.Render(0);
+	player->Render();
 	playerUI->Render();
 }

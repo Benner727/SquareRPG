@@ -7,6 +7,7 @@
 #include "Game/Player/Gear.h"
 #include "Game/Player/Magic/StandardSpellBook.h"
 #include "Game/Player/Prayer/StandardPrayerBook.h"
+#include "Game/Point.h"
 
 enum class CombatOption {
 	melee_accurate, melee_aggressive, melee_defensive, melee_controlled,
@@ -18,6 +19,9 @@ class Player : public Square::GameObject
 {
 private:
 	Square::Sprite* mSprite;
+	Point mMapPosition;
+	bool mMoving;
+	float mMoveSpeed;
 
 	CombatOption mCombatStance;
 	bool mAutoAttack;
@@ -42,6 +46,7 @@ private:
 
 	void HandleDelays();
 	void HandlePrayer();
+	void HandleMovement();
 
 public:
 	Player();
@@ -81,6 +86,9 @@ public:
 	void CalculateBonuses();
 
 	inline bool Dead() const { return mSkills.EffectiveLevel(Skills::SkillIndex::hitpoints) < 1; }
+
+	void MoveTo(Direction dir);
+	inline bool Moving() const { return mMoving; }
 
 	void Update();
 	void Render();
