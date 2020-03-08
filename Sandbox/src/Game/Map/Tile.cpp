@@ -1,23 +1,26 @@
 #include "Tile.h"
 
-Tile::Tile(bool walkable, bool canAttackOver, std::string spritePath, std::vector<std::string> commands)
-	: mWalkable(walkable), mCanAttackOver(canAttackOver), mCommands(commands)
+Tile::Tile(bool walkable, bool canAttackOver, Square::Sprite* terrain, Square::Sprite* feature, std::vector<std::string> commands)
+	: mWalkable(walkable), mCanAttackOver(canAttackOver), mTerrain(terrain), mFeature(feature), mCommands(commands)
 {
-	mSprite = new Square::Sprite(spritePath);
-	mSprite->Parent(this);
+	if (mTerrain) mTerrain->Parent(this);
+	if (mFeature) mFeature->Parent(this);
 }
 
 Tile::~Tile()
 {
-	delete mSprite;
+	delete mTerrain;
+	delete mFeature;
 }
 
 void Tile::Update()
 {
-	if (mSprite) mSprite->Update();
+	if (mTerrain) mTerrain->Update();
+	if (mFeature) mFeature->Update();
 }
 
 void Tile::Render()
 {
-	if (mSprite) mSprite->Render();
+	if (mTerrain) mTerrain->Render();
+	if (mFeature) mFeature->Render();
 }

@@ -3,23 +3,28 @@
 #include <vector>
 #include <string>
 
-#include "Game/Map/Tile.h"
+#include "Game/Map/Region.h"
 #include "Game/Point.h"
 
 
 class Map
 {
 private:
-	int width;
-	int height;
+	int mWidth;
+	int mHeight;
 
-	std::vector<Tile> mTiles;
-
+	std::vector<Region*> mRegions;
 
 public:
-	std::vector<std::string> TileCommands(Point p) {};
+	Map();
+	~Map();
 
-	void Update();
-	void Render();
+	Tile* GetTile(Point p);
+	std::vector<std::string> TileCommands(Point p);
+	bool TileWalkable(Point p);
+	bool TileCanAttackOver(Point p);
+
+	void Update(int z);
+	void Render(int z);
 
 };

@@ -27,9 +27,11 @@ void GameLayer::OnUpdate()
 {
 	player->Update();
 	playerUI->Update();
+	map.Update(0);
 }
 
 void GameLayer::OnRender()
 {
+	map.Render(0);
 	playerUI->Render();
 }

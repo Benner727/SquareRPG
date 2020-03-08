@@ -4,10 +4,13 @@
 
 #include "Game/Interface/PlayerInterface.h"
 #include "Game/Items/ItemFactory.h"
+#include "Game/Map/Map.h"
 
 class GameLayer : public Square::Layer
 {
 public:
+	Map map;
+
 	GameLayer();
 	virtual ~GameLayer();
 

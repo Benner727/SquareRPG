@@ -10,17 +10,16 @@ private:
 	bool mWalkable;
 	bool mCanAttackOver;
 
-	Square::Sprite* mSprite;
+	Square::Sprite* mTerrain;
+	Square::Sprite* mFeature;
 	std::vector<std::string> mCommands;
 
-	Tile(bool walkable, bool canAttackOver, std::string spritePath, std::vector<std::string> commands);
+public:
+	Tile(bool walkable, bool canAttackOver, Square::Sprite* terrain, Square::Sprite* feature, std::vector<std::string> commands);
 	virtual ~Tile();
 
-	friend class Map;
-
-public:
 	inline bool Walkable() const { return mWalkable;  }
-	inline bool CanTalkAttack() const { return mCanAttackOver; }
+	inline bool CanAttackOver() const { return mCanAttackOver; }
 	inline std::vector<std::string> const Commands() { return mCommands; }
 
 	virtual void Update();
