@@ -11,13 +11,11 @@ protected:
 	int mWidth;
 	int mHeight;
 
-	//Square::InputHandler& mInputHandler;
-
 	Square::Vector2 mPosition;
 	Square::Sprite mContainer;
 	Square::Sprite mButtonUnselected;
 	Square::Sprite mButtonSelected;
-	Square::InputHandler& mInputHandler = Square::InputHandler::Instance()
+	Square::InputHandler& mInputHandler = Square::InputHandler::Instance();
 
 	int mActiveSlot = -1;
 	Square::Vector2 mDragPosition = Square::Vector2(-1, -1);

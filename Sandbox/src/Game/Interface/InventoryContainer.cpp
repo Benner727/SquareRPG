@@ -3,8 +3,7 @@
 #include "MenuContainer.h"
 
 InventoryContainer::InventoryContainer(Inventory& inventory) :
-	mInventory(inventory),
-	mInputHandler(Square::InputHandler::Instance())
+	mInventory(inventory)
 {
 	mWidth = CONTAINER_WIDTH;
 	mHeight = CONTAINER_HEIGHT;
@@ -52,9 +51,13 @@ void InventoryContainer::LeftClick(Square::Vector2 position) // THE ITEM DRAGS T
 
 void InventoryContainer::RightClick(Square::Vector2 position)
 {
+	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::right))
+	{
+
+	}
 }
 
-void InventoryContainer::Drag(Square::Vector2 position) // BE ABLE TO DRAG AROUND THE INVENTORY
+void InventoryContainer::Drag(Square::Vector2 position)
 {
 	if (mInputHandler.MouseButtonDown(Square::InputHandler::MOUSE_BUTTON::left))
 	{
@@ -63,10 +66,7 @@ void InventoryContainer::Drag(Square::Vector2 position) // BE ABLE TO DRAG AROUN
 	else if (mInputHandler.MouseButtonReleased(Square::InputHandler::MOUSE_BUTTON::left))
 	{
 		int swapIndex = SlotIndex(position);
-		if (swapIndex != mInventory.ActiveSlot() && mInventory.GetItem(swapIndex))
-		{
-			mInventory.Swap(mInventory.ActiveSlot(), swapIndex);
-		}
+		mInventory.Swap(mInventory.ActiveSlot(), swapIndex);
 
 		mDragPosition = Square::Vector2(-1, -1);
 		mInventory.ActiveSlot(-1);
@@ -76,7 +76,7 @@ void InventoryContainer::Drag(Square::Vector2 position) // BE ABLE TO DRAG AROUN
 void InventoryContainer::Hover(Square::Vector2 position)
 {
 	int slotIndex = SlotIndex(position);
-	mActiveSlot = (mInventory.GetItem(slotIndex)) ? slotIndex : -1;
+	mActiveSlot = slotIndex;
 }
 
 void InventoryContainer::Update()
