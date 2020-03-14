@@ -26,7 +26,7 @@ Tile* Map::GetTile(Point p) const
 	{
 		if (region->Contains(p))
 		{
-			tile = region->Tiles(p.z)[(p.x - Region::SIZE) + (p.y - Region::SIZE) * Region::SIZE];
+			tile = region->Tiles(p.z)[p.x + p.y * Region::SIZE];
 			break;
 		}
 	}

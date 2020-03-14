@@ -1,10 +1,5 @@
 #include "PathFinder.h"
 
-bool PathFinder::ValidPoint(const Point& p)
-{
-	return p.x > -1 && p.y > -1 && p.x < mMap.Width() && p.y < mMap.Height();
-}
-
 bool PathFinder::CanWalkTo(Point p, int direction)
 {
 	switch (direction)
@@ -45,7 +40,7 @@ bool PathFinder::FillOpenNodes(Node& n)
 
 	for (int direction = 0; direction < Direction::TOTAL_DIRECTIONS; direction++)
 	{
-		if (ValidPoint(n.position) && CanWalkTo(n.position, direction))
+		if (CanWalkTo(n.position, direction))
 		{
 			neighbor = n.position;
 			neighbor.Translate(direction);
@@ -59,10 +54,29 @@ bool PathFinder::FillOpenNodes(Node& n)
 			newNode.parent = n.position;
 			newNode.distance = distanceFromEnd;
 			newNode.cost = distanceFromStart;
-			if (distanceFromStart < MAX_COST)
+			if (distanceFromStart < MAX_COST && ViablePoint(neighbor, distanceFromStart + distanceFromEnd))
 				mOpenNodes.push_back(newNode);
 		}
 	}
+	return false;
+}
+
+bool PathFinder::ViablePoint(Point p, int cost)
+{
+	std::list<Node>::iterator i = std::find(mClosedNodes.begin(), mClosedNodes.end(), p);
+	if (i != mClosedNodes.end())
+	{
+		if ((*i).cost + (*i).distance < cost) return true;
+		mClosedNodes.erase(i);
+	}
+
+	i = std::find(mOpenNodes.begin(), mOpenNodes.end(), p);
+	if (i != mOpenNodes.end())
+	{
+		if ((*i).cost + (*i).distance < cost) return true;
+		mOpenNodes.erase(i);
+	}
+
 	return false;
 }
 
@@ -94,6 +108,7 @@ std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
 	n.cost = 0;
 	n.distance = 0;
 	n.position = mStart;
+	n.parent = 0;
 
 	mOpenNodes.push_back(n);
 
@@ -112,7 +127,7 @@ std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
 			{
 				if ((*i).position == parentPosition && !((*i).position == mStart))
 				{
-					path.push_front(parentPosition);
+					path.push_front((*i).position);
 					parentPosition = (*i).parent;
 				}
 			}

@@ -19,7 +19,7 @@ Player::Player()
 	mTarget = nullptr;
 
 	mMoving = false;
-	mMoveSpeed = 16.0f;
+	mMoveSpeed = 32.0f;
 	mMapPosition = { 0, 0, 0 };
 	Pos(Square::Vector2(16.0, 16.0));
 }
@@ -129,10 +129,10 @@ void Player::CalculateBonuses()
 	}
 }
 
-void Player::MoveTo(Direction dir)
+void Player::MoveTo(Point point)
 {
 	mMoving = true;
-	mMapPosition.Translate(dir);
+	mMapPosition = point;
 }
 
 void Player::Update()

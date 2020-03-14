@@ -15,6 +15,11 @@ private:
 		Point parent;
 		int distance;
 		int cost;
+
+		bool operator == (const Point& other)
+		{
+			return position == other;
+		}
 	};
 
 	const int ORTHOGONAL_COST = 10;
@@ -27,9 +32,9 @@ private:
 	std::list<Node> mOpenNodes;
 	std::list<Node> mClosedNodes;
 
-	bool ValidPoint(const Point& p);
 	bool CanWalkTo(Point p, int direction);
 	bool FillOpenNodes(Node& n);
+	bool ViablePoint(Point p, int cost);
 	int CalculateDistanceToEnd(Point p);
 
 public:

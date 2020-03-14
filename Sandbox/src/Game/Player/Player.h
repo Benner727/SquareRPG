@@ -87,7 +87,8 @@ public:
 
 	inline bool Dead() const { return mSkills.EffectiveLevel(Skills::SkillIndex::hitpoints) < 1; }
 
-	void MoveTo(Direction dir);
+	inline Point MapPosition() const { return mMapPosition; }
+	void MoveTo(Point point);
 	inline bool Moving() const { return mMoving; }
 
 	void Update();
