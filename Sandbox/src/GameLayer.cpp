@@ -34,6 +34,8 @@ void GameLayer::HandlePathing()
 		target.x = Square::InputHandler::Instance().MousePos().x / 32.0f;
 		target.y = Square::InputHandler::Instance().MousePos().y / 32.0f;
 
+		std::cout << target.x << ", " << target.y << std::endl;
+
 		path.clear();
 		path = pathFinder.GeneratePath(player->MapPosition(), target);
 	}

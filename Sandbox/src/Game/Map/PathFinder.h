@@ -20,6 +20,10 @@ private:
 		{
 			return position == other;
 		}
+
+		Node()
+		{
+		}
 	};
 
 	const int ORTHOGONAL_COST = 10;
@@ -34,7 +38,7 @@ private:
 
 	bool CanWalkTo(Point p, int direction);
 	bool FillOpenNodes(Node& n);
-	bool ViablePoint(Point p, int cost);
+	bool UnviablePoint(Point p, int cost);
 	int CalculateDistanceToEnd(Point p);
 
 public:

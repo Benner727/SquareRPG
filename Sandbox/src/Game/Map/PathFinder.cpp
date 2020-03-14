@@ -54,20 +54,21 @@ bool PathFinder::FillOpenNodes(Node& n)
 			newNode.parent = n.position;
 			newNode.distance = distanceFromEnd;
 			newNode.cost = distanceFromStart;
-			if (distanceFromStart < MAX_COST && ViablePoint(neighbor, distanceFromStart + distanceFromEnd))
+			if (distanceFromStart < MAX_COST && !UnviablePoint(neighbor, distanceFromStart + distanceFromEnd))
 				mOpenNodes.push_back(newNode);
 		}
 	}
 	return false;
 }
 
-bool PathFinder::ViablePoint(Point p, int cost)
+bool PathFinder::UnviablePoint(Point p, int cost)
 {
 	std::list<Node>::iterator i = std::find(mClosedNodes.begin(), mClosedNodes.end(), p);
 	if (i != mClosedNodes.end())
 	{
 		if ((*i).cost + (*i).distance < cost) return true;
 		mClosedNodes.erase(i);
+		return false;
 	}
 
 	i = std::find(mOpenNodes.begin(), mOpenNodes.end(), p);
@@ -75,6 +76,7 @@ bool PathFinder::ViablePoint(Point p, int cost)
 	{
 		if ((*i).cost + (*i).distance < cost) return true;
 		mOpenNodes.erase(i);
+		return false;
 	}
 
 	return false;
@@ -103,6 +105,9 @@ std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
 	mStart = source;
 	mEnd = destination;
 	std::list<Point> path;
+
+	mOpenNodes.clear();
+	mClosedNodes.clear();
 	
 	Node n;
 	n.cost = 0;
