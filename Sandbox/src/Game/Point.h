@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Direction {
+enum Direction {
 	north,
 	east,
 	south,
@@ -8,14 +8,20 @@ enum class Direction {
 	northeast,
 	northwest,
 	southeast,
-	southwest
+	southwest,
+	TOTAL_DIRECTIONS
 };
 
 struct Point
 {
 	int x, y, z;
+	
+	Point(int _x = 0, int _y = 0, int _z = 0)
+		: x(_x), y(_y), z(_z)
+	{
+	}
 
-	void Translate(Direction dir)
+	void Translate(int dir)
 	{
 		switch (dir)
 		{
@@ -48,5 +54,15 @@ struct Point
 			x--;
 			break;
 		}
+	}
+
+	bool operator == (const Point& other)
+	{
+		return x == other.x && y == other.y && z == other.z;
+	}
+
+	Point operator + (const Point& other)
+	{
+		return Point(x + other.x, y + other.y, z + other.z);
 	}
 };

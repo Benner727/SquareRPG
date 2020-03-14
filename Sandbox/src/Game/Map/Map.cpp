@@ -18,7 +18,7 @@ Map::~Map()
 {
 }
 
-Tile* Map::GetTile(Point p)
+Tile* Map::GetTile(Point p) const
 {
 	Tile* tile = nullptr;
 
@@ -40,13 +40,13 @@ std::vector<std::string> Map::TileCommands(Point p)
 	return (tile) ? tile->Commands() : std::vector<std::string>();
 }
 
-bool Map::TileWalkable(Point p)
+bool Map::TileWalkable(Point p) const
 {
 	Tile* tile = GetTile(p);
 	return (tile) ? tile->Walkable() : false;
 }
 
-bool Map::TileCanAttackOver(Point p)
+bool Map::TileCanAttackOver(Point p) const
 {
 	Tile* tile = GetTile(p);
 	return (tile) ? tile->CanAttackOver() : false;

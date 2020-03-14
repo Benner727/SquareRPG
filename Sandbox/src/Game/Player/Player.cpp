@@ -101,9 +101,18 @@ void Player::HandleMovement()
 	if (mMoving)
 	{
 		Square::Vector2 endPosition = Square::Vector2(mMapPosition.x * 32 + 16, mMapPosition.y * 32 + 16);
-		Square::Vector2 direction = (endPosition - Pos()).Normalize();
-		float angle = atan2(direction.y, direction.x) * RAD_TO_DEG;
-		Translate(Square::RotateVector(mMoveSpeed * Square::Timer::Instance().DeltaTime(), angle));
+
+		if ((Pos() - endPosition).Magnitude() > 1.0f)
+		{
+			Square::Vector2 direction = (endPosition - Pos()).Normalize();
+			float angle = atan2(direction.y, direction.x) * RAD_TO_DEG;
+			Translate(Square::RotateVector(mMoveSpeed * Square::Timer::Instance().DeltaTime(), angle));
+		}
+		else
+		{
+			Pos(endPosition);
+			mMoving = false;
+		}
 	}
 }
 
