@@ -2,7 +2,7 @@
 
 void Tooltip::DrawBackground(Square::Vector2 position)
 {
-	Square::Vector2 dimensions = mText->ScaledDimensions();
+	Square::Vector2 dimensions = mTitle->ScaledDimensions();
 	int startX = position.x - dimensions.x / 2 - PADDING;
 	int endX = position.x + dimensions.x / 2 + PADDING;
 	int startY = position.y - dimensions.y / 2 - PADDING;
@@ -19,8 +19,8 @@ void Tooltip::DrawBackground(Square::Vector2 position)
 
 Tooltip::Tooltip(const std::string text, int size, SDL_Color color)
 {
-	mText = new Square::Text(text, FONT_PATH, size, color);
-	std::cout << mText->ScaledDimensions().x << ", " << mText->ScaledDimensions().y << std::endl;
+	mTitle = new Square::Text(text, FONT_PATH, size, color);
+	std::cout << mTitle->ScaledDimensions().x << ", " << mTitle->ScaledDimensions().y << std::endl;
 }
 
 Tooltip::~Tooltip()
@@ -29,6 +29,6 @@ Tooltip::~Tooltip()
 
 void Tooltip::Render()
 {
-	DrawBackground(mText->Pos());
-	mText->Render();
+	DrawBackground(mTitle->Pos());
+	mTitle->Render();
 }
