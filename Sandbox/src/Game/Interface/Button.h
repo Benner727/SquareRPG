@@ -2,12 +2,17 @@
 
 #include <Square.h>
 
-class Button : public Square::GameObject
+class Button
 {
 private:
-	std::string mText;
+	Square::Text* mText;
+	Square::Graphics& mGraphics = Square::Graphics::Instance();
+
+	// onchange handler
 
 public:
-	Button();
+	Button(std::string text);
 	~Button();
+
+	void Render();
 };
