@@ -22,3 +22,4 @@
 // Utilities
 #include "Square/Utilities/MathHelper.h"
 #include "Square/Utilities/Timer.h"
+#include "Square/Utilities/Logger.h"

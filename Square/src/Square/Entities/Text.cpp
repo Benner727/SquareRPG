@@ -9,23 +9,28 @@ namespace Square {
 
 	Text::Text(const std::string& text, const std::string& fontpath, int size, SDL_Color color)
 	{
-		float width = 0;
-		for (const char& c : text)
+		if (text.size() > 0)
 		{
-			mSprites.push_back(std::shared_ptr<Sprite>(new Sprite(c, fontpath, size, color)));
-			mSprites.back()->Parent(this);
-			width += mSprites.back()->ScaledDimensions().x;
-		}
+			float width = 0;
+			for (const char& c : text)
+			{
+				mSprites.push_back(std::shared_ptr<Sprite>(new Sprite(c, fontpath, size, color)));
+				mSprites.back()->Parent(this);
+				width += mSprites.back()->ScaledDimensions().x;
+			}
 
-		width /= 2.0f;
-		width -= mSprites.front()->ScaledDimensions().x * 0.5f;
-		for (auto& sprite : mSprites)
-		{
-			sprite->Pos(-VEC2_RIGHT * width);
-			width -= sprite->ScaledDimensions().x;
-		}
+			width /= 2.0f;
+			width -= mSprites.front()->ScaledDimensions().x * 0.5f;
+			for (auto& sprite : mSprites)
+			{
+				sprite->Pos(-VEC2_RIGHT * width);
+				width -= sprite->ScaledDimensions().x;
+			}
 
-		mReversed = false;
+			mReversed = false;
+		}
+		else
+			LOG(ERROR) << "Error: You cannot have a text sprite containing 0 characters!";
 	}
 
 	Vector2 Text::ScaledDimensions()
@@ -99,10 +104,19 @@ namespace Square {
 
 	Text& Text::operator=(Text other)
 	{
+		GameObject::operator=(other);
+
 		mSprites = other.mSprites;
 		mReversed = other.mReversed;
 
 		return *this;
+	}
+
+	Text::Text(const Text& other)
+		: GameObject(other)
+	{
+		mSprites = other.mSprites;
+		mReversed = other.mReversed;
 	}
 
 }

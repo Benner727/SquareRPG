@@ -29,7 +29,7 @@ namespace Square {
 		{
 			mFonts[key] = std::shared_ptr<TTF_Font>(TTF_OpenFont(fullPath.c_str(), size), TTF_CloseFont);
 			if (!mFonts[key])
-				std::cout << "Font Loading Error: Font- " << filename << " Error- " << TTF_GetError() << std::endl;
+				LOG(ERROR) << "Font Loading Error: Font- " << filename << " Error- " << TTF_GetError();
 		}
 
 		return mFonts[key];
@@ -67,7 +67,7 @@ namespace Square {
 		{
 			mMusic[fullPath] = std::shared_ptr<Mix_Music>(Mix_LoadMUS(fullPath.c_str()), Mix_FreeMusic);
 			if (!mMusic[fullPath])
-				std::cout << "Music Loading Error: File-" << filename << " Erorr-" << Mix_GetError() << std::endl;
+				LOG(ERROR) << "Music Loading Error: File-" << filename << " Erorr-" << Mix_GetError();
 		}
 
 		return mMusic[fullPath];
@@ -82,7 +82,7 @@ namespace Square {
 		{
 			mSFX[fullPath] = std::shared_ptr<Mix_Chunk>(Mix_LoadWAV(fullPath.c_str()), Mix_FreeChunk);
 			if (!mSFX[fullPath])
-				std::cout << "SFX Loading Error: File-" << filename << " Erorr-" << Mix_GetError() << std::endl;
+				LOG(ERROR) << "SFX Loading Error: File-" << filename << " Erorr-" << Mix_GetError();
 		}
 
 		return mSFX[fullPath];

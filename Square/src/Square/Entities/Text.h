@@ -31,6 +31,7 @@ namespace Square {
 		void Render();
 
 		Text& operator=(Text other);
+		Text(const Text& other);
 	};
 
 }

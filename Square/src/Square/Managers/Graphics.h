@@ -9,6 +9,7 @@
 
 #include "Square/Core/Core.h"
 #include "Square/Utilities/MathHelper.h"
+#include "Square/Utilities/Logger.h"
 
 namespace Square {
 
