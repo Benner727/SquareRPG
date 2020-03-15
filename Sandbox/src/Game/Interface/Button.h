@@ -8,8 +8,8 @@ class Button : public Square::GameObject
 {
 private:
 	const std::string FONT_PATH = "UI/VeraMono.ttf";
-	const SDL_Color COLOR = { 255, 255, 255, 255 };
-	const SDL_Color HOVERED_COLOR = { 255, 255, 255, 100 };
+	const SDL_Color COLOR = { 0, 0, 0, 255 };
+	const SDL_Color HOVERED_COLOR = { 150, 150, 150, 255 };
 	static const int SIZE = 12;
 	static const int VERTICAL_PADDING = 10;
 	Square::Graphics& mGraphics = Square::Graphics::Instance();

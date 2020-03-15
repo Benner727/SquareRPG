@@ -3,25 +3,28 @@
 #include "MenuContainer.h"
 
 InventoryContainer::InventoryContainer(Inventory& inventory) :
-	mInventory(inventory)
+	mInventory(inventory), mDrag(false), mLastClick(-1)
 {
 	mWidth = CONTAINER_WIDTH;
 	mHeight = CONTAINER_HEIGHT;
 	mPosition = Square::Vector2(
-		Square::Graphics::SCREEN_WIDTH - CONTAINER_WIDTH / 2,
-		Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT / 2 - MenuContainer::MENU_HEIGHT);
+		Square::Graphics::SCREEN_WIDTH - CONTAINER_WIDTH / 2 - PADDING,
+		Square::Graphics::SCREEN_HEIGHT - CONTAINER_HEIGHT / 2 - MenuContainer::MENU_HEIGHT - PADDING * 2);
 
 	mContainer = Square::Sprite(CONTAINER_PATH);
 	mContainer.Pos(mPosition);
 
-	mButtonSelected = Square::Sprite(BUTTON_UNSELECTED);	
-	mButtonUnselected = Square::Sprite(BUTTON_SELECTED);
+	mButtonSelected = Square::Sprite(BUTTON_SELECTED);
+	mButtonUnselected = Square::Sprite(BUTTON_UNSELECTED);
 	mButtonSelected.Parent(&mContainer);
 	mButtonUnselected.Parent(&mContainer);
+
+	mTooltip = nullptr;
 }
 
 InventoryContainer::~InventoryContainer()
 {
+	if (mTooltip) delete mTooltip;
 }
 
 int InventoryContainer::SlotIndex(Square::Vector2 position)
@@ -32,7 +35,7 @@ int InventoryContainer::SlotIndex(Square::Vector2 position)
 	return slotIndex;
 }
 
-void InventoryContainer::LeftClick(Square::Vector2 position) // THE ITEM DRAGS TO YOU (100ms) -- record timer when you click and record the release
+void InventoryContainer::LeftClick(Square::Vector2 position)
 {
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
@@ -53,23 +56,43 @@ void InventoryContainer::RightClick(Square::Vector2 position)
 {
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::right))
 	{
-
+		int slotIndex = SlotIndex(position);
+		Item* mItem = mInventory.GetItem(slotIndex);
+		if (mItem)
+		{
+			std::cout << position.x << " " << position.y << std::endl;
+			std::vector<std::string> actions = mItem->InventoryActions();
+			mTooltip = new Tooltip(mItem->Name(), actions);
+			mTooltip->Position(position);
+		}
 	}
 }
 
 void InventoryContainer::Drag(Square::Vector2 position)
 {
-	if (mInputHandler.MouseButtonDown(Square::InputHandler::MOUSE_BUTTON::left))
+	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
-		mDragPosition = position;
+		mLastClick = std::clock();
 	}
 	else if (mInputHandler.MouseButtonReleased(Square::InputHandler::MOUSE_BUTTON::left))
 	{
+		std::cout << '3' << std::endl;
 		int swapIndex = SlotIndex(position);
 		mInventory.Swap(mInventory.ActiveSlot(), swapIndex);
 
 		mDragPosition = Square::Vector2(-1, -1);
 		mInventory.ActiveSlot(-1);
+
+		mLastClick = -1;
+		mDrag = false;
+	}
+	else if (mDrag)
+	{
+		mDragPosition = position;
+	}
+	else if (mLastClick != -1 && std::clock() - mLastClick > 100)
+	{
+		mDrag = true;
 	}
 }
 
@@ -87,6 +110,7 @@ void InventoryContainer::Update()
 	{
 		Hover(position);
 		LeftClick(position);
+		RightClick(position);
 		Drag(position);
 	}
 	else
@@ -96,6 +120,7 @@ void InventoryContainer::Update()
 		mActiveSlot = -1;
 	}
 
+	if (mTooltip) mTooltip->Update();
 }
 
 void InventoryContainer::Render()
@@ -147,4 +172,6 @@ void InventoryContainer::Render()
 
 		row += 1;
 	}
+
+	if (mTooltip) mTooltip->Render();
 }

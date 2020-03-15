@@ -13,7 +13,6 @@ private:
 	Player mPlayer;
 	Interface mInterface;
 	ItemFactory& mItemFactory;
-	Tooltip* tooltip;
 
 public:
 	GameLayer();

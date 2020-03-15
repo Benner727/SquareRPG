@@ -6,7 +6,7 @@ MenuContainer::MenuContainer()
 	mHeight = MENU_HEIGHT;
 	mPosition = Square::Vector2(
 		Square::Graphics::SCREEN_WIDTH - MENU_WIDTH / 2,
-		Square::Graphics::SCREEN_HEIGHT - MENU_HEIGHT / 2);
+		Square::Graphics::SCREEN_HEIGHT - MENU_HEIGHT / 2) - PADDING;
 
 	mContainer = Square::Sprite(MENU_PATH);
 	mContainer.Pos(mPosition);

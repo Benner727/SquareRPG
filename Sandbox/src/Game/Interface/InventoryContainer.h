@@ -1,8 +1,10 @@
 #pragma once
 
 #include <Square.h>
+#include <ctime>
 
 #include "Game/Interface/IInputContainer.h"
+#include "Game/Interface/Tooltip.h"
 #include "Game/Player/Inventory.h"
 
 class InventoryContainer : public IInputContainer
@@ -12,10 +14,16 @@ public:
 	const std::string BUTTON_UNSELECTED = "Graphics/resting-item.png";
 	const std::string BUTTON_SELECTED = "Graphics/selected-item.png";
 
+	static const int PADDING = 10;
 	static const int CONTAINER_WIDTH = 256;
 	static const int CONTAINER_HEIGHT = 320;
 	static const int BUTTON_WIDTH = 64;
 	static const int BUTTON_HEIGHT = 64;
+
+	Tooltip* mTooltip;
+
+	std::clock_t mLastClick;
+	bool mDrag;
 
 private:
 	Inventory& mInventory;

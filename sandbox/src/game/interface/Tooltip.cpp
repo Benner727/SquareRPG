@@ -11,7 +11,12 @@ void Tooltip::DrawBackground(Square::Vector2 position)
 	{
 		for (int y = startY; y < endY; y++)
 		{
-			mGraphics.DrawPixel(Square::Vector2(x, y), { 255, 255, 255, 100 });
+			bool border = x == startX || y == startY || x == endX - 1 || y == endY - 1;
+
+			if (border)
+				mGraphics.DrawPixel(Square::Vector2(x, y), { 0, 0, 0, 255 });
+			else
+				mGraphics.DrawPixel(Square::Vector2(x, y), { 230, 230, 230, 255 });
 		}
 	}
 }
@@ -27,7 +32,7 @@ void Tooltip::DrawTitleBackground()
 	{
 		for (int y = startY; y < endY; y++)
 		{
-			mGraphics.DrawPixel(Square::Vector2(x, y), { 255, 255, 255, 255 });
+			mGraphics.DrawPixel(Square::Vector2(x, y), { 0, 0, 0, 255 });
 		}
 	}
 }
@@ -52,15 +57,18 @@ int Tooltip::MaxWidth()
 	return std::max((int) mTitle->ScaledDimensions().x + PADDING * 2, maxButtonWidth);
 }
 
-Tooltip::Tooltip(const std::string text, int size, SDL_Color color)
+Tooltip::Tooltip(const std::string text, std::vector<std::string> commands)
 {
-	mTitle = new Square::Text(text, FONT_PATH, size, color);
+	mTitle = new Square::Text(text, FONT_PATH, TITLE_SIZE, TITLE_COLOR);
 
-	std::function<void()> fn = std::bind(&Tooltip::fc, this);
-	Button* button = new Button("click me", fn);
-	button->Parent(mTitle);
+	//std::function<void()> fn = std::bind(&Tooltip::fc, this);
 
-	mButtons.push_back(button);
+	for (std::string command : commands)
+	{
+		Button* button = new Button(command);
+		button->Parent(mTitle);
+		mButtons.push_back(button);
+	}
 }
 
 Tooltip::~Tooltip()
@@ -68,7 +76,6 @@ Tooltip::~Tooltip()
 	for (auto button : mButtons)
 		delete button;
 }
-
 
 
 void Tooltip::Update()

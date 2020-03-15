@@ -11,6 +11,7 @@ public:
 	const std::string BUTTON_UNSELECTED = "Graphics/resting-menu-button.png";
 	const std::string BUTTON_SELECTED = "Graphics/selected-menu-button.png";
 
+	static const int PADDING = 10;
 	static const int MENU_WIDTH = 256;
 	static const int MENU_HEIGHT = 64;
 	static const int BUTTON_WIDTH = 64;
