@@ -20,7 +20,7 @@ private:
 
 	Square::InputHandler& mInputHandler;
 
-	bool Hovered();
+	bool MouseOver();
 	void HandleClick();
 
 public:

@@ -12,7 +12,7 @@ Button::~Button()
 	delete mText;
 }
 
-bool Button::Hovered()
+bool Button::MouseOver()
 {
 	int startX = mText->Pos().x - Width() / 2;
 	int endX = mText->Pos().x + Width() / 2;
@@ -43,7 +43,7 @@ void Button::Press()
 
 void Button::Update()
 {
-	if (Hovered())
+	if (MouseOver())
 	{
 		mText->Color(HOVERED_COLOR);
 		HandleClick();

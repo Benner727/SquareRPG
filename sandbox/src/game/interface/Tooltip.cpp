@@ -1,7 +1,8 @@
 #include "Tooltip.h"
 
-void Tooltip::DrawBackground(Square::Vector2 position)
+void Tooltip::DrawBackground()
 {
+	Square::Vector2 position = mTitle->Pos();
 	int startX = position.x - MaxWidth() / 2;
 	int endX = position.x + MaxWidth() / 2;
 	int startY = position.y - mTitle->ScaledDimensions().y / 2 - PADDING;
@@ -78,6 +79,20 @@ Tooltip::~Tooltip()
 }
 
 
+bool Tooltip::MouseOver(Square::Vector2 position)
+{
+	Square::Vector2 titlePosition = mTitle->Pos();
+	int startX = titlePosition.x - MaxWidth() / 2;
+	int endX = titlePosition.x + MaxWidth() / 2;
+	int startY = titlePosition.y - mTitle->ScaledDimensions().y / 2 - PADDING;
+	int endY = titlePosition.y + TotalHeight() / 2 + PADDING;
+
+	bool withinWidth = position.x >= startX && position.x < endX;
+	bool withinHeight = position.y >= startY && position.y < endY;
+
+	return withinWidth && withinHeight;
+}
+
 void Tooltip::Update()
 {
 	for (auto button : mButtons)
@@ -86,7 +101,7 @@ void Tooltip::Update()
 
 void Tooltip::Render()
 {
-	DrawBackground(mTitle->Pos());
+	DrawBackground();
 	DrawTitleBackground();
 	mTitle->Render();
 

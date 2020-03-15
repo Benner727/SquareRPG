@@ -106,7 +106,7 @@ void InventoryContainer::Update()
 {
 	Square::Vector2 position = mInputHandler.MousePos();
 
-	if (MouseIsOver(position))
+	if (!mTooltip && MouseIsOver(position))
 	{
 		Hover(position);
 		LeftClick(position);
@@ -120,7 +120,13 @@ void InventoryContainer::Update()
 		mActiveSlot = -1;
 	}
 
-	if (mTooltip) mTooltip->Update();
+	if (mTooltip)
+	{
+		if (!mTooltip->MouseOver(position) && mInputHandler.MouseButtonPressed(Square::InputHandler::left))
+			mTooltip = nullptr;
+		else
+			mTooltip->Update();
+	}
 }
 
 void InventoryContainer::Render()
