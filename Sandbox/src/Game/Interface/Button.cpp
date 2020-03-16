@@ -1,7 +1,7 @@
 #include "Button.h"
 
-Button::Button(std::string text, std::function<void()> func, int minWidth)
-	: OnPress(func), mInputHandler(Square::InputHandler::Instance()), mWidth(minWidth)
+Button::Button(std::string text, int minWidth)
+ : mName(text), mInputHandler(Square::InputHandler::Instance()), mWidth(minWidth)
 {
 	mText = new Square::Text(text, FONT_PATH, SIZE, COLOR);
 	mText->Parent(this);
@@ -24,21 +24,9 @@ bool Button::MouseOver()
 	return hoveredX && hoveredY;
 }
 
-void Button::HandleClick()
-{
-	if (mInputHandler.MouseButtonPressed(Square::InputHandler::left))
-		Press();
-}
-
 void Button::Position(Square::Vector2 pos)
 {
 	this->Pos(pos);
-}
-
-void Button::Press()
-{
-	if (OnPress)
-		OnPress();
 }
 
 void Button::Update()
@@ -46,7 +34,6 @@ void Button::Update()
 	if (MouseOver())
 	{
 		mText->Color(HOVERED_COLOR);
-		HandleClick();
 	}
 	else
 	{

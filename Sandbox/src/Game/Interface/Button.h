@@ -15,23 +15,22 @@ private:
 	Square::Graphics& mGraphics = Square::Graphics::Instance();
 
 	int mWidth;
+	std::string mName;
 	Square::Text* mText;
-	std::function<void()> OnPress;
-
 	Square::InputHandler& mInputHandler;
 
-	bool MouseOver();
-	void HandleClick();
-
 public:
-	Button(std::string text, std::function<void()> func = 0, int minWidth = 0);
+	Button(std::string text, int minWidth = 0);
 	~Button();
 
+	inline std::string Name() const { return mName; }
 	inline int Height() const { return mText->ScaledDimensions().y + VERTICAL_PADDING * 2; }
 	inline int Width() const { return std::max((int) mText->ScaledDimensions().x, mWidth); }
+	inline Square::Vector2 Position() const { return mText->Pos(); }
+
+	bool MouseOver();
 
 	void Position(Square::Vector2 pos);
-	void Press();
 	void Update();
 	void Render();
 };

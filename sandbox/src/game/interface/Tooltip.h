@@ -18,7 +18,6 @@ private:
 	std::vector<Button*> mButtons;
 	Square::Graphics& mGraphics = Square::Graphics::Instance();
 
-	void fc();
 	int TotalHeight();
 	int MaxWidth();
 
@@ -32,6 +31,7 @@ public:
 	void Position(Square::Vector2 position) { mTitle->Pos(position); };
 	void Parent(Square::GameObject* parent) { mTitle->Parent(parent); }
 	bool MouseOver(Square::Vector2 position);
+	std::string Command(Square::Vector2 position);
 
 	void Update();
 	void Render();

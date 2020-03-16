@@ -6,7 +6,7 @@ void Tooltip::DrawBackground()
 	int startX = position.x - MaxWidth() / 2;
 	int endX = position.x + MaxWidth() / 2;
 	int startY = position.y - mTitle->ScaledDimensions().y / 2 - PADDING;
-	int endY = position.y + TotalHeight() / 2 + PADDING;
+	int endY = startY + TotalHeight() + PADDING;
 
 	for (int x = startX; x < endX; x++)
 	{
@@ -38,13 +38,11 @@ void Tooltip::DrawTitleBackground()
 	}
 }
 
-void Tooltip::fc() { std::cout << "clicked fc" << std::endl; }
-
 int Tooltip::TotalHeight()
 {
-	int height = mTitle->ScaledDimensions().y + PADDING * 2;
-	for (auto button : mButtons)
-		height += button->Height();
+	int height = mTitle->ScaledDimensions().y;
+	if (!mButtons.empty())
+		height += (mButtons.back()->Position().y - mTitle->Pos().y) + mButtons.back()->Height() / 2;
 
 	return height;
 }
@@ -61,8 +59,6 @@ int Tooltip::MaxWidth()
 Tooltip::Tooltip(const std::string text, std::vector<std::string> commands)
 {
 	mTitle = new Square::Text(text, FONT_PATH, TITLE_SIZE, TITLE_COLOR);
-
-	//std::function<void()> fn = std::bind(&Tooltip::fc, this);
 
 	for (std::string command : commands)
 	{
@@ -91,6 +87,16 @@ bool Tooltip::MouseOver(Square::Vector2 position)
 	bool withinHeight = position.y >= startY && position.y < endY;
 
 	return withinWidth && withinHeight;
+}
+
+std::string Tooltip::Command(Square::Vector2 position)
+{
+	for (auto button : mButtons)
+	{
+		if (button->MouseOver())
+			return button->Name();
+	}
+	return "";
 }
 
 void Tooltip::Update()
