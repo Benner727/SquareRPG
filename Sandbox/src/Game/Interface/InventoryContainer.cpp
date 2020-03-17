@@ -126,9 +126,9 @@ void InventoryContainer::Update()
 			return;
 		}
 	
-		else if (mInputHandler.MouseButtonPressed(Square::InputHandler::left))
+		else if (mTooltip->Command() != "")
 		{
-			std::cout << mTooltip->Command(position) << std::endl; // get command of clicked button here
+			std::cout << mTooltip->Command() << std::endl; // get command of clicked button here
 		}
 
 		mTooltip->Update();

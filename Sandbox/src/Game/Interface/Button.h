@@ -19,6 +19,8 @@ private:
 	Square::Text* mText;
 	Square::InputHandler& mInputHandler;
 
+	bool MouseOver();
+
 public:
 	Button(std::string text, int minWidth = 0);
 	~Button();
@@ -28,7 +30,7 @@ public:
 	inline int Width() const { return std::max((int) mText->ScaledDimensions().x, mWidth); }
 	inline Square::Vector2 Position() const { return mText->Pos(); }
 
-	bool MouseOver();
+	bool Clicked();
 
 	void Position(Square::Vector2 pos);
 	void Update();

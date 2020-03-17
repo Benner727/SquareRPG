@@ -89,11 +89,11 @@ bool Tooltip::MouseOver(Square::Vector2 position)
 	return withinWidth && withinHeight;
 }
 
-std::string Tooltip::Command(Square::Vector2 position)
+std::string Tooltip::Command()
 {
 	for (auto button : mButtons)
 	{
-		if (button->MouseOver())
+		if (button->Clicked())
 			return button->Name();
 	}
 	return "";
