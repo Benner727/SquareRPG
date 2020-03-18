@@ -22,7 +22,7 @@ private:
 	bool MouseOver();
 
 public:
-	Button(std::string text, int minWidth = 0);
+	Button(std::string& text, int minWidth = 0);
 	~Button();
 
 	inline std::string Name() const { return mName; }

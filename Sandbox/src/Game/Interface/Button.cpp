@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(std::string text, int minWidth)
+Button::Button(std::string& text, int minWidth)
  : mName(text), mInputHandler(Square::InputHandler::Instance()), mWidth(minWidth)
 {
 	mText = new Square::Text(text, FONT_PATH, SIZE, COLOR);

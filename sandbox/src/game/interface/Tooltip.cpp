@@ -1,5 +1,23 @@
 #include "Tooltip.h"
 
+Tooltip::Tooltip(const std::string& text, std::vector<std::string> commands)
+{
+	mTitle = new Square::Text(text, FONT_PATH, TITLE_SIZE, TITLE_COLOR);
+
+	for (std::string command : commands)
+	{
+		Button* button = new Button(command);
+		button->Parent(mTitle);
+		mButtons.push_back(button);
+	}
+}
+
+Tooltip::~Tooltip()
+{
+	for (auto button : mButtons)
+		delete button;
+}
+
 void Tooltip::DrawBackground()
 {
 	Square::Vector2 position = mTitle->Pos();
@@ -56,25 +74,6 @@ int Tooltip::MaxWidth()
 	return std::max((int) mTitle->ScaledDimensions().x + PADDING * 2, maxButtonWidth);
 }
 
-Tooltip::Tooltip(const std::string text, std::vector<std::string> commands)
-{
-	mTitle = new Square::Text(text, FONT_PATH, TITLE_SIZE, TITLE_COLOR);
-
-	for (std::string command : commands)
-	{
-		Button* button = new Button(command);
-		button->Parent(mTitle);
-		mButtons.push_back(button);
-	}
-}
-
-Tooltip::~Tooltip()
-{
-	for (auto button : mButtons)
-		delete button;
-}
-
-
 bool Tooltip::MouseOver(Square::Vector2 position)
 {
 	Square::Vector2 titlePosition = mTitle->Pos();
@@ -91,12 +90,16 @@ bool Tooltip::MouseOver(Square::Vector2 position)
 
 std::string Tooltip::Command()
 {
+	std::string command = "";
 	for (auto button : mButtons)
 	{
 		if (button->Clicked())
-			return button->Name();
+		{
+			command = button->Name();
+			break;
+		}
 	}
-	return "";
+	return command;
 }
 
 void Tooltip::Update()
@@ -113,8 +116,7 @@ void Tooltip::Render()
 
 	for (int i = 0; i < mButtons.size(); i++)
 	{
-		Button* button = mButtons[i];
-		button->Pos(Square::Vector2(0, (i+1) * 32));
-		button->Render();
+		mButtons[i]->Pos(Square::Vector2(0, (i+1) * 32));
+		mButtons[i]->Render();
 	}
 }

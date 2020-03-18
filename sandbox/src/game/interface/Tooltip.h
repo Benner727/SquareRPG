@@ -25,7 +25,7 @@ private:
 	void DrawTitleBackground();
 
 public:
-	Tooltip(const std::string text, std::vector<std::string> commands);
+	Tooltip(const std::string& text, std::vector<std::string> commands);
 	~Tooltip();
 
 	void Position(Square::Vector2 position) { mTitle->Pos(position); };
