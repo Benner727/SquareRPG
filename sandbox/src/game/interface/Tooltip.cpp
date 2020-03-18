@@ -23,39 +23,22 @@ Tooltip::~Tooltip()
 void Tooltip::DrawBackground()
 {
 	Square::Vector2 position = mTitle->Pos();
-	int startX = position.x - MaxWidth() / 2;
-	int endX = position.x + MaxWidth() / 2;
-	int startY = position.y - mTitle->ScaledDimensions().y / 2 - PADDING;
-	int endY = startY + TotalHeight() + PADDING;
+	int x = position.x - MaxWidth() / 2;
+	int y = position.y - mTitle->ScaledDimensions().y / 2 - PADDING;
+	int width = MaxWidth();
+	int height = TotalHeight() + PADDING;
 
-	for (int x = startX; x < endX; x++)
-	{
-		for (int y = startY; y < endY; y++)
-		{
-			bool border = x == startX || y == startY || x == endX - 1 || y == endY - 1;
-
-			if (border)
-				mGraphics.DrawPixel(Square::Vector2(x, y), { 0, 0, 0, 255 });
-			else
-				mGraphics.DrawPixel(Square::Vector2(x, y), { 230, 230, 230, 255 });
-		}
-	}
+	mGraphics.DrawRectangle(Square::Vector2(x, y), width, height, { 230, 230, 230, 255 });
 }
 
 void Tooltip::DrawTitleBackground()
 {
-	int startX = mTitle->Pos().x - mTitle->ScaledDimensions().x / 2 - PADDING/2;
-	int endX = mTitle->Pos().x + mTitle->ScaledDimensions().x / 2 + PADDING/2;
-	int startY = mTitle->Pos().y - mTitle->ScaledDimensions().y / 2 - PADDING/2;
-	int endY = mTitle->Pos().y + mTitle->ScaledDimensions().y / 2 + PADDING/2;
+	int x = mTitle->Pos().x - mTitle->ScaledDimensions().x / 2 - PADDING/2;
+	int y = mTitle->Pos().y - mTitle->ScaledDimensions().y / 2 - PADDING/2;
+	int width = mTitle->ScaledDimensions().x + PADDING;
+	int height = mTitle->ScaledDimensions().y + PADDING;
 
-	for (int x = startX + 5; x < endX - 5; x++)
-	{
-		for (int y = startY; y < endY; y++)
-		{
-			mGraphics.DrawPixel(Square::Vector2(x, y), { 0, 0, 0, 255 });
-		}
-	}
+	mGraphics.DrawRectangle(Square::Vector2(x, y), width, height, { 0, 0, 0, 255 });
 }
 
 int Tooltip::TotalHeight()
