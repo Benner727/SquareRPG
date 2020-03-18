@@ -14,7 +14,7 @@ private:
 	MenuContainer mMenu;
 	InventoryContainer mInventory;
 
-	int mActiveMenu = -1;
+	int mActiveMenu;
 
 	Square::InputHandler& mInputHandler;
 

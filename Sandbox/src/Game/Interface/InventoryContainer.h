@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Square.h>
-#include <ctime>
 
 #include "Game/Interface/IInputContainer.h"
 #include "Game/Interface/Tooltip.h"
@@ -22,7 +21,7 @@ public:
 
 	Tooltip* mTooltip;
 
-	std::clock_t mLastClick;
+	unsigned int mLastClick;
 	bool mDrag;
 
 private:

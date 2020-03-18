@@ -71,7 +71,7 @@ void InventoryContainer::Drag(Square::Vector2 position)
 {
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
-		mLastClick = std::clock();
+		mLastClick = SDL_GetTicks();
 	}
 	else if (mInputHandler.MouseButtonReleased(Square::InputHandler::MOUSE_BUTTON::left))
 	{
@@ -88,7 +88,7 @@ void InventoryContainer::Drag(Square::Vector2 position)
 	{
 		mDragPosition = position;
 	}
-	else if (mLastClick != -1 && std::clock() - mLastClick > 100)
+	else if (mLastClick != -1 && SDL_GetTicks() - mLastClick > 100)
 	{
 		mDrag = true;
 	}
@@ -104,7 +104,7 @@ void InventoryContainer::Update()
 {
 	Square::Vector2 position = mInputHandler.MousePos();
 
-	if (!mTooltip && MouseIsOver(position))
+	if (!mTooltip && MouseIsOver())
 	{
 		Hover(position);
 		LeftClick(position);

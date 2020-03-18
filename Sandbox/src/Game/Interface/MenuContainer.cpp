@@ -49,7 +49,7 @@ void MenuContainer::Update()
 {
 	Square::Vector2 position = mInputHandler.MousePos();
 
-	if (MouseIsOver(position))
+	if (MouseIsOver())
 	{
 		Hover(position);
 		LeftClick(position);

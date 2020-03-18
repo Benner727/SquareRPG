@@ -29,11 +29,6 @@ bool Button::Clicked()
 	return mInputHandler.MouseButtonPressed(Square::InputHandler::left) && MouseOver();
 }
 
-void Button::Position(Square::Vector2 pos)
-{
-	this->Pos(pos);
-}
-
 void Button::Update()
 {
 	if (MouseOver())
