@@ -62,7 +62,7 @@ void InventoryContainer::RightClick(Square::Vector2 position)
 		{
 			std::vector<std::string> actions = mItem->InventoryActions();
 			mTooltip = new Tooltip(mItem->Name(), actions);
-			mTooltip->Position(position);
+			mTooltip->Pos(position);
 		}
 	}
 }

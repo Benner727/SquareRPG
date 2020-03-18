@@ -1,13 +1,15 @@
 #include "Tooltip.h"
 
 Tooltip::Tooltip(const std::string& text, std::vector<std::string> commands)
+	:mGraphics(Square::Graphics::Instance())
 {
 	mTitle = new Square::Text(text, FONT_PATH, TITLE_SIZE, TITLE_COLOR);
+	mTitle->Parent(this);
 
 	for (std::string command : commands)
 	{
 		Button* button = new Button(command);
-		button->Parent(mTitle);
+		button->Parent(this);
 		mButtons.push_back(button);
 	}
 }

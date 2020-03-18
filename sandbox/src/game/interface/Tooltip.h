@@ -16,7 +16,7 @@ private:
 
 	Square::Text* mTitle;
 	std::vector<Button*> mButtons;
-	Square::Graphics& mGraphics = Square::Graphics::Instance();
+	Square::Graphics& mGraphics;
 
 	int TotalHeight();
 	int MaxWidth();
@@ -28,8 +28,6 @@ public:
 	Tooltip(const std::string& text, std::vector<std::string> commands);
 	~Tooltip();
 
-	void Position(Square::Vector2 position) { mTitle->Pos(position); };
-	void Parent(Square::GameObject* parent) { mTitle->Parent(parent); }
 	bool MouseOver(Square::Vector2 position);
 	std::string Command();
 
