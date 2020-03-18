@@ -18,8 +18,6 @@ private:
 
 	Square::InputHandler& mInputHandler;
 
-	void InitializeBackground();
-
 public:
 	Interface(Player& player);
 	~Interface();

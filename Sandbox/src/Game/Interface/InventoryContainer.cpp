@@ -24,7 +24,7 @@ InventoryContainer::InventoryContainer(Inventory& inventory) :
 
 InventoryContainer::~InventoryContainer()
 {
-	if (mTooltip) delete mTooltip;
+	delete mTooltip;
 }
 
 int InventoryContainer::SlotIndex(Square::Vector2 position)
@@ -122,6 +122,7 @@ void InventoryContainer::Update()
 	{
 		if (!mTooltip->MouseOver(position) && mInputHandler.MouseButtonPressed(Square::InputHandler::left))
 		{
+			delete mTooltip;
 			mTooltip = nullptr;
 			return;
 		}

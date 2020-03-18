@@ -42,7 +42,7 @@ int Tooltip::TotalHeight()
 {
 	int height = mTitle->ScaledDimensions().y;
 	if (!mButtons.empty())
-		height += (mButtons.back()->Position().y - mTitle->Pos().y) + mButtons.back()->Height() / 2;
+		height += (mButtons.back()->Pos().y - mTitle->Pos().y) + mButtons.back()->Height() / 2;
 
 	return height;
 }
@@ -114,7 +114,7 @@ void Tooltip::Render()
 	for (int i = 0; i < mButtons.size(); i++)
 	{
 		Button* button = mButtons[i];
-		button->Position(Square::Vector2(0, (i+1) * 32));
+		button->Pos(Square::Vector2(0, (i+1) * 32));
 		button->Render();
 	}
 }

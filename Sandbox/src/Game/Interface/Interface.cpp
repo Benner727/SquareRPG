@@ -6,28 +6,20 @@ Interface::Interface(Player& player) :
 {
 	mMenu.Parent(this);
 	mInventory.Parent(this);
-	InitializeBackground();
 }
 
 Interface::~Interface()
 {
 }
 
-void Interface::InitializeBackground()
-{
-}
-
 void Interface::HandleInput()
 {
 
-	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
+	if (mMenu.Pressed())
 	{
-		if (mMenu.MouseIsOver(mInputHandler.MousePos()))
-		{
-			mMenu.LeftClick(mInputHandler.MousePos());
-			mActiveMenu = mMenu.ActiveSlot();
-			if (mMenu.ActiveSlot() == -1) mPlayer.Inventory().ActiveSlot(-1);
-		}
+		mMenu.LeftClick(mInputHandler.MousePos());
+		mActiveMenu = mMenu.ActiveSlot();
+		if (mMenu.ActiveSlot() == -1) mPlayer.Inventory().ActiveSlot(-1);
 	}
 	mInventory.Update();
 }

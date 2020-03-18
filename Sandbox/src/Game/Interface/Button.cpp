@@ -14,10 +14,10 @@ Button::~Button()
 
 bool Button::MouseOver()
 {
-	int startX = mText->Pos().x - Width() / 2;
-	int endX = mText->Pos().x + Width() / 2;
-	int startY = mText->Pos().y - Height() / 2;
-	int endY = mText->Pos().y + Height() / 2;
+	int startX = this->Pos().x - Width() / 2;
+	int endX = this->Pos().x + Width() / 2;
+	int startY = this->Pos().y - Height() / 2;
+	int endY = this->Pos().y + Height() / 2;
 
 	bool hoveredX = mInputHandler.MousePos().x >= startX && mInputHandler.MousePos().x < endX;
 	bool hoveredY = mInputHandler.MousePos().y >= startY && mInputHandler.MousePos().y < endY;

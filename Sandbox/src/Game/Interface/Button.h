@@ -28,11 +28,9 @@ public:
 	inline std::string Name() const { return mName; }
 	inline int Height() const { return mText->ScaledDimensions().y + VERTICAL_PADDING * 2; }
 	inline int Width() const { return std::max((int) mText->ScaledDimensions().x, mWidth); }
-	inline Square::Vector2 Position() const { return mText->Pos(); }
 
 	bool Clicked();
 
-	void Position(Square::Vector2 pos);
 	void Update();
 	void Render();
 };
