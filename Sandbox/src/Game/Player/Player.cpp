@@ -9,6 +9,7 @@ Player::Player()
 	mPrayerBook = new StandardPrayerBook();
 
 	mCombatStance = CombatOption::melee_accurate;
+	mTarget = nullptr;
 
 	mEatDelay = 0.0f;
 	mDrinkDelay = 0.0f;
@@ -19,7 +20,7 @@ Player::Player()
 	mTarget = nullptr;
 
 	mMoving = false;
-	mMoveSpeed = 32.0f;
+	mMoveSpeed = 64.0f;
 	mMapPosition = { 0, 0, 0 };
 	Pos(Square::Vector2(16.0, 16.0));
 }
@@ -144,6 +145,8 @@ void Player::Update()
 	HandlePrayer();
 
 	HandleMovement();
+
+	Square::Graphics::Instance().Camera(Pos());
 }
 
 void Player::Render()

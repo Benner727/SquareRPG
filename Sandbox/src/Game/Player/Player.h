@@ -26,6 +26,8 @@ private:
 	CombatOption mCombatStance;
 	bool mAutoAttack;
 
+	Square::GameObject* mTarget;
+
 	float mEatDelay;
 	float mDrinkDelay;
 

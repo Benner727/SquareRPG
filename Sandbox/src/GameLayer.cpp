@@ -31,8 +31,8 @@ void GameLayer::HandlePathing()
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
 		Point target;
-		target.x = Square::InputHandler::Instance().MousePos().x / 32.0f;
-		target.y = Square::InputHandler::Instance().MousePos().y / 32.0f;
+		target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+		target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
 
 		std::cout << target.x << ", " << target.y << std::endl;
 
@@ -45,6 +45,8 @@ void GameLayer::HandlePathing()
 		player->MoveTo(path.front());
 		path.pop_front();
 	}
+
+
 }
 
 void GameLayer::OnUpdate()

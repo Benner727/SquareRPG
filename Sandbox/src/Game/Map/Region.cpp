@@ -24,7 +24,6 @@ Region::Region(int topLeftX, int topLeftY, std::map<int, std::vector<Tile*>> lay
 
 Region::~Region()
 {
-	std::cout << "hi" << std::endl;
 	for (auto layer : mLayers)
 	{
 		for (auto tile : layer.second)

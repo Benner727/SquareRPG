@@ -12,6 +12,8 @@ Map::Map()
 	}
 
 	mRegions.push_back(new Region(0, 0, tiles));
+
+	Square::Graphics::Instance().SetLimit(Square::VEC2_ONE * mRegions.size() * Region::SIZE * 32.0f);
 }
 
 Map::~Map()
