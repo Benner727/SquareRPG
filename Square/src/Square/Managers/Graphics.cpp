@@ -160,6 +160,31 @@ namespace Square {
 		SDL_SetRenderDrawColor(mRenderer.get(), mDefaultDrawColor.r, mDefaultDrawColor.g, mDefaultDrawColor.b, mDefaultDrawColor.a);
 	}
 
+	void Graphics::DrawRectangle(Vector2 pos, int width, int height, SDL_Color color)
+	{
+		if (pos.x < mCamera.x) //Left of camera
+			return;
+		else if (pos.x > mCamera.x + mCamera.w) //Right of camera
+			return;
+		else if (pos.y < mCamera.y) //Above camera
+			return;
+		else if (pos.y > mCamera.y + mCamera.h) //Below camera
+			return;
+
+		pos.x -= mCamera.x + mOffset.x;
+		pos.y -= mCamera.y + mOffset.y;
+
+		SDL_Rect rectangle;
+		rectangle.x = pos.x;
+		rectangle.y = pos.y;
+		rectangle.w = width;
+		rectangle.h = height;
+
+		SDL_SetRenderDrawColor(mRenderer.get(), color.r, color.g, color.b, color.a);
+		SDL_RenderFillRect(mRenderer.get(), &rectangle);
+		SDL_SetRenderDrawColor(mRenderer.get(), mDefaultDrawColor.r, mDefaultDrawColor.g, mDefaultDrawColor.b, mDefaultDrawColor.a);
+	}
+
 	void Graphics::SetLimit(Vector2 vec)
 	{
 		mLimit = vec;
