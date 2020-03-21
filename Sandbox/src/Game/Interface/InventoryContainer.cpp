@@ -40,8 +40,7 @@ void InventoryContainer::LeftClick(Square::Vector2 position)
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::left))
 	{
 		int slotIndex = SlotIndex(position);
-		Item* mItem = mInventory.GetItem(slotIndex);
-		if (mItem)
+		if (Item* item = mInventory.GetItem(slotIndex))
 		{
 			mInventory.ActiveSlot(slotIndex);
 		}
@@ -57,12 +56,13 @@ void InventoryContainer::RightClick(Square::Vector2 position)
 	if (mInputHandler.MouseButtonPressed(Square::InputHandler::MOUSE_BUTTON::right))
 	{
 		int slotIndex = SlotIndex(position);
-		Item* mItem = mInventory.GetItem(slotIndex);
-		if (mItem)
+		if (Item* item = mInventory.GetItem(slotIndex))
 		{
-			std::vector<std::string> actions = mItem->InventoryActions();
-			mTooltip = new Tooltip(mItem->Name(), actions);
+			std::vector<std::string> actions = item->InventoryActions();
+			mTooltip = new Tooltip(item->Name(), actions);
 			mTooltip->Pos(position);
+
+			mInventory.ActiveSlot(slotIndex);
 		}
 	}
 }
@@ -75,11 +75,19 @@ void InventoryContainer::Drag(Square::Vector2 position)
 	}
 	else if (mInputHandler.MouseButtonReleased(Square::InputHandler::MOUSE_BUTTON::left))
 	{
-		int swapIndex = SlotIndex(position);
-		mInventory.Swap(mInventory.ActiveSlot(), swapIndex);
+		if (mDrag)
+		{
+			int swapIndex = SlotIndex(position);
+			mInventory.Swap(mInventory.ActiveSlot(), swapIndex);
 
-		mDragPosition = Square::Vector2(-1, -1);
-		mInventory.ActiveSlot(-1);
+			mDragPosition = Square::Vector2(-1, -1);
+			mInventory.ActiveSlot(-1);
+		}
+		else if (Item* item = mInventory.GetItem(mInventory.ActiveSlot()))
+		{
+			std::cout << item->InventoryActions().front() << std::endl; // get command of clicked button here
+			mInventory.ActiveSlot(-1);
+		}
 
 		mLastClick = -1;
 		mDrag = false;
@@ -98,6 +106,15 @@ void InventoryContainer::Hover(Square::Vector2 position)
 {
 	int slotIndex = SlotIndex(position);
 	mActiveSlot = slotIndex;
+
+	std::string hoverText = "";
+	if (Item* item = mInventory.GetItem(slotIndex))
+	{
+		hoverText = item->InventoryActions().front() + " " + item->Name() + 
+			" / " + std::to_string(item->InventoryActions().size() - 1) + " more options";
+	}
+
+	//std::cout << hoverText << std::endl;
 }
 
 void InventoryContainer::Update()
@@ -120,19 +137,18 @@ void InventoryContainer::Update()
 
 	if (mTooltip)
 	{
-		if (!mTooltip->MouseOver(position) && mInputHandler.MouseButtonPressed(Square::InputHandler::left))
+		mTooltip->Update();
+		if (!mTooltip->MouseOver(position) || mInputHandler.MouseButtonPressed(Square::InputHandler::left))
 		{
+			if (mInputHandler.MouseButtonPressed(Square::InputHandler::left))
+			{
+				std::cout << mTooltip->Command() << std::endl; // get command of clicked button here
+				mInventory.ActiveSlot(-1);
+			}
+
 			delete mTooltip;
 			mTooltip = nullptr;
-			return;
 		}
-	
-		else if (mTooltip->Command() != "")
-		{
-			std::cout << mTooltip->Command() << std::endl; // get command of clicked button here
-		}
-
-		mTooltip->Update();
 	}
 }
 

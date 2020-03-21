@@ -61,13 +61,17 @@ void ItemRepository::LoadItemDefinitions()
 	int alchemyPrice;
 	int generalPrice;
 	std::string spritePath;
-	std::string inventoryActions;
-	std::string groundActions;
+	std::string delimitedInventoryActions;
+	std::string delimitedGroundActions;
 
-	while (infile >> std::quoted(name) >> index >> stackable >> alchemyPrice >> generalPrice >> spritePath >> std::quoted(inventoryActions) >> std::quoted(groundActions))
+	while (infile >> std::quoted(name) >> index >> stackable >> alchemyPrice >> generalPrice >> spritePath >> std::quoted(delimitedInventoryActions) >> std::quoted(delimitedGroundActions))
 	{
+		std::vector<std::string> inventoryActions = DelimitedStringToVector(delimitedInventoryActions);
+		inventoryActions.push_back("Use");
+		inventoryActions.push_back("Drop");
+
 		mItemDefinitions[index] = new ItemDefinition(name, index, stackable, alchemyPrice, generalPrice, spritePath, 
-			DelimitedStringToVector(inventoryActions), DelimitedStringToVector(groundActions));
+			inventoryActions, DelimitedStringToVector(delimitedGroundActions));
 	}
 
 	infile.close();

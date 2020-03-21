@@ -63,9 +63,9 @@ bool Tooltip::MouseOver(Square::Vector2 position)
 {
 	Square::Vector2 titlePosition = mTitle->Pos();
 	int startX = titlePosition.x - MaxWidth() / 2;
-	int endX = titlePosition.x + MaxWidth() / 2;
 	int startY = titlePosition.y - mTitle->ScaledDimensions().y / 2 - PADDING;
-	int endY = titlePosition.y + TotalHeight() / 2 + PADDING;
+	int endX = startX + MaxWidth();
+	int endY = startY + TotalHeight() + PADDING;
 
 	bool withinWidth = position.x >= startX && position.x < endX;
 	bool withinHeight = position.y >= startY && position.y < endY;
