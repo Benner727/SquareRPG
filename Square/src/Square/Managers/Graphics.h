@@ -47,6 +47,7 @@ namespace Square {
 
 		void DrawTexture(std::weak_ptr<SDL_Texture> tex, const SDL_Rect* clip = nullptr, SDL_Rect* rend = nullptr, float angle = 0.0f, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		void DrawPixel(Vector2 pos, SDL_Color color);
+		void DrawRectangle(Vector2 pos, int width, int height, SDL_Color color);
 
 		void SetLimit(Vector2 vec);
 		void Camera(Vector2 vec);

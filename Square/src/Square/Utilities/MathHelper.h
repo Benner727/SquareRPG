@@ -85,6 +85,11 @@ namespace Square {
 			return x == rhs.x && y == rhs.y;
 		}
 
+		bool operator!= (const Vector2& rhs) const
+		{
+			return x != rhs.x && y != rhs.y;
+		}
+
 		friend std::ostream& operator<< (std::ostream& os, const Vector2& vec)
 		{
 			os << vec.x << ", " << vec.y;
@@ -97,9 +102,19 @@ namespace Square {
 		return Vector2(lhs.x + rhs.x, lhs.y + rhs.y);
 	}
 
+	inline Vector2 operator +(const Vector2& lhs, const float& rhs)
+	{
+		return Vector2(lhs.x + rhs, lhs.y + rhs);
+	}
+
 	inline Vector2 operator -(const Vector2& lhs, const Vector2 rhs)
 	{
 		return Vector2(lhs.x - rhs.x, lhs.y - rhs.y);
+	}
+
+	inline Vector2 operator -(const Vector2& lhs, const float& rhs)
+	{
+		return Vector2(lhs.x - rhs, lhs.y - rhs);
 	}
 
 	inline Vector2 operator *(const Vector2& lhs, const Vector2 rhs)

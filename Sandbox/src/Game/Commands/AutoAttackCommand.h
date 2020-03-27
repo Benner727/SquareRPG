@@ -49,10 +49,10 @@ private:
 	}
 
 public:
-	AutoAttackCommand(Player* player, NpcFighter* npc)
+	AutoAttackCommand(Player* player)
 	{
 		mPlayer = player;
-		mNpc = npc;
+		mNpc = dynamic_cast<NpcFighter*>(player->Target());
 	}
 
 	~AutoAttackCommand() = default;
@@ -61,7 +61,7 @@ public:
 	{
 		bool canAttack = HasAmmo() && HasRunes();
 
-		return canAttack;
+		return canAttack && (mNpc != nullptr);
 	}
 
 	void Execute()

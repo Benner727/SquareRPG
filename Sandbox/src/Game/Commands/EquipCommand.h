@@ -69,13 +69,13 @@ public:
 			else if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
 				unequipShield = weapon->TwoHanded();
 
+			mPlayer->Inventory().SetNull(activeSlot);
 			if (Item* unequippedSlot = mPlayer->Gear().GetItem(equipment->Slot()))
 			{
 				mPlayer->Inventory().Add(unequippedSlot);
 				mPlayer->Gear().SetNull(equipment->Slot());
 			}
 
-			mPlayer->Inventory().SetNull(activeSlot);
 			mPlayer->Gear().Add(equipment);
 
 			if (unequipWeapon)

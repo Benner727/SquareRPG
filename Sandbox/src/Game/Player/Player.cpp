@@ -15,6 +15,8 @@ Player::Player()
 
 	mInCombat = false;
 	mCombatDelay = 0.0f;
+
+	mTarget = nullptr;
 }
 
 Player::~Player()

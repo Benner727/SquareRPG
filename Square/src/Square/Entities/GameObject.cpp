@@ -89,7 +89,7 @@ namespace Square {
 		mActive = active;
 	}
 
-	bool GameObject::Active()
+	bool GameObject::Active() const
 	{
 		return mActive;
 	}

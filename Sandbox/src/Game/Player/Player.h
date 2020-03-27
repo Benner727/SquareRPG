@@ -27,6 +27,8 @@ private:
 	bool mInCombat;
 	float mCombatDelay;
 
+	Square::GameObject* mTarget;
+
 	Skills mSkills;
 
 	Inventory mInventory;
@@ -56,6 +58,9 @@ public:
 
 	inline CombatOption CombatStance() const { return mCombatStance; }
 	inline void CombatStance(CombatOption combatStance) { mCombatStance = combatStance; }
+
+	inline void Target(Square::GameObject* target) { mTarget = target; }
+	inline Square::GameObject* Target() const { return mTarget; }
 
 	inline bool HasEatDelay() const { return (mEatDelay > 0.0f); }
 	void SetEatDelay();

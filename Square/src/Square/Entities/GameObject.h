@@ -36,7 +36,7 @@ namespace Square {
 		Vector2 Scale(SPACE space = world);
 
 		void Active(bool active);
-		bool Active();
+		bool Active() const;
 
 		void Parent(GameObject* parent);
 		GameObject* Parent();
