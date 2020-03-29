@@ -34,16 +34,19 @@ int InventoryInterface::PosToSlot(Square::Vector2 pos)
 
 Item* InventoryInterface::GetSlot(Square::Vector2 pos)
 {
-	Item* item = mInventory.GetItem(PosToSlot(pos));
+	int slot = PosToSlot(pos);
 
-	if (item)
+	if (slot != mInventory.ActiveSlot())
 	{
-		if (pos.x >= item->Pos().x - 16.0f &&
-			pos.x <= item->Pos().x + 16.0f &&
-			pos.y >= item->Pos().y - 16.0f &&
-			pos.y <= item->Pos().y + 16.0f)
+		if (Item* item = mInventory.GetItem(slot))
 		{
-			return item;
+			if (pos.x >= item->Pos().x - 16.0f &&
+				pos.x <= item->Pos().x + 16.0f &&
+				pos.y >= item->Pos().y - 16.0f &&
+				pos.y <= item->Pos().y + 16.0f)
+			{
+				return item;
+			}
 		}
 	}
 	

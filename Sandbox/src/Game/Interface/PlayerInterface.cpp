@@ -22,12 +22,17 @@ PlayerInterface::PlayerInterface(Player& player)
 	mGear.Parent(this);
 	mGear.Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mGearButton->ScaledDimensions().y));
 	mGear.Active(false);
+
+	mHoverText = "";
+	mHoverSprite = nullptr;
 }
 
 PlayerInterface::~PlayerInterface()
 {
 	delete mGearButton;
 	delete mInventoryButton;
+
+	delete mHoverSprite;
 }
 
 void PlayerInterface::HandleButtons()
@@ -111,8 +116,20 @@ void PlayerInterface::SetHoverText()
 		break;
 	}
 
-	if (!hoverText.empty())
-		std::cout << hoverText << std::endl;
+	if (mHoverText != hoverText)
+	{
+		mHoverText = hoverText;
+
+		delete mHoverSprite;
+		mHoverSprite = nullptr;
+		
+		if (!mHoverText.empty())
+		{
+			mHoverSprite = new Square::Text(mHoverText, "Font/VeraMono.ttf", 16, { 255, 140, 0, 255 });
+			mHoverSprite->Parent(this);
+			mHoverSprite->Pos(mHoverSprite->ScaledDimensions() * 0.5f + 4.0f);
+		}
+	}
 }
 
 void PlayerInterface::UpdateInventory()
@@ -184,4 +201,6 @@ void PlayerInterface::Render()
 		mGear.Render();
 		break;
 	}
+
+	if (mHoverSprite) mHoverSprite->Render();
 }

@@ -22,6 +22,8 @@ private:
 		{
 			if (command->CanExecute())
 				command->Execute();
+			else
+				mPlayer->Inventory().ActiveSlot(-1);
 		}
 	}
 

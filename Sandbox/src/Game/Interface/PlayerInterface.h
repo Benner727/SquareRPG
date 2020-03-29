@@ -18,6 +18,9 @@ private:
 	std::string mCommand;
 	bool mWaitingForUse;
 
+	std::string mHoverText;
+	Square::Text* mHoverSprite;
+
 	Menu mActiveMenu;
 
 	Square::Sprite* mInventoryButton;
