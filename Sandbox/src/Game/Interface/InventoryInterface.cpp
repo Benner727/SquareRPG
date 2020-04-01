@@ -102,7 +102,8 @@ void InventoryInterface::Update()
 		if (mActionsMenu)
 		{
 			mCurrentAction = mActionsMenu->Action();
-			mInventory.ActiveSlot(mSelectedSlot);
+			if (!mCurrentAction.empty())
+				mInventory.ActiveSlot(mSelectedSlot);
 			mSelectedSlot = -1;
 			mActionsMenu->Active(false);
 		}

@@ -21,6 +21,9 @@ private:
 	std::string mHoverText;
 	Square::Text* mHoverSprite;
 
+	ActionsMenu* mActionsMenu;
+	Square::GameObject* mTargetObject;
+
 	Menu mActiveMenu;
 
 	Square::Sprite* mInventoryButton;

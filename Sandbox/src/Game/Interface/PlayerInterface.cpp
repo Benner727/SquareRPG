@@ -25,6 +25,10 @@ PlayerInterface::PlayerInterface(Player& player)
 
 	mHoverText = "";
 	mHoverSprite = nullptr;
+
+	mActionsMenu = nullptr;
+
+	mTargetObject = nullptr;
 }
 
 PlayerInterface::~PlayerInterface()
@@ -33,6 +37,8 @@ PlayerInterface::~PlayerInterface()
 	delete mInventoryButton;
 
 	delete mHoverSprite;
+
+	delete mActionsMenu;
 }
 
 void PlayerInterface::HandleButtons()
@@ -166,12 +172,37 @@ void PlayerInterface::Update()
 	{
 		if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 		{
-			if (mInventory.ContainsClick())
+			if (mActionsMenu)
+			{
+				mActionsMenu->Active(false);		
+				if (!mActionsMenu->Action().empty())
+					mPlayer.Target(mTargetObject);
+			}
+			else if (mInventory.ContainsClick())
 			{
 				mPlayer.Target(mInventory.GetSlot(Square::InputHandler::Instance().MousePos()));
 			}
 
 			mWaitingForUse = false;
+		}
+		else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
+		{
+			if (mActionsMenu == nullptr)
+			{
+				std::string activeItem = mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name();
+				std::string targetObject = "";
+
+				if (mInventory.ContainsClick())
+				{
+					if (Item* item = mInventory.GetSlot(Square::InputHandler::Instance().MousePos()))
+					{
+						targetObject = item->Name();
+						mTargetObject = item;
+					}
+				}
+
+				mActionsMenu = new ActionsMenu("Options", { mHoverText }, Square::InputHandler::Instance().MousePos());
+			}
 		}
 	}
 	else if (!mCommand.empty())
@@ -182,6 +213,19 @@ void PlayerInterface::Update()
 
 	HandleButtons();
 	SetHoverText();
+
+	if (mActionsMenu)
+	{
+		mActionsMenu->Update();
+
+		if (!mActionsMenu->Active())
+		{
+			delete mActionsMenu;
+			mActionsMenu = nullptr;
+
+			mTargetObject = nullptr;
+		}
+	}
 
 	UpdateInventory();
 	UpdateGear();
@@ -203,4 +247,6 @@ void PlayerInterface::Render()
 	}
 
 	if (mHoverSprite) mHoverSprite->Render();
+
+	if (mActionsMenu) mActionsMenu->Render();
 }
