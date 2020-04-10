@@ -12,9 +12,9 @@ namespace CombatFormulas
 
 		for (const auto& aura : player.PrayerBook().PrayerAuras())
 		{
-			if (aura.Activated())
+			if (aura->Activated())
 			{
-				switch (aura.Index())
+				switch (aura->Index())
 				{
 				case 2:
 					hiddenAttack *= 1.05f;
@@ -47,9 +47,9 @@ namespace CombatFormulas
 
 		for (const auto& aura : player.PrayerBook().PrayerAuras())
 		{
-			if (aura.Activated())
+			if (aura->Activated())
 			{
-				switch (aura.Index())
+				switch (aura->Index())
 				{
 				case 3:
 					hiddenStrength *= 1.05f;
@@ -85,9 +85,9 @@ namespace CombatFormulas
 
 		for (const auto& aura : player.PrayerBook().PrayerAuras())
 		{
-			if (aura.Activated())
+			if (aura->Activated())
 			{
-				switch (aura.Index())
+				switch (aura->Index())
 				{
 				case 1:
 					hiddenDefense *= 1.05f;
@@ -117,9 +117,9 @@ namespace CombatFormulas
 
 		for (const auto& aura : player.PrayerBook().PrayerAuras())
 		{
-			if (aura.Activated())
+			if (aura->Activated())
 			{
-				switch (aura.Index())
+				switch (aura->Index())
 				{
 				case 4:
 					hiddenRanged *= 1.05f;
@@ -146,9 +146,9 @@ namespace CombatFormulas
 
 		for (const auto& aura : player.PrayerBook().PrayerAuras())
 		{
-			if (aura.Activated())
+			if (aura->Activated())
 			{
-				switch (aura.Index())
+				switch (aura->Index())
 				{
 				case 5:
 					hiddenMagic *= 1.05f;

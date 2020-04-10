@@ -21,6 +21,9 @@ namespace Square {
 		strftime(MY_TIME, sizeof(MY_TIME), "%x - %H:%M:%S", tmp);
 
 		mTimestamp = std::string(MY_TIME);
+
+		if (_DEBUG)
+			std::remove(LOG_FILE);
 	}
 
 	LogMessage::~LogMessage()

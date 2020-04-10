@@ -43,7 +43,7 @@ private:
 	{
 		bool hasMagicCombatStance = (mPlayer->CombatStance() == CombatOption::magic_standard || mPlayer->CombatStance() == CombatOption::magic_defensive);
 		bool hasActiveSpell = (mPlayer->SpellBook().ActiveSpell() != -1);
-		bool hasRunes = mPlayer->Inventory().HasItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()].CastReq());
+		bool hasRunes = mPlayer->Inventory().HasItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->CastReq());
 
 		return hasMagicCombatStance && hasActiveSpell && hasRunes;
 	}
@@ -90,7 +90,7 @@ public:
 			defenseRoll = MagicFormulas::DefenseRoll(*mNpc);
 			damage = MagicFormulas::BaseDamage(*mPlayer);
 
-			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()].CastReq());
+			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->CastReq());
 		}
 		else
 		{

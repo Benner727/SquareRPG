@@ -9,6 +9,7 @@
 #include "Game/Commands/EquipCommand.h"
 #include "Game/Commands/UnequipCommand.h"
 #include "Game/Commands/UseCommand.h"
+#include "Game/Commands/TogglePrayerCommand.h"
 
 class CommandManager
 {
@@ -38,6 +39,8 @@ public:
 		mCommands["Equip"] = new EquipCommand(mPlayer);
 		mCommands["Unequip"] = new UnequipCommand(mPlayer);
 		mCommands["Use"] = new UseCommand(mPlayer);
+		mCommands["Activate"] = new TogglePrayerCommand(mPlayer);
+		mCommands["Deactivate"] = new TogglePrayerCommand(mPlayer);
 	}
 	
 	~CommandManager()

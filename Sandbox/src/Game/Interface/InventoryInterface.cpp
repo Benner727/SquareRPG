@@ -9,6 +9,8 @@ InventoryInterface::InventoryInterface(Inventory& inventory)
 
 	mActionsMenu = nullptr;
 
+	mSelectedSlot = -1;
+
 	mLastClick = 0;
 	mDragSlot = -1;
 }
@@ -21,8 +23,8 @@ InventoryInterface::~InventoryInterface()
 
 int InventoryInterface::PosToSlot(Square::Vector2 pos)
 {
-	int x = (pos.x - Pos().x) / 48;;
-	int y = (pos.y - Pos().y) / 48;;
+	int x = (pos.x - Pos().x) / 48.0f;
+	int y = (pos.y - Pos().y) / 48.0f;
 
 	int slot = x + y * 4;
 
@@ -111,17 +113,19 @@ void InventoryInterface::Update()
 		{
 			mLastClick = SDL_GetTicks();
 			mLastPos = Square::InputHandler::Instance().MousePos();
-			mSelectedSlot = PosToSlot(mLastPos);
+			
+			if (Item* item = GetSlot(mLastPos))
+				mSelectedSlot = PosToSlot(mLastPos);
 		}
 	}
 	else if (Square::InputHandler::Instance().MouseButtonReleased(Square::InputHandler::left) && mLastClick != 0)
 	{
 		mLastClick = 0;
 
-		if (SDL_GetTicks() - mLastClick < 100 || mDragSlot == -1)
+		if (SDL_GetTicks() - mLastClick <= 100 || mDragSlot == -1)
 		{
 			mCurrentAction = GetAction();
-			mInventory.ActiveSlot(mSelectedSlot);
+			mInventory.ActiveSlot(mCurrentAction.empty() ? -1 : mSelectedSlot);
 			mSelectedSlot = -1;
 		}
 
@@ -139,9 +143,10 @@ void InventoryInterface::Update()
 	{
 		if (mLastClick != 0)
 		{
-			if (!(mLastPos == Square::InputHandler::Instance().MousePos()))
+			if (SDL_GetTicks() - mLastClick > 100 && mLastPos != Square::InputHandler::Instance().MousePos())
 			{
-				mDragSlot = PosToSlot(mLastPos);
+				if (Item* item = GetSlot(mLastPos))
+					mDragSlot = PosToSlot(mLastPos);
 			}
 		}
 	}

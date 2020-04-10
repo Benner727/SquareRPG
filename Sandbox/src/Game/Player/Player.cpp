@@ -35,6 +35,8 @@ void Player::SetEatDelay()
 		mCombatDelay += 1.8f - mDrinkDelay;
 		mEatDelay = 1.8f;
 	}
+	else
+		mEatDelay = 0.6f;
 }
 
 void Player::SetDrinkDelay()
@@ -44,6 +46,8 @@ void Player::SetDrinkDelay()
 		mCombatDelay += 1.8f - mEatDelay;
 		mDrinkDelay = 1.8f;
 	}
+	else
+		mDrinkDelay = 0.6f;
 }
 
 void Player::SetCombatDelay()

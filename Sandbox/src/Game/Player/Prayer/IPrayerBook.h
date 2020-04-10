@@ -7,16 +7,21 @@
 class IPrayerBook
 {
 protected:
-	std::vector<Aura> mAuras;
+	std::vector<Aura*> mAuras;
+
+	int mActiveSlot = -1;
 
 public:
 	virtual ~IPrayerBook() = default;
 
-	virtual void Toggle(int index, int prayerLevel);
+	virtual void ActiveSlot(int slot) { mActiveSlot = slot; }
+	virtual int ActiveSlot() const { return mActiveSlot; }
+
+	virtual void Toggle(int index);
 	void ToggleAllOff();
 
 	bool Activated(int index) const;
 	float PrayerDrain() const;
 
-	inline std::vector<Aura> PrayerAuras() const { return mAuras; }
+	inline std::vector<Aura*> PrayerAuras() const { return mAuras; }
 };

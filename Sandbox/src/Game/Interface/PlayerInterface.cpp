@@ -2,26 +2,30 @@
 
 PlayerInterface::PlayerInterface(Player& player)
 	: mPlayer(player), mCommandManager(&mPlayer),
-	mInventory(player.Inventory()), mGear(player.Gear())
+	mInventory(player.Inventory()), mGear(player.Gear()),
+	mPrayer(player.PrayerBook())
 {
 	mWaitingForUse = false;
 
 	mActiveMenu = Menu::inventory;
 
-	mGearButton = new Square::Sprite("Graphics/buttonSquare_brown.png");
-	mGearButton->Parent(this);
-	mGearButton->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - mGearButton->ScaledDimensions().x * 0.5f, Square::Graphics::SCREEN_HEIGHT - mGearButton->ScaledDimensions().y * 0.5f));
-
-	mInventoryButton = new Square::Sprite("Graphics/buttonSquare_brown.png");
-	mInventoryButton->Parent(this);
-	mInventoryButton->Pos(mGearButton->Pos() - Square::VEC2_RIGHT * mInventoryButton->ScaledDimensions().x);
+	AddButton("SpellBook");
+	AddButton("Prayer");
+	AddButton("Gear");
+	AddButton("Inventory");
+	AddButton("Stats");
+	AddButton("Combat");
 
 	mInventory.Parent(this);
-	mInventory.Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mInventoryButton->ScaledDimensions().y));
+	mInventory.Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Inventory"]->ScaledDimensions().y));
 
 	mGear.Parent(this);
-	mGear.Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mGearButton->ScaledDimensions().y));
+	mGear.Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Gear"]->ScaledDimensions().y));
 	mGear.Active(false);
+
+	mPrayer.Parent(this);
+	mPrayer.Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Prayer"]->ScaledDimensions().y));
+	mPrayer.Active(false);
 
 	mHoverText = "";
 	mHoverSprite = nullptr;
@@ -33,12 +37,19 @@ PlayerInterface::PlayerInterface(Player& player)
 
 PlayerInterface::~PlayerInterface()
 {
-	delete mGearButton;
-	delete mInventoryButton;
+	for (auto button : mButtons)
+		delete button.second;
 
 	delete mHoverSprite;
 
 	delete mActionsMenu;
+}
+
+void PlayerInterface::AddButton(std::string button)
+{
+	mButtons[button] = new Square::Sprite("Graphics/buttonSquare_brown.png");
+	mButtons[button]->Parent(this);
+	mButtons[button]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - mButtons[button]->ScaledDimensions().x * 0.5f - (mButtons[button]->ScaledDimensions().x * (mButtons.size() - 1)), Square::Graphics::SCREEN_HEIGHT - mButtons[button]->ScaledDimensions().y * 0.5f));
 }
 
 void PlayerInterface::HandleButtons()
@@ -47,10 +58,10 @@ void PlayerInterface::HandleButtons()
 	{
 		Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
-		if (pos.x > mInventoryButton->Pos().x - mInventoryButton->ScaledDimensions().x * 0.5f &&
-			pos.x < mInventoryButton->Pos().x + mInventoryButton->ScaledDimensions().x * 0.5f &&
-			pos.y > mInventoryButton->Pos().y - mInventoryButton->ScaledDimensions().y * 0.5f &&
-			pos.y < mInventoryButton->Pos().y + mInventoryButton->ScaledDimensions().y * 0.5f)
+		if (pos.x > mButtons["Inventory"]->Pos().x - mButtons["Inventory"]->ScaledDimensions().x * 0.5f &&
+			pos.x < mButtons["Inventory"]->Pos().x + mButtons["Inventory"]->ScaledDimensions().x * 0.5f &&
+			pos.y > mButtons["Inventory"]->Pos().y - mButtons["Inventory"]->ScaledDimensions().y * 0.5f &&
+			pos.y < mButtons["Inventory"]->Pos().y + mButtons["Inventory"]->ScaledDimensions().y * 0.5f)
 		{
 			if (mActiveMenu != Menu::inventory)
 			{
@@ -58,6 +69,7 @@ void PlayerInterface::HandleButtons()
 				mInventory.Active(true);
 
 				mGear.Active(false);
+				mPrayer.Active(false);
 			}
 			else
 			{
@@ -65,10 +77,10 @@ void PlayerInterface::HandleButtons()
 				mInventory.Active(false);
 			}
 		}
-		else if (pos.x > mGearButton->Pos().x - mGearButton->ScaledDimensions().x * 0.5f &&
-			pos.x < mGearButton->Pos().x + mGearButton->ScaledDimensions().x * 0.5f &&
-			pos.y > mGearButton->Pos().y - mGearButton->ScaledDimensions().y * 0.5f &&
-			pos.y < mGearButton->Pos().y + mGearButton->ScaledDimensions().y * 0.5f)
+		else if (pos.x > mButtons["Gear"]->Pos().x - mButtons["Gear"]->ScaledDimensions().x * 0.5f &&
+			pos.x < mButtons["Gear"]->Pos().x + mButtons["Gear"]->ScaledDimensions().x * 0.5f &&
+			pos.y > mButtons["Gear"]->Pos().y - mButtons["Gear"]->ScaledDimensions().y * 0.5f &&
+			pos.y < mButtons["Gear"]->Pos().y + mButtons["Gear"]->ScaledDimensions().y * 0.5f)
 		{
 			if (mActiveMenu != Menu::gear)
 			{
@@ -76,11 +88,31 @@ void PlayerInterface::HandleButtons()
 				mGear.Active(true);
 
 				mInventory.Active(false);
+				mPrayer.Active(false);
 			}
 			else
 			{
 				mActiveMenu = Menu::none;
 				mGear.Active(false);
+			}
+		}
+		else if (pos.x > mButtons["Prayer"]->Pos().x - mButtons["Prayer"]->ScaledDimensions().x * 0.5f &&
+			pos.x < mButtons["Prayer"]->Pos().x + mButtons["Prayer"]->ScaledDimensions().x * 0.5f &&
+			pos.y > mButtons["Prayer"]->Pos().y - mButtons["Prayer"]->ScaledDimensions().y * 0.5f &&
+			pos.y < mButtons["Prayer"]->Pos().y + mButtons["Prayer"]->ScaledDimensions().y * 0.5f)
+		{
+			if (mActiveMenu != Menu::prayer)
+			{
+				mActiveMenu = Menu::prayer;
+				mPrayer.Active(true);
+
+				mInventory.Active(false);
+				mGear.Active(false);
+			}
+			else
+			{
+				mActiveMenu = Menu::none;
+				mPrayer.Active(false);
 			}
 		}
 	}
@@ -95,7 +127,7 @@ void PlayerInterface::SetHoverText()
 	switch (mActiveMenu)
 	{
 	case Menu::inventory:
-		if (!mInventory.MenuOpened())
+		if (!mInventory.MenuOpened() && mActionsMenu == nullptr)
 		{
 			if (mWaitingForUse)
 			{
@@ -114,10 +146,17 @@ void PlayerInterface::SetHoverText()
 		}
 		break;
 	case Menu::gear:
-		if (!mGear.MenuOpened())
+		if (!mGear.MenuOpened() && mActionsMenu == nullptr)
 		{
 			if (Item* item = mGear.GetSlot(pos))
 				hoverText += "Unequip " + item->Name();
+		}
+		break;
+	case Menu::prayer:
+		if (!mPrayer.MenuOpened() && mActionsMenu == nullptr)
+		{
+			if (Aura* aura = mPrayer.GetSlot(pos))
+				hoverText += (aura->Activated() ? "Deactivate " : "Activate ") + aura->Name();
 		}
 		break;
 	}
@@ -163,6 +202,16 @@ void PlayerInterface::UpdateGear()
 	if (mGear.Active())
 	{
 		mCommand = mGear.CurrentAction();
+	}
+}
+
+void PlayerInterface::UpdatePrayer()
+{
+	mPrayer.Update();
+
+	if (mPrayer.Active())
+	{
+		mCommand = mPrayer.CurrentAction();
 	}
 }
 
@@ -229,12 +278,13 @@ void PlayerInterface::Update()
 
 	UpdateInventory();
 	UpdateGear();
+	UpdatePrayer();
 }
 
 void PlayerInterface::Render()
 {
-	mInventoryButton->Render();
-	mGearButton->Render();
+	for (auto button : mButtons)
+			button.second->Render();
 
 	switch (mActiveMenu)
 	{
@@ -243,6 +293,9 @@ void PlayerInterface::Render()
 		break;
 	case Menu::gear:
 		mGear.Render();
+		break;
+	case Menu::prayer:
+		mPrayer.Render();
 		break;
 	}
 

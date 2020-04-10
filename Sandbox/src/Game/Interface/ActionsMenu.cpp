@@ -5,7 +5,7 @@ const std::string ActionsMenu::FONT_PATH = "Font/VeraMono.ttf";
 ActionsMenu::ActionsMenu(std::string title, std::vector<std::string> actions, Square::Vector2 pos)
 	: mSelectedAction(-1)
 {
-	mTitle = new Square::Text(title, FONT_PATH, 18, { 255, 140, 0, 255 });
+	mTitle = new Square::Text(title, FONT_PATH, 16, { 255, 140, 0, 255 });
 	mTitle->Parent(this);
 
 	mWidth = mTitle->ScaledDimensions().x + PADDING * 2.0f;
@@ -15,11 +15,11 @@ ActionsMenu::ActionsMenu(std::string title, std::vector<std::string> actions, Sq
 	{
 		mActions.push_back(action);
 
-		mActionsText.push_back(new Square::Text(action, FONT_PATH, 16, { 255, 255, 255, 255 }));
+		mActionsText.push_back(new Square::Text(action, FONT_PATH, 14, { 255, 255, 255, 255 }));
 		mActionsText.back()->Parent(this);
 		mActionsText.back()->Translate(-Square::VEC2_UP * ((mActionsText.back()->ScaledDimensions().y + PADDING) * mActions.size()));
 
-		mHighlightedText.push_back(new Square::Text(action, FONT_PATH, 16, { 255, 215, 0, 255 }));
+		mHighlightedText.push_back(new Square::Text(action, FONT_PATH, 14, { 255, 215, 0, 255 }));
 		mHighlightedText.back()->Parent(this);
 		mHighlightedText.back()->Translate(-Square::VEC2_UP * ((mActionsText.back()->ScaledDimensions().y + PADDING) * mActions.size()));
 

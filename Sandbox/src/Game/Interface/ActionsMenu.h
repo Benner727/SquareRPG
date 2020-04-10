@@ -8,7 +8,7 @@ class ActionsMenu : public Square::GameObject
 {
 private:
 	static const std::string FONT_PATH;
-	static const int PADDING = 8;
+	static const int PADDING = 6;
 
 	Square::Vector2 mTopLeft;
 	int mWidth;

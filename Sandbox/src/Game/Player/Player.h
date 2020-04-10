@@ -20,6 +20,7 @@ private:
 	Square::Sprite* mSprite;
 
 	CombatOption mCombatStance;
+	bool mAutoAttack;
 
 	float mEatDelay;
 	float mDrinkDelay;
@@ -58,6 +59,9 @@ public:
 
 	inline CombatOption CombatStance() const { return mCombatStance; }
 	inline void CombatStance(CombatOption combatStance) { mCombatStance = combatStance; }
+
+	inline bool AutoAttack() const { return mAutoAttack; }
+	inline void AutoAttack(bool autoAttack) { mAutoAttack = autoAttack; }
 
 	inline void Target(Square::GameObject* target) { mTarget = target; }
 	inline Square::GameObject* Target() const { return mTarget; }

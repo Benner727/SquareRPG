@@ -8,9 +8,6 @@ GearInterface::GearInterface(Gear& gear)
 	mBackground->Pos(mBackground->ScaledDimensions() * 0.5f);
 
 	mActionsMenu = nullptr;
-
-	mLastClick = 0;
-	mDragSlot = -1;
 }
 
 GearInterface::~GearInterface()
@@ -21,8 +18,8 @@ GearInterface::~GearInterface()
 
 int GearInterface::PosToSlot(Square::Vector2 pos)
 {
-	int x = (pos.x - Pos().x) / 48;;
-	int y = (pos.y - Pos().y) / 48;;
+	int x = (pos.x - Pos().x) / 48.0f;
+	int y = (pos.y - Pos().y) / 48.0f;
 
 	int slot = x + y * 2;
 
@@ -82,7 +79,7 @@ void GearInterface::Update()
 {
 	mCurrentAction.clear();
 
-	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right) && mDragSlot == -1)
+	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
 		if (Active())
 		{
@@ -99,7 +96,8 @@ void GearInterface::Update()
 		if (mActionsMenu)
 		{
 			mCurrentAction = mActionsMenu->Action();
-			mGear.ActiveSlot(mSelectedSlot);
+			if (!mCurrentAction.empty())
+				mGear.ActiveSlot(mSelectedSlot);
 			mSelectedSlot = -1;
 			mActionsMenu->Active(false);
 		}

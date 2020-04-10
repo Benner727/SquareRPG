@@ -1,32 +1,34 @@
 #pragma once
 
-#include <Square.h>
-
-#include "Game/Player/Gear.h"
+#include "Game/Player/Prayer/IPrayerBook.h"
 #include "Game/Interface/ActionsMenu.h"
+#include "Game/Interface/Tooltip.h"
 
-class GearInterface : public Square::GameObject
+class PrayerInterface : public Square::GameObject
 {
 private:
-	Gear& mGear;
+	IPrayerBook& mPrayerBook;
 
 	Square::Sprite* mBackground;
 
 	ActionsMenu* mActionsMenu;
+	Tooltip* mTooltip;
 
 	std::string mCurrentAction;
 	int mSelectedSlot;
+
+	float mHoverTimer;
 
 	int PosToSlot(Square::Vector2 pos);
 	std::string GetAction();
 
 public:
-	GearInterface(Gear& gear);
-	~GearInterface();
+	PrayerInterface(IPrayerBook& prayerBook);
+	~PrayerInterface();
 
 	bool ContainsClick() const;
 
-	Item* GetSlot(Square::Vector2 pos);
+	Aura* GetSlot(Square::Vector2 pos);
 
 	inline bool MenuOpened() const { return (mActionsMenu != nullptr); }
 	inline std::string CurrentAction() const { return mCurrentAction; }

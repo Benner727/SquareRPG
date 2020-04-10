@@ -23,9 +23,9 @@ GameLayer::~GameLayer()
 	delete playerUI;
 }
 
-
 void GameLayer::OnUpdate()
 {
+	player->Update();
 	playerUI->Update();
 }
 
