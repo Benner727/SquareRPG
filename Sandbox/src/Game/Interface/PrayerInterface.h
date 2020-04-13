@@ -1,38 +1,26 @@
 #pragma once
 
+#include "Game/Interface/IMenuTab.h"
 #include "Game/Player/Prayer/IPrayerBook.h"
-#include "Game/Interface/ActionsMenu.h"
-#include "Game/Interface/Tooltip.h"
 
-class PrayerInterface : public Square::GameObject
+class PrayerInterface : public IMenuTab
 {
 private:
 	IPrayerBook& mPrayerBook;
 
-	Square::Sprite* mBackground;
-
-	ActionsMenu* mActionsMenu;
-	Tooltip* mTooltip;
-
-	std::string mCurrentAction;
-	int mSelectedSlot;
-
-	float mHoverTimer;
-
-	int PosToSlot(Square::Vector2 pos);
 	std::string GetAction();
+
+	void CreateActionMenu();
+	void CreateTooltip();
+
+	inline void SetActiveSlot(int slot) { mPrayerBook.ActiveSlot(slot); }
+	inline bool IsActiveSlot(int slot) { return mPrayerBook.PrayerAuras()[slot]->Activated(); }
+	inline void Swap(int slotOne, int slotTwo) {}
+	Square::GameObject* GetSlot(int slot);
 
 public:
 	PrayerInterface(IPrayerBook& prayerBook);
-	~PrayerInterface();
+	~PrayerInterface() = default;
 
-	bool ContainsClick() const;
-
-	Aura* GetSlot(Square::Vector2 pos);
-
-	inline bool MenuOpened() const { return (mActionsMenu != nullptr); }
-	inline std::string CurrentAction() const { return mCurrentAction; }
-
-	void Update();
-	void Render();
+	Square::GameObject* GetSlot(Square::Vector2 pos);
 };

@@ -10,6 +10,13 @@ class IMenuTab : public Square::GameObject
 private:
 	Square::Sprite* mBackground;
 
+	bool mCanDrag;
+	bool mHasHover;
+
+	void HandleLeftClick();
+	void HandleMenus();
+
+protected:
 	ActionsMenu* mActionsMenu;
 	Tooltip* mTooltip;
 
@@ -24,11 +31,9 @@ private:
 
 	Uint32 mLastClick;
 	Square::Vector2 mLastPos;
-	bool mCanDrag;
 	int mDragSlot;
 
 	float mHoverTimer;
-	bool mHasHover;
 
 	int PosToSlot(Square::Vector2 pos);
 	virtual std::string GetAction() = 0;
@@ -39,13 +44,11 @@ private:
 	virtual void SetActiveSlot(int slot) = 0;
 	virtual bool IsActiveSlot(int slot) = 0;
 	virtual void Swap(int slotOne, int slotTwo) = 0;
-
-	void HandleLeftClick();
-	void HandleMenus();
+	virtual Square::GameObject* GetSlot(int slot) = 0;
 
 public:
 	IMenuTab(std::string backgroundPath, int itemSize, bool canDrag = false, bool hasHover = false);
-	~IMenuTab();
+	virtual ~IMenuTab();
 
 	bool ContainsClick() const;
 	

@@ -1,50 +1,15 @@
 #include "GearInterface.h"
 
 GearInterface::GearInterface(Gear& gear)
-	: mGear(gear)
+	: IMenuTab("Graphics/panel_brown.png", 32, false, false), mGear(gear)
 {
-	mBackground = new Square::Sprite("Graphics/panel_brown.png");
-	mBackground->Parent(this);
-	mBackground->Pos(mBackground->ScaledDimensions() * 0.5f);
-
-	mActionsMenu = nullptr;
-}
-
-GearInterface::~GearInterface()
-{
-	delete mBackground;
-	delete mActionsMenu;
-}
-
-int GearInterface::PosToSlot(Square::Vector2 pos)
-{
-	int x = (pos.x - Pos().x) / 48.0f;
-	int y = (pos.y - Pos().y) / 48.0f;
-
-	int slot = x + y * 2;
-
-	if (slot < 0 || slot > Gear::EquipmentSlot::TOTAL_SLOTS)
-		slot = -1;
-
-	return slot;
-}
-
-Item* GearInterface::GetSlot(Square::Vector2 pos)
-{
-	Item* item = mGear.GetItem(PosToSlot(pos));
-
-	if (item)
+	for (int y = 0; y < 5; y++)
 	{
-		if (pos.x >= item->Pos().x - 16.0f &&
-			pos.x <= item->Pos().x + 16.0f &&
-			pos.y >= item->Pos().y - 16.0f &&
-			pos.y <= item->Pos().y + 16.0f)
+		for (int x = 0; x < 2; x++)
 		{
-			return item;
+			mSlotPos.push_back(Square::Vector2(x * 48.0f + 32.0f, y * 48.0f + 32.0f));
 		}
 	}
-
-	return nullptr;
 }
 
 std::string GearInterface::GetAction()
@@ -53,7 +18,7 @@ std::string GearInterface::GetAction()
 
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
-	if (Item* item = GetSlot(pos))
+	if (Item* item = dynamic_cast<Item*>(GetSlot(pos)))
 	{
 		action = "Unequip";
 	}
@@ -61,91 +26,28 @@ std::string GearInterface::GetAction()
 	return action;
 }
 
-
-bool GearInterface::ContainsClick() const
+void GearInterface::CreateActionMenu()
 {
-	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
-
-	if (pos.x >= mBackground->Pos().x - mBackground->ScaledDimensions().x * 0.5f &&
-		pos.x <= mBackground->Pos().x + mBackground->ScaledDimensions().x * 0.5f &&
-		pos.y >= mBackground->Pos().y - mBackground->ScaledDimensions().y * 0.5f &&
-		pos.y <= mBackground->Pos().y + mBackground->ScaledDimensions().y * 0.5f)
-		return true;
-
-	return false;
-}
-
-void GearInterface::Update()
-{
-	mCurrentAction.clear();
-
-	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
+	if (Item* item = dynamic_cast<Item*>(GetSlot(Square::InputHandler::Instance().MousePos())))
 	{
-		if (Active())
-		{
-			if (Item* item = GetSlot(Square::InputHandler::Instance().MousePos()))
-			{
-				mActionsMenu = new ActionsMenu(item->Name(), { "Unequip" }, Square::InputHandler::Instance().MousePos());
-				mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
-			}
-		}
-	}
-
-	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
-	{
-		if (mActionsMenu)
-		{
-			mCurrentAction = mActionsMenu->Action();
-			if (!mCurrentAction.empty())
-				mGear.ActiveSlot(mSelectedSlot);
-			mSelectedSlot = -1;
-			mActionsMenu->Active(false);
-		}
-		else if (ContainsClick() && Active())
-		{
-			mCurrentAction = GetAction();
-			mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
-			mGear.ActiveSlot(mSelectedSlot);
-			mSelectedSlot = -1;
-		}
-	}
-
-	if (mActionsMenu)
-	{
-		mActionsMenu->Update();
-
-		if (!mActionsMenu->Active())
-		{
-			delete mActionsMenu;
-			mActionsMenu = nullptr;
-		}
+		mActionsMenu = new ActionsMenu(item->Name(), { "Unequip" }, Square::InputHandler::Instance().MousePos());
+		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 	}
 }
 
-void GearInterface::Render()
+Square::GameObject* GearInterface::GetSlot(int slot)
 {
-	mBackground->Render();
+	Item* item = nullptr;
 
-	int slot = 0;
-	for (int y = 0; y < 5; y++)
-	{
-		for (int x = 0; x < 2; x++)
-		{
-			if (Item* item = mGear.GetItem(slot))
-			{
-				item->Parent(this);
-				item->Pos(Square::Vector2(x * 48.0f + 32.0f, y * 48.0f + 32.0f));
+	if (slot != -1)
+		item = mGear.GetItem(slot);
 
-				if (mGear.ActiveSlot() == x + y * 2)
-					Square::Graphics::Instance().DrawRectangle(item->Pos() - 16.0f, 32.0f, 32.0f, { 125, 25, 25, 255 });
+	return item;
+}
 
-				item->Render();
-			}
+Square::GameObject* GearInterface::GetSlot(Square::Vector2 pos)
+{
+	int slot = PosToSlot(pos);
 
-			slot++;
-		}
-	}
-
-	if (mActionsMenu)
-		mActionsMenu->Render();
+	return GetSlot(slot);
 }

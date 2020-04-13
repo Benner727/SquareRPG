@@ -35,12 +35,13 @@ int IMenuTab::PosToSlot(Square::Vector2 pos)
 	int slot = -1;
 	for (int i = 0; i < mSlotPos.size(); i++)
 	{
-		if (pos.x >= mSlotPos[i].x - mItemSize &&
-			pos.x <= mSlotPos[i].x + mItemSize &&
-			pos.y >= mSlotPos[i].y - mItemSize &&
-			pos.y <= mSlotPos[i].y + mItemSize)
+		if (pos.x >= Pos().x + mSlotPos[i].x - mItemSize * 0.5f &&
+			pos.x <= Pos().x + mSlotPos[i].x + mItemSize * 0.5f &&
+			pos.y >= Pos().y + mSlotPos[i].y - mItemSize * 0.5f &&
+			pos.y <= Pos().y + mSlotPos[i].y + mItemSize * 0.5f)
 		{
 			slot = i;
+			break;
 		}
 	}
 
@@ -82,9 +83,7 @@ void IMenuTab::HandleLeftClick()
 		}
 		else if (ContainsClick() && Active())
 		{
-			if (!mCanDrag)
-				mCurrentAction = GetAction();
-
+			mCurrentAction = GetAction();
 			mLastClick = SDL_GetTicks();
 			mLastPos = Square::InputHandler::Instance().MousePos();
 
@@ -113,7 +112,7 @@ void IMenuTab::HandleLeftClick()
 			mDragSlot = -1;
 		}
 	}
-	else
+	else if (mCanDrag)
 	{
 		if (mLastClick != 0)
 		{
@@ -138,7 +137,7 @@ void IMenuTab::HandleMenus()
 			mActionsMenu = nullptr;
 		}
 	}
-	else
+	else if (mHasHover)
 	{
 		if (mSelectedSlot != -1 && mSelectedSlot == mLastSlot)
 		{
@@ -152,7 +151,8 @@ void IMenuTab::HandleMenus()
 		if (mTooltip)
 		{
 			mTooltip->Update();
-			if (mSelectedSlot != PosToSlot(Square::InputHandler::Instance().MousePos()))
+			if (mSelectedSlot == -1 ||
+				mSelectedSlot != PosToSlot(Square::InputHandler::Instance().MousePos()))
 				mTooltip->Active(false);
 
 			if (!mTooltip->Active())

@@ -1,40 +1,25 @@
 #pragma once
 
-#include <Square.h>
-
+#include "Game/Interface/IMenuTab.h"
 #include "Game/Player/Inventory.h"
-#include "Game/Interface/ActionsMenu.h"
 
-class InventoryInterface : public Square::GameObject
+class InventoryInterface : public IMenuTab
 {
 private:
 	Inventory& mInventory;
 
-	Square::Sprite* mBackground;
-
-	ActionsMenu* mActionsMenu;
-
-	std::string mCurrentAction;
-	int mSelectedSlot;
-
-	Uint32 mLastClick;
-	Square::Vector2 mLastPos;
-	int mDragSlot;
-
-	int PosToSlot(Square::Vector2 pos);
 	std::string GetAction();
+
+	void CreateActionMenu();
+
+	inline void SetActiveSlot(int slot) { mInventory.ActiveSlot(slot); }
+	inline bool IsActiveSlot(int slot) { return slot == mInventory.ActiveSlot(); }
+	inline void Swap(int slotOne, int slotTwo) { mInventory.Swap(slotOne, slotTwo); }
+	Square::GameObject* GetSlot(int slot);
 
 public:
 	InventoryInterface(Inventory& inventory);
-	~InventoryInterface();
+	~InventoryInterface() = default;
 
-	bool ContainsClick() const;
-
-	Item* GetSlot(Square::Vector2 pos);
-
-	inline bool MenuOpened() const { return (mActionsMenu != nullptr); }
-	inline std::string CurrentAction() const { return mCurrentAction; }
-
-	void Update();
-	void Render();
+	Square::GameObject* GetSlot(Square::Vector2 pos);
 };

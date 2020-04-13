@@ -134,7 +134,7 @@ void PlayerInterface::SetHoverText()
 				hoverText += "Use " + mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name() + " -> ";
 			}
 
-			if (Item* item = mInventory.GetSlot(pos))
+			if (Item* item = dynamic_cast<Item*>(mInventory.GetSlot(pos)))
 			{
 				if (mWaitingForUse)
 				{
@@ -148,14 +148,14 @@ void PlayerInterface::SetHoverText()
 	case Menu::gear:
 		if (!mGear.MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Item* item = mGear.GetSlot(pos))
+			if (Item* item = dynamic_cast<Item*>(mGear.GetSlot(pos)))
 				hoverText += "Unequip " + item->Name();
 		}
 		break;
 	case Menu::prayer:
 		if (!mPrayer.MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Aura* aura = mPrayer.GetSlot(pos))
+			if (Aura* aura = dynamic_cast<Aura*>(mPrayer.GetSlot(pos)))
 				hoverText += (aura->Activated() ? "Deactivate " : "Activate ") + aura->Name();
 		}
 		break;
@@ -243,7 +243,7 @@ void PlayerInterface::Update()
 
 				if (mInventory.ContainsClick())
 				{
-					if (Item* item = mInventory.GetSlot(Square::InputHandler::Instance().MousePos()))
+					if (Item* item = dynamic_cast<Item*>(mInventory.GetSlot(Square::InputHandler::Instance().MousePos())))
 					{
 						targetObject = item->Name();
 						mTargetObject = item;
