@@ -40,6 +40,6 @@ public:
 			mPlayer->CalculateBonuses();
 		}
 
-		mPlayer->Inventory().ActiveSlot(-1);
+		mPlayer->Gear().ActiveSlot(-1);
 	}
 };

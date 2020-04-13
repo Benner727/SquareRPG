@@ -135,6 +135,10 @@ void GearInterface::Render()
 			{
 				item->Parent(this);
 				item->Pos(Square::Vector2(x * 48.0f + 32.0f, y * 48.0f + 32.0f));
+
+				if (mGear.ActiveSlot() == x + y * 2)
+					Square::Graphics::Instance().DrawRectangle(item->Pos() - 16.0f, 32.0f, 32.0f, { 125, 25, 25, 255 });
+
 				item->Render();
 			}
 

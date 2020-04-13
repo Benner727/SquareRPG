@@ -185,6 +185,9 @@ void InventoryInterface::Render()
 					item->Pos(Square::Vector2(x * 48.0f + 32.0f, y * 48.0f + 32.0f));
 				}
 
+				if (mInventory.ActiveSlot() == x + y * 4)
+					Square::Graphics::Instance().DrawRectangle(item->Pos() - 16.0f, 32.0f, 32.0f, { 125, 25, 25, 255 });
+
 				item->Render();
 			}
 
