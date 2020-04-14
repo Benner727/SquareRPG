@@ -15,11 +15,11 @@ private:
 	inline void SetActiveSlot(int slot) { mGear.ActiveSlot(slot); }
 	inline bool IsActiveSlot(int slot) { return slot == mGear.ActiveSlot(); }
 	inline void Swap(int slotOne, int slotTwo) {}
-	Square::GameObject* GetSlot(int slot);
+	Square::GameObject* GetSlot(int slot, bool includeActive = true);
 
 public:
 	GearInterface(Gear& gear);
 	~GearInterface() = default;
 
-	Square::GameObject* GetSlot(Square::Vector2 pos);
+	Square::GameObject* GetSlot(Square::Vector2 pos, bool includeActive = true);
 };

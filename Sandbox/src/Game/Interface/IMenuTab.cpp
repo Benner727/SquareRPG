@@ -7,6 +7,8 @@ IMenuTab::IMenuTab(std::string backgroundPath, int itemSize, bool canDrag, bool 
 	mBackground->Parent(this);
 	mBackground->Pos(mBackground->ScaledDimensions() * 0.5f);
 
+	mInUse = false;
+
 	mActionsMenu = nullptr;
 	mTooltip = nullptr;
 
@@ -81,7 +83,7 @@ void IMenuTab::HandleLeftClick()
 			mSelectedSlot = -1;
 			mActionsMenu->Active(false);
 		}
-		else if (ContainsClick() && Active())
+		else if (ContainsClick() && Active() && !InUse())
 		{
 			mCurrentAction = GetAction();
 			mLastClick = SDL_GetTicks();
@@ -146,7 +148,8 @@ void IMenuTab::HandleMenus()
 		else
 			mHoverTimer = 0.0f;
 
-		CreateTooltip();
+		if (Active())
+			CreateTooltip();
 
 		if (mTooltip)
 		{
@@ -172,7 +175,7 @@ void IMenuTab::Update()
 
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right) && mDragSlot == -1)
 	{
-		if (Active())
+		if (Active() && !InUse())
 		{
 			CreateActionMenu();
 		}

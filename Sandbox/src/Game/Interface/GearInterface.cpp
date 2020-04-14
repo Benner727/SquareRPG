@@ -35,19 +35,22 @@ void GearInterface::CreateActionMenu()
 	}
 }
 
-Square::GameObject* GearInterface::GetSlot(int slot)
+Square::GameObject* GearInterface::GetSlot(int slot, bool includeActive)
 {
 	Item* item = nullptr;
 
 	if (slot != -1)
-		item = mGear.GetItem(slot);
+	{
+		if (includeActive || (slot != mGear.ActiveSlot() && !includeActive))
+			item = mGear.GetItem(slot);
+	}
 
 	return item;
 }
 
-Square::GameObject* GearInterface::GetSlot(Square::Vector2 pos)
+Square::GameObject* GearInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 
-	return GetSlot(slot);
+	return GetSlot(slot, includeActive);
 }

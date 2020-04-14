@@ -52,19 +52,22 @@ void PrayerInterface::CreateTooltip()
 		mSelectedSlot = -1;
 }
 
-Square::GameObject* PrayerInterface::GetSlot(int slot)
+Square::GameObject* PrayerInterface::GetSlot(int slot, bool includeActive)
 {
 	Aura* aura = nullptr;
 
 	if (slot != -1)
-		aura = mPrayerBook.PrayerAuras()[slot];
+	{
+		if (includeActive || (slot != mPrayerBook.ActiveSlot() && !includeActive))
+			aura = mPrayerBook.PrayerAuras()[slot];
+	}
 
 	return aura;
 }
 
-Square::GameObject* PrayerInterface::GetSlot(Square::Vector2 pos)
+Square::GameObject* PrayerInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 
-	return GetSlot(slot);
+	return GetSlot(slot, includeActive);
 }

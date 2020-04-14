@@ -10,6 +10,8 @@ class IMenuTab : public Square::GameObject
 private:
 	Square::Sprite* mBackground;
 
+	bool mInUse;
+
 	bool mCanDrag;
 	bool mHasHover;
 
@@ -44,15 +46,18 @@ protected:
 	virtual void SetActiveSlot(int slot) = 0;
 	virtual bool IsActiveSlot(int slot) = 0;
 	virtual void Swap(int slotOne, int slotTwo) = 0;
-	virtual Square::GameObject* GetSlot(int slot) = 0;
+	virtual Square::GameObject* GetSlot(int slot, bool includeActive = true) = 0;
 
 public:
 	IMenuTab(std::string backgroundPath, int itemSize, bool canDrag = false, bool hasHover = false);
 	virtual ~IMenuTab();
 
+	inline bool InUse() const { return mInUse; }
+	inline void InUse(bool inUse) { mInUse = inUse; }
+
 	bool ContainsClick() const;
 	
-	virtual Square::GameObject* GetSlot(Square::Vector2 pos) = 0;
+	virtual Square::GameObject* GetSlot(Square::Vector2 pos, bool includeActive = true) = 0;
 
 	inline bool MenuOpened() const { return (mActionsMenu != nullptr); }
 	inline std::string CurrentAction() const { return mCurrentAction; }

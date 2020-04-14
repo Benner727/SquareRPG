@@ -36,19 +36,22 @@ void InventoryInterface::CreateActionMenu()
 	}
 }
 
-Square::GameObject* InventoryInterface::GetSlot(int slot)
+Square::GameObject* InventoryInterface::GetSlot(int slot, bool includeActive)
 {
 	Item* item = nullptr;
 
 	if (slot != -1)
-		item = mInventory.GetItem(slot);
+	{
+		if (includeActive || (slot != mInventory.ActiveSlot() && !includeActive))
+			item = mInventory.GetItem(slot);
+	}
 
 	return item;
 }
 
-Square::GameObject* InventoryInterface::GetSlot(Square::Vector2 pos)
+Square::GameObject* InventoryInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 
-	return GetSlot(slot);
+	return GetSlot(slot, includeActive);
 }

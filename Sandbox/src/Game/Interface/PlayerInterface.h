@@ -4,18 +4,16 @@
 #include "Game/Interface/InventoryInterface.h"
 #include "Game/Interface/GearInterface.h"
 #include "Game/Interface/PrayerInterface.h"
+#include "Game/Interface/Button.h"
 
 class PlayerInterface : public Square::GameObject
 {
 private:
-	enum class Menu { none, inventory, gear, prayer };
-
 	Player& mPlayer;
 	CommandManager mCommandManager;
 
-	InventoryInterface mInventory;
-	GearInterface mGear;
-	PrayerInterface mPrayer;
+	std::map<std::string, IMenuTab*> mTabs;
+	std::map<std::string, Button*> mButtons;
 
 	std::string mCommand;
 	bool mWaitingForUse;
@@ -26,18 +24,18 @@ private:
 	ActionsMenu* mActionsMenu;
 	Square::GameObject* mTargetObject;
 
-	Menu mActiveMenu;
-
-	std::map<std::string, Square::Sprite*> mButtons;
-
 	void AddButton(std::string button);
 
 	void HandleButtons();
+	void SwitchTab(std::string key);
+
 	void SetHoverText();
 
 	void UpdateInventory();
 	void UpdateGear();
 	void UpdatePrayer();
+
+	void HandleUse();
 
 public:
 	PlayerInterface(Player& player);
