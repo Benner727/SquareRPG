@@ -12,8 +12,7 @@ class GameLayer : public Square::Layer
 {
 public:
 	Map map;
-	Player player;
-	
+
 	void HandlePathing();
 
 	GameLayer();

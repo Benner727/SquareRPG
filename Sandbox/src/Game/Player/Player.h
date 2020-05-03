@@ -34,8 +34,6 @@ private:
 	bool mInCombat;
 	float mCombatDelay;
 
-	Square::GameObject* mTarget;
-
 	Skills mSkills;
 
 	Inventory mInventory;
