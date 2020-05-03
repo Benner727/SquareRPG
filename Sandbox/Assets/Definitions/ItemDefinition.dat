@@ -3,3 +3,5 @@
 "Potion" 3 0 5 2 Potion.png "Drink" ""
 "Sword" 4 0 1 1 Sword.png "Equip" ""
 "Shield" 5 0 1 1 Shield.png "Equip" ""
+"Air Rune" 6 1 1 1 AirRune.png "" ""
+"Mind Rune" 7 1 1 1 MindRune.png "" ""

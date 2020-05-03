@@ -56,7 +56,7 @@ Square::GameObject* PrayerInterface::GetSlot(int slot, bool includeActive)
 {
 	Aura* aura = nullptr;
 
-	if (slot != -1)
+	if (slot >= 0 && slot < mPrayerBook.PrayerAuras().size())
 	{
 		if (includeActive || (slot != mPrayerBook.ActiveSlot() && !includeActive))
 			aura = mPrayerBook.PrayerAuras()[slot];

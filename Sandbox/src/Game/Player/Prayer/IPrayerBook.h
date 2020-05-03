@@ -12,7 +12,11 @@ protected:
 	int mActiveSlot = -1;
 
 public:
-	virtual ~IPrayerBook() = default;
+	virtual ~IPrayerBook()
+	{
+		for (auto& aura : mAuras)
+			delete aura;
+	}
 
 	virtual void ActiveSlot(int slot) { mActiveSlot = slot; }
 	virtual int ActiveSlot() const { return mActiveSlot; }

@@ -13,18 +13,18 @@ public:
 		ranged, prayer, magic, TOTAL_SKILLS};
 
 private:
-	Skill mSkills[SkillIndex::TOTAL_SKILLS];
+	std::vector<Skill*> mSkills;
 	int mCombatLevel;
 
 	void CalculateCombatLevel();
 
 public:
 	Skills();
-	~Skills() = default;
+	~Skills();
 
-	inline int Experience(int index) const { return mSkills[index].Experience(); }
-	inline int EffectiveLevel(int index) const { return mSkills[index].EffectiveLevel(); }
-	inline int Level(int index) const { return mSkills[index].Level(); }
+	inline int Experience(int index) const { return mSkills[index]->Experience(); }
+	inline int EffectiveLevel(int index) const { return mSkills[index]->EffectiveLevel(); }
+	inline int Level(int index) const { return mSkills[index]->Level(); }
 
 	inline int CombatLevel() const { return mCombatLevel; }
 
@@ -35,6 +35,8 @@ public:
 	void DrainSkill(int skill, int amount);
 	void BoostSkill(int skill, int add, int modifier, bool restoreOnly);
 	void RestoreSkill(int skill);
+
+	std::vector<Skill*> GetSkills() { return mSkills; }
 
 	void Update();
 };

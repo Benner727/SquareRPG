@@ -4,8 +4,9 @@ PlayerInterface::PlayerInterface(Player& player)
 	: mPlayer(player), mCommandManager(&mPlayer)
 {
 	mWaitingForUse = false;
+	mWaitingForCast = false;
 
-	AddButton("SpellBook");
+	AddButton("Magic");
 	AddButton("Prayer");
 	AddButton("Gear");
 	AddButton("Inventory");
@@ -25,6 +26,16 @@ PlayerInterface::PlayerInterface(Player& player)
 	mTabs["Prayer"]->Parent(this);
 	mTabs["Prayer"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Prayer"]->Height()));
 	mTabs["Prayer"]->Active(false);
+
+	mTabs["Magic"] = new MagicInterface(mPlayer.SpellBook());
+	mTabs["Magic"]->Parent(this);
+	mTabs["Magic"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Magic"]->Height()));
+	mTabs["Magic"]->Active(false);
+
+	mTabs["Stats"] = new StatsInterface(mPlayer.Skills());
+	mTabs["Stats"]->Parent(this);
+	mTabs["Stats"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Stats"]->Height()));
+	mTabs["Stats"]->Active(false);
 
 	mHoverText = "";
 	mHoverSprite = nullptr;
@@ -121,6 +132,32 @@ void PlayerInterface::SetHoverText()
 				hoverText += (aura->Activated() ? "Deactivate " : "Activate ") + aura->Name();
 		}
 	}
+	else if (mTabs["Magic"]->Active())
+	{
+		if (!mTabs["Magic"]->MenuOpened() && mActionsMenu == nullptr)
+		{
+			if (mWaitingForCast)
+			{
+				hoverText += "Cast " + mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name() + " -> ";
+			}
+
+			if (Spell* spell = dynamic_cast<Spell*>(mTabs["Magic"]->GetSlot(pos)))
+			{
+				if (!mWaitingForCast)
+				{
+					hoverText += "Cast " + spell->Name();
+				}
+			}
+		}
+	}
+	else if (mTabs["Stats"]->Active())
+	{
+		if (!mTabs["Stats"]->MenuOpened() && mActionsMenu == nullptr)
+		{
+			if (Skill* skill = dynamic_cast<Skill*>(mTabs["Stats"]->GetSlot(pos)))
+				hoverText += skill->SkillName() + " Skill";
+		}
+	}
 
 	if (mHoverText != hoverText)
 	{
@@ -176,6 +213,34 @@ void PlayerInterface::UpdatePrayer()
 	}
 }
 
+void PlayerInterface::UpdateMagic()
+{
+	mTabs["Magic"]->Update();
+
+	if (mTabs["Magic"]->Active() && !mTabs["Magic"]->InUse())
+	{
+		mCommand = mTabs["Magic"]->CurrentAction();
+
+		if (mCommand == "Cast")
+		{
+			mTabs["Magic"]->InUse(true);
+			mWaitingForCast = true;
+		}
+	}
+	else if (mTabs["Magic"]->Active() && mTabs["Magic"]->InUse() && !mWaitingForCast)
+		mTabs["Magic"]->InUse(false);
+}
+
+void PlayerInterface::UpdateStats()
+{
+	mTabs["Stats"]->Update();
+
+	if (mTabs["Stats"]->Active())
+	{
+		mCommand = mTabs["Stats"]->CurrentAction();
+	}
+}
+
 void PlayerInterface::HandleUse()
 {
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
@@ -214,11 +279,40 @@ void PlayerInterface::HandleUse()
 	}
 }
 
+void PlayerInterface::HandleCast()
+{
+	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
+	{
+		if (mActionsMenu)
+		{
+			mActionsMenu->Active(false);
+			if (!mActionsMenu->Action().empty())
+				mPlayer.Target(mTargetObject);
+		}
+
+		mWaitingForCast = false;
+	}
+	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
+	{
+		if (mActionsMenu == nullptr)
+		{
+			std::string activeItem = mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name();
+			std::string targetObject = "";
+
+			mActionsMenu = new ActionsMenu("Options", { mHoverText }, Square::InputHandler::Instance().MousePos());
+		}
+	}
+}
+
 void PlayerInterface::Update()
 {
 	if (mWaitingForUse)
 	{
 		HandleUse();
+	}
+	else if (mWaitingForCast)
+	{
+		HandleCast();
 	}
 	else if (!mCommand.empty())
 	{
@@ -245,6 +339,8 @@ void PlayerInterface::Update()
 	UpdateInventory();
 	UpdateGear();
 	UpdatePrayer();
+	UpdateMagic();
+	UpdateStats();
 }
 
 void PlayerInterface::Render()

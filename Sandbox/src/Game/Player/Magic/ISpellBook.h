@@ -13,7 +13,11 @@ protected:
 public:
 	ISpellBook() : mActiveSpell(-1) {}
 
-	virtual ~ISpellBook() = default;
+	virtual ~ISpellBook()
+	{
+		for (auto& spell : mSpells)
+			delete spell;
+	}
 
 	inline std::vector<Spell*> Spells() const { return mSpells; }
 

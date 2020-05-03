@@ -4,6 +4,8 @@
 #include "Game/Interface/InventoryInterface.h"
 #include "Game/Interface/GearInterface.h"
 #include "Game/Interface/PrayerInterface.h"
+#include "Game/Interface/MagicInterface.h"
+#include "Game/Interface/StatsInterface.h"
 #include "Game/Interface/Button.h"
 
 class PlayerInterface : public Square::GameObject
@@ -17,6 +19,7 @@ private:
 
 	std::string mCommand;
 	bool mWaitingForUse;
+	bool mWaitingForCast;
 
 	std::string mHoverText;
 	Square::Text* mHoverSprite;
@@ -34,8 +37,11 @@ private:
 	void UpdateInventory();
 	void UpdateGear();
 	void UpdatePrayer();
+	void UpdateMagic();
+	void UpdateStats();
 
 	void HandleUse();
+	void HandleCast();
 
 public:
 	PlayerInterface(Player& player);

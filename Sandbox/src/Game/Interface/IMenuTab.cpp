@@ -85,7 +85,7 @@ void IMenuTab::HandleLeftClick()
 		}
 		else if (ContainsClick() && Active() && !InUse())
 		{
-			mCurrentAction = GetAction();
+			//mCurrentAction = GetAction();
 			mLastClick = SDL_GetTicks();
 			mLastPos = Square::InputHandler::Instance().MousePos();
 

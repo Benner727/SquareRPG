@@ -10,6 +10,7 @@
 #include "Game/Commands/UnequipCommand.h"
 #include "Game/Commands/UseCommand.h"
 #include "Game/Commands/TogglePrayerCommand.h"
+#include "Game/Commands/CastSpellCommand.h"
 
 class CommandManager
 {
@@ -24,7 +25,12 @@ private:
 			if (command->CanExecute())
 				command->Execute();
 			else
+			{
+				//Fix this
 				mPlayer->Inventory().ActiveSlot(-1);
+				mPlayer->SpellBook().ActiveSpell(-1);
+				mPlayer->Target(nullptr);
+			}
 		}
 	}
 
@@ -41,6 +47,7 @@ public:
 		mCommands["Use"] = new UseCommand(mPlayer);
 		mCommands["Activate"] = new TogglePrayerCommand(mPlayer);
 		mCommands["Deactivate"] = new TogglePrayerCommand(mPlayer);
+		mCommands["Cast"] = new CastSpellCommand(mPlayer);
 	}
 	
 	~CommandManager()
