@@ -14,7 +14,7 @@ GameLayer::GameLayer()
 	player->Inventory().Remove(7);
 	player->Inventory().Remove(17);
 
-	playerUI = new PlayerInterface(*player);
+	playerUI = new PlayerInterface(*player, map);
 }
 
 GameLayer::~GameLayer()
@@ -45,17 +45,13 @@ void GameLayer::HandlePathing()
 		player->MoveTo(path.front());
 		path.pop_front();
 	}
-
-
 }
 
 void GameLayer::OnUpdate()
 {
+	map.Update(0);
 	player->Update();
 	playerUI->Update();
-	map.Update(0);
-
-	HandlePathing();
 }
 
 void GameLayer::OnRender()

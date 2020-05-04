@@ -11,15 +11,14 @@
 class GameLayer : public Square::Layer
 {
 public:
+	Player* player;
+	PlayerInterface* playerUI;
 	Map map;
 
 	void HandlePathing();
 
 	GameLayer();
 	virtual ~GameLayer();
-
-	Player* player;
-	PlayerInterface* playerUI;
 
 	virtual void OnUpdate() override;
 	virtual void OnRender() override;

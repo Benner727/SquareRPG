@@ -41,5 +41,5 @@ public:
 	inline int Damage() const { return mDamage; }
 	inline int BaseExperience() const { return mBaseExperience; }
 	
-	inline void Render() { mSprite->Render(); }
+	inline void Render(bool ignoreCamera = false) { mSprite->Render(ignoreCamera); }
 };

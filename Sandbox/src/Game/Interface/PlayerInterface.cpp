@@ -1,7 +1,7 @@
 #include "PlayerInterface.h"
 
-PlayerInterface::PlayerInterface(Player& player)
-	: mPlayer(player), mCommandManager(&mPlayer)
+PlayerInterface::PlayerInterface(Player& player, Map& map)
+	: mPlayer(player), mMap(map), mCommandManager(&mPlayer)
 {
 	mWaitingForUse = false;
 	mWaitingForCast = false;
@@ -61,6 +61,23 @@ void PlayerInterface::AddButton(std::string button)
 	mButtons[button]->Parent(this);
 	mButtons[button]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - mButtons[button]->Width() * 0.5f - (mButtons[button]->Width() * (mButtons.size() - 1)), 
 		Square::Graphics::SCREEN_HEIGHT - mButtons[button]->Height() * 0.5f));
+}
+
+bool PlayerInterface::ContainsClick() const
+{
+	for (const auto& button : mButtons)
+	{
+		if (button.second->Pressed())
+			return true;
+	}
+
+	for (const auto& tab : mTabs)
+	{
+		if (tab.second->ContainsClick())
+			return true;
+	}
+
+	return false;
 }
 
 void PlayerInterface::HandleButtons()
@@ -336,11 +353,18 @@ void PlayerInterface::Update()
 		}
 	}
 
-	UpdateInventory();
-	UpdateGear();
-	UpdatePrayer();
-	UpdateMagic();
-	UpdateStats();
+	if (ContainsClick())
+	{
+		UpdateInventory();
+		UpdateGear();
+		UpdatePrayer();
+		UpdateMagic();
+		UpdateStats();
+	}
+	else
+	{
+		mCommand = "Move";
+	}
 }
 
 void PlayerInterface::Render()
@@ -354,7 +378,7 @@ void PlayerInterface::Render()
 			tab.second->Render();
 	}
 
-	if (mHoverSprite) mHoverSprite->Render();
+	if (mHoverSprite) mHoverSprite->Render(true);
 
 	if (mActionsMenu) mActionsMenu->Render();
 }

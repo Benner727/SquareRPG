@@ -45,7 +45,7 @@ namespace Square {
 		void Rotate(float amount);
 
 		virtual void Update();
-		virtual void Render();
+		virtual void Render(bool ignoreCamera = false);
 
 		GameObject& operator=(GameObject other);
 		GameObject(const GameObject& other);

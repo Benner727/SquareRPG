@@ -47,5 +47,5 @@ void Tooltip::Render()
 	Square::Graphics::Instance().DrawRectangle(mTopLeft, mWidth, mHeight, { 255, 255, 160, 255 });
 
 	for (const auto& infoText : mInfoText)
-		infoText->Render();
+		infoText->Render(true);
 }

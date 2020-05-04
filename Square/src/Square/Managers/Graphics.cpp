@@ -120,41 +120,32 @@ namespace Square {
 		SDL_RenderClear(mRenderer.get());
 	}
 
-	void Graphics::DrawTexture(std::weak_ptr<SDL_Texture> tex, const SDL_Rect* clip, SDL_Rect* rend, float angle, SDL_RendererFlip flip)
+	void Graphics::DrawTexture(std::weak_ptr<SDL_Texture> tex, const SDL_Rect* clip, SDL_Rect* rend, float angle, SDL_RendererFlip flip, bool ignoreCamera)
 	{
-		Vector2 size = RotateVector(Vector2(rend->w, rend->h), angle);
-		size.x = abs(size.x);
-		size.y = abs(size.y);
+		if (!ignoreCamera)
+		{
+			Vector2 size = RotateVector(Vector2(rend->w, rend->h), angle);
+			size.x = abs(size.x);
+			size.y = abs(size.y);
 
-		if (rend->x + size.x < mCamera.x) //Left of camera
-			return;
-		else if (rend->x > mCamera.x + mCamera.w) //Right of camera
-			return;
-		else if (rend->y + size.y < mCamera.y) //Above camera
-			return;
-		else if (rend->y > mCamera.y + mCamera.h) //Below camera
-			return;
+			if (rend->x + size.x < mCamera.x) //Left of camera
+				return;
+			else if (rend->x > mCamera.x + mCamera.w) //Right of camera
+				return;
+			else if (rend->y + size.y < mCamera.y) //Above camera
+				return;
+			else if (rend->y > mCamera.y + mCamera.h) //Below camera
+				return;
 
-		rend->x -= mCamera.x + mOffset.x;
-		rend->y -= mCamera.y + mOffset.y;
+			rend->x -= mCamera.x + mOffset.x;
+			rend->y -= mCamera.y + mOffset.y;
+		}
 
 		SDL_RenderCopyEx(mRenderer.get(), tex.lock().get(), clip, rend, angle, nullptr, flip);
 	}
 
 	void Graphics::DrawPixel(Vector2 pos, SDL_Color color)
 	{
-		if (pos.x < mCamera.x) //Left of camera
-			return;
-		else if (pos.x > mCamera.x + mCamera.w) //Right of camera
-			return;
-		else if (pos.y < mCamera.y) //Above camera
-			return;
-		else if (pos.y > mCamera.y + mCamera.h) //Below camera
-			return;
-
-		pos.x -= mCamera.x + mOffset.x;
-		pos.y -= mCamera.y + mOffset.y;
-
 		SDL_SetRenderDrawColor(mRenderer.get(), color.r, color.g, color.b, color.a);
 		SDL_RenderDrawPoint(mRenderer.get(), pos.x, pos.y);
 		SDL_SetRenderDrawColor(mRenderer.get(), mDefaultDrawColor.r, mDefaultDrawColor.g, mDefaultDrawColor.b, mDefaultDrawColor.a);
@@ -162,18 +153,6 @@ namespace Square {
 
 	void Graphics::DrawRectangle(Vector2 pos, int width, int height, SDL_Color color)
 	{
-		if (pos.x < mCamera.x) //Left of camera
-			return;
-		else if (pos.x > mCamera.x + mCamera.w) //Right of camera
-			return;
-		else if (pos.y < mCamera.y) //Above camera
-			return;
-		else if (pos.y > mCamera.y + mCamera.h) //Below camera
-			return;
-
-		pos.x -= mCamera.x + mOffset.x;
-		pos.y -= mCamera.y + mOffset.y;
-
 		SDL_Rect rectangle;
 		rectangle.x = pos.x;
 		rectangle.y = pos.y;

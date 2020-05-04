@@ -35,5 +35,5 @@ public:
 	inline void Add(int amount = 1) { mAmount += amount; }
 	inline void Remove(int amount = 1) { mAmount -= amount; }
 
-	void Render();
+	void Render(bool ignoreCamera = false);
 };

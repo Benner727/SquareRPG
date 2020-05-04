@@ -33,5 +33,5 @@ void Button::Update()
 
 void Button::Render()
 {
-	mSprite->Render();
+	mSprite->Render(true);
 }

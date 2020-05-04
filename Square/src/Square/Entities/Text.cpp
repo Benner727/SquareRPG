@@ -96,10 +96,10 @@ namespace Square {
 			sprite->Flash();
 	}
 
-	void Text::Render()
+	void Text::Render(bool ignoreCamera)
 	{
 		for (const auto& sprite : mSprites)
-			sprite->Render();
+			sprite->Render(ignoreCamera);
 	}
 
 	Text& Text::operator=(Text other)

@@ -46,5 +46,5 @@ public:
 	inline bool Activated() const { return mActivated; }
 	inline void Activated(bool activated) { mActivated = activated; }
 
-	inline void Render() { mSprite->Render(); }
+	inline void Render(bool ignoreCamera = false) { mSprite->Render(ignoreCamera); }
 };

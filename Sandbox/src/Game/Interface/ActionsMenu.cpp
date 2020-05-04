@@ -103,13 +103,13 @@ void ActionsMenu::Render()
 {
 	Square::Graphics::Instance().DrawRectangle(mTopLeft, mWidth, mHeight, { 93, 84, 71, 255 });
 
-	mTitle->Render();
+	mTitle->Render(true);
 
 	for (int i = 0; i < mActionsText.size(); i++)
 	{
 		if (mSelectedAction != i)
-			mActionsText[i]->Render();
+			mActionsText[i]->Render(true);
 		else
-			mHighlightedText[i]->Render();
+			mHighlightedText[i]->Render(true);
 	}
 }

@@ -28,7 +28,7 @@ namespace Square {
 		void FlashColor(SDL_Color color);
 		void Flash();
 
-		void Render();
+		void Render(bool ignoreCamera = false);
 
 		Text& operator=(Text other);
 		Text(const Text& other);

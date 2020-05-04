@@ -46,7 +46,7 @@ namespace Square {
 		void FlashColor(SDL_Color color);
 		void Flash();
 
-		virtual void Render();
+		virtual void Render(bool ignoreCamera = false);
 
 		Sprite& operator=(Sprite other);
 		Sprite(const Sprite& other);

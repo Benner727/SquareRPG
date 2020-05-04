@@ -57,9 +57,9 @@ public:
 		mLevelText->Pos((mIcon->ScaledDimensions() + mLevelText->ScaledDimensions() * 0.5f) * Square::VEC2_RIGHT);
 	}
 
-	inline void Render() 
+	inline void Render(bool ignoreCamera = false)
 	{ 
-		mIcon->Render();
-		mLevelText->Render();
+		mIcon->Render(ignoreCamera);
+		mLevelText->Render(ignoreCamera);
 	}
 };

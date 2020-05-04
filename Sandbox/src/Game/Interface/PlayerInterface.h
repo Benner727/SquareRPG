@@ -8,10 +8,13 @@
 #include "Game/Interface/StatsInterface.h"
 #include "Game/Interface/Button.h"
 
+#include "Game/Map/Map.h"
+
 class PlayerInterface : public Square::GameObject
 {
 private:
 	Player& mPlayer;
+	Map& mMap;
 	CommandManager mCommandManager;
 
 	std::map<std::string, IMenuTab*> mTabs;
@@ -29,6 +32,8 @@ private:
 
 	void AddButton(std::string button);
 
+	bool ContainsClick() const;
+
 	void HandleButtons();
 	void SwitchTab(std::string key);
 
@@ -44,7 +49,7 @@ private:
 	void HandleCast();
 
 public:
-	PlayerInterface(Player& player);
+	PlayerInterface(Player& player, Map& map);
 	~PlayerInterface();
 
 	void Update();

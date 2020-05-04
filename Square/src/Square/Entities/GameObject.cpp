@@ -152,7 +152,7 @@ namespace Square {
 
 	}
 
-	void GameObject::Render()
+	void GameObject::Render(bool ignoreCamera)
 	{
 
 	}

@@ -22,8 +22,7 @@ namespace Square {
 
 		mTimestamp = std::string(MY_TIME);
 
-		if (_DEBUG)
-			std::remove(LOG_FILE);
+		//std::remove(LOG_FILE);
 	}
 
 	LogMessage::~LogMessage()

@@ -187,7 +187,7 @@ void IMenuTab::Update()
 
 void IMenuTab::Render()
 {
-	mBackground->Render();
+	mBackground->Render(true);
 
 	for (int i = 0; i < mSlotPos.size(); i++)
 	{
@@ -207,7 +207,7 @@ void IMenuTab::Render()
 			if (IsActiveSlot(i))
 				Square::Graphics::Instance().DrawRectangle(obj->Pos() - mItemSize * 0.5f, mItemSize, mItemSize, mActiveColor);
 
-			obj->Render();
+			obj->Render(true);
 		}
 	}
 

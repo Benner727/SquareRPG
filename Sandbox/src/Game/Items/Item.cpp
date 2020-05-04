@@ -14,7 +14,7 @@ Item::~Item()
 	delete mSprite;
 }
 
-void Item::Render()
+void Item::Render(bool ignoreCamera)
 {
-	mSprite->Render();
+	mSprite->Render(ignoreCamera);
 }

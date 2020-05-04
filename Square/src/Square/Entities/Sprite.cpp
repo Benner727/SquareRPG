@@ -146,7 +146,7 @@ namespace Square {
 		mFlash = true;
 	}
 
-	void Sprite::Render()
+	void Sprite::Render(bool ignoreCamera)
 	{
 		if (mTexture)
 		{
@@ -172,7 +172,7 @@ namespace Square {
 				if (mFlashFrames < 0) mFlashFrames++;
 			}
 
-			mGraphics.DrawTexture(mTexture, (mClipped) ? &mClipRect : nullptr, &mRenderRect, Rotation(world), mFlip);
+			mGraphics.DrawTexture(mTexture, (mClipped) ? &mClipRect : nullptr, &mRenderRect, Rotation(world), mFlip, ignoreCamera);
 
 			if (mFlash && mFlashFrames >= FLASH_FRAMES)
 			{
