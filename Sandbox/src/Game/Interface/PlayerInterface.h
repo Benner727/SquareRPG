@@ -48,6 +48,8 @@ private:
 	void HandleUse();
 	void HandleCast();
 
+	void HandleMove();
+
 public:
 	PlayerInterface(Player& player, Map& map);
 	~PlayerInterface();

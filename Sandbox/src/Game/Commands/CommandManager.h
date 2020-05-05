@@ -11,11 +11,13 @@
 #include "Game/Commands/UseCommand.h"
 #include "Game/Commands/TogglePrayerCommand.h"
 #include "Game/Commands/CastSpellCommand.h"
+#include "Game/Commands/MoveCommand.h"
 
 class CommandManager
 {
 private:
 	Player* mPlayer;
+	Map* mMap;
 	std::map<std::string, ICommand*> mCommands;
 
 	inline void Invoke(ICommand* command)
@@ -35,8 +37,8 @@ private:
 	}
 
 public:
-	CommandManager(Player* player)
-		: mPlayer(player)
+	CommandManager(Player* player, Map* map)
+		: mPlayer(player), mMap(map)
 	{
 		mCommands["Attack"] = new AutoAttackCommand(mPlayer);
 		mCommands["Drink"] = new DrinkCommand(mPlayer);
@@ -48,6 +50,7 @@ public:
 		mCommands["Activate"] = new TogglePrayerCommand(mPlayer);
 		mCommands["Deactivate"] = new TogglePrayerCommand(mPlayer);
 		mCommands["Cast"] = new CastSpellCommand(mPlayer);
+		mCommands["Move"] = new MoveCommand(mPlayer, mMap);
 	}
 	
 	~CommandManager()

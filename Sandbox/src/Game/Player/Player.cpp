@@ -19,7 +19,6 @@ Player::Player()
 
 	mTarget = nullptr;
 
-	mMoving = false;
 	mMoveSpeed = 64.0f;
 	mMapPosition = { 0, 0, 0 };
 	Pos(Square::Vector2(16.0, 16.0));
@@ -99,11 +98,12 @@ void Player::HandlePrayer()
 
 void Player::HandleMovement()
 {
-	if (mMoving)
+	if (mCurrentPath.size())
 	{
+		mMapPosition = mCurrentPath.front();
 		Square::Vector2 endPosition = Square::Vector2(mMapPosition.x * 32 + 16, mMapPosition.y * 32 + 16);
 
-		if ((Pos() - endPosition).Magnitude() > 1.0f)
+		if ((Pos() - endPosition).Magnitude() >= mMoveSpeed * Square::Timer::Instance().DeltaTime())
 		{
 			Square::Vector2 direction = (endPosition - Pos()).Normalize();
 			float angle = atan2(direction.y, direction.x) * RAD_TO_DEG;
@@ -111,9 +111,11 @@ void Player::HandleMovement()
 		}
 		else
 		{
-			Pos(endPosition);
-			mMoving = false;
+			mCurrentPath.pop_front();
 		}
+
+		if (mCurrentPath.size() < 1)
+			Pos(endPosition);
 	}
 }
 
@@ -132,8 +134,19 @@ void Player::CalculateBonuses()
 
 void Player::MoveTo(Point point)
 {
-	mMoving = true;
-	mMapPosition = point;
+	mCurrentPath.clear();
+	mCurrentPath.push_back(point);
+}
+
+void Player::PathTo(std::list<Point> path)
+{
+	mCurrentPath.clear();
+	mCurrentPath = path;
+}
+
+void Player::CancelMove()
+{
+	mCurrentPath.clear();
 }
 
 void Player::Update()

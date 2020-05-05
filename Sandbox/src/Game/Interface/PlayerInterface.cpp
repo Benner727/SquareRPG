@@ -1,7 +1,7 @@
 #include "PlayerInterface.h"
 
 PlayerInterface::PlayerInterface(Player& player, Map& map)
-	: mPlayer(player), mMap(map), mCommandManager(&mPlayer)
+	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap)
 {
 	mWaitingForUse = false;
 	mWaitingForCast = false;
@@ -74,7 +74,10 @@ bool PlayerInterface::ContainsClick() const
 	for (const auto& tab : mTabs)
 	{
 		if (tab.second->ContainsClick())
-			return true;
+		{
+			if (tab.second->Active())
+				return true;
+		}
 	}
 
 	return false;
@@ -321,6 +324,23 @@ void PlayerInterface::HandleCast()
 	}
 }
 
+void PlayerInterface::HandleMove()
+{
+	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
+	{
+		Point target;
+		target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+		target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
+		target.z = mPlayer.MapPosition().z;
+
+		mPlayer.Target(mMap.GetTile(target));
+		if (!mWaitingForCast && !mWaitingForUse)
+		{
+			mCommand = "Move";
+		}
+	}
+}
+
 void PlayerInterface::Update()
 {
 	if (mWaitingForUse)
@@ -353,18 +373,14 @@ void PlayerInterface::Update()
 		}
 	}
 
-	if (ContainsClick())
-	{
-		UpdateInventory();
-		UpdateGear();
-		UpdatePrayer();
-		UpdateMagic();
-		UpdateStats();
-	}
-	else
-	{
-		mCommand = "Move";
-	}
+	UpdateInventory();
+	UpdateGear();
+	UpdatePrayer();
+	UpdateMagic();
+	UpdateStats();
+
+	if (!ContainsClick() && mCommand.empty())
+		HandleMove();
 }
 
 void PlayerInterface::Render()

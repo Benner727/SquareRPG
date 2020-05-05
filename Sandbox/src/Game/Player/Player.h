@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Square.h>
+#include <list>
 
 #include "Skills.h"
 #include "Game/Player/Inventory.h"
@@ -20,6 +21,7 @@ class Player : public Square::GameObject
 private:
 	Square::Sprite* mSprite;
 	Point mMapPosition;
+	std::list<Point> mCurrentPath;
 	bool mMoving;
 	float mMoveSpeed;
 
@@ -89,7 +91,8 @@ public:
 
 	inline Point MapPosition() const { return mMapPosition; }
 	void MoveTo(Point point);
-	inline bool Moving() const { return mMoving; }
+	void PathTo(std::list<Point> path);
+	void CancelMove();
 
 	void Update();
 	void Render();
