@@ -1,7 +1,7 @@
 #include "PlayerInterface.h"
 
 PlayerInterface::PlayerInterface(Player& player, Map& map)
-	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap)
+	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap), mGameGrid(mMap)
 {
 	mMenuTabsInterface = new MenuTabsInterface(player);
 
@@ -204,40 +204,39 @@ void PlayerInterface::HandleActionsMenu()
 	}
 }
 
-void PlayerInterface::HandleMove()
+void PlayerInterface::HandleInteraction()
 {
+	Point target;
+	target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+	target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
+	target.z = mPlayer.MapPosition().z;
+
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
 		if (mActionsMenu)
 		{
 			mActionsMenu->Active(false);
 			if (!mActionsMenu->Action().empty())
-				mPlayer.Target(mTargetObject);
+				mPlayer.Target(mActionsMenu->Object());
 		}
 		else
 		{
-			Point target;
-			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
-			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-			target.z = mPlayer.MapPosition().z;
-
-			mPlayer.Target(mMap.GetTile(target));
+			if (mGameGrid.GetGridObjects(target).size())
+				mPlayer.Target(mGameGrid.GetGridObjects(target).front()->Target());
 		}
 		
 		if (!mWaitingForInteraction)
 		{
-			mCommand = "Walk Here";
+			if (mGameGrid.GetGridObjects(target).size())
+				mCommand = mGameGrid.GetGridObjects(target).front()->Command();
 		}
 	}
 	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
-		Point target;
-		target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
-		target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-		target.z = mPlayer.MapPosition().z;
-
-		mTargetObject = mMap.GetTile(target);
-		mActionsMenu = new ActionsMenu("Options", { "Walk Here" }, Square::InputHandler::Instance().MousePos());
+		if (mGameGrid.GetGridObjects(target).size())
+		{
+			mActionsMenu = new ActionsMenu("Options", mGameGrid.GetGridObjects(target), Square::InputHandler::Instance().MousePos());
+		}
 	}
 }
 
@@ -264,8 +263,8 @@ void PlayerInterface::Update()
 
 	HandleActionsMenu();
 
-	if (!mMenuTabsInterface->ContainsClick() && !mMessageLog->ContainsClick() && mCommand.empty())
-		HandleMove();
+	if (!mMenuTabsInterface->ContainsClick() && (!mMessageLog->ContainsClick() || mActionsMenu) && mCommand.empty())
+		HandleInteraction();
 
 	mMenuTabsInterface->Update();
 

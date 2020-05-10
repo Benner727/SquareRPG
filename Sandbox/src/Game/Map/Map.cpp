@@ -3,13 +3,21 @@
 Map::Map()
 {
 	std::map<int, std::vector<Tile*>> tiles;
+	
 	for (int y = 0; y < 256; y++)
 	{
 		for (int x = 0; x < 256; x++)
 		{
-			tiles[0].push_back(new Tile(true, false, new Square::Sprite("Tile.png"), nullptr, {}));
+			tiles[0].push_back(new Tile(true, false, new Square::Sprite("Tile.png"), nullptr, {"Walk Here"}));
 		}
 	}
+
+	tiles[0].at(3 + 5 * 256) = new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {});
+	tiles[0].at(3 + 6 * 256) = new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {});
+	tiles[0].at(3 + 7 * 256) = new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {});
+	tiles[0].at(3 + 8 * 256) = new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {});
+	tiles[0].at(4 + 5 * 256) = new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {});
+	tiles[0].at(5 + 5 * 256) = new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {});
 
 	mRegions.push_back(new Region(0, 0, tiles));
 
@@ -18,6 +26,8 @@ Map::Map()
 
 Map::~Map()
 {
+	for (auto region : mRegions)
+		delete region;
 }
 
 Tile* Map::GetTile(Point p) const

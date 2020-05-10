@@ -2,7 +2,7 @@
 
 #include "Game/Commands/CommandManager.h"
 #include "Game/Interface/MenuTabsInterface.h"
-#include "Game/Map/Map.h"
+#include "Game/GameGrid.h"
 #include "Game/Interface/MessageLog.h"
 
 class PlayerInterface : public Square::GameObject
@@ -10,6 +10,8 @@ class PlayerInterface : public Square::GameObject
 private:
 	Player& mPlayer;
 	Map& mMap;
+
+	GameGrid mGameGrid;
 
 	MenuTabsInterface* mMenuTabsInterface;
 	MessageLog* mMessageLog;
@@ -32,7 +34,7 @@ private:
 
 	void HandleActionsMenu();
 
-	void HandleMove();
+	void HandleInteraction();
 
 public:
 	PlayerInterface(Player& player, Map& map);

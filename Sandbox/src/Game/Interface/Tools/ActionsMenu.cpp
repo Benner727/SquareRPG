@@ -5,6 +5,35 @@ const std::string ActionsMenu::FONT_PATH = "Font/VeraMono.ttf";
 ActionsMenu::ActionsMenu(std::string title, std::vector<std::string> actions, Square::Vector2 pos)
 	: mSelectedAction(-1)
 {
+	Init(title, actions, pos);
+}
+
+ActionsMenu::ActionsMenu(std::string title, std::vector<GridObject*> gridObjects, Square::Vector2 pos)
+	: mSelectedAction(-1)
+{
+	std::vector<std::string> actions;
+	for (const auto& object : gridObjects)
+	{
+		actions.push_back(object->Command());
+		mObjects.push_back(object->Target());
+	}
+
+	Init(title, actions, pos);
+}
+
+ActionsMenu::~ActionsMenu()
+{
+	delete mTitle;
+
+	for (auto text : mActionsText)
+		delete text;
+
+	for (auto highlighted : mHighlightedText)
+		delete highlighted;
+}
+
+void ActionsMenu::Init(std::string title, std::vector<std::string> actions, Square::Vector2 pos)
+{
 	mTitle = new Square::Text(title, FONT_PATH, 16, { 255, 140, 0, 255 });
 	mTitle->Parent(this);
 
@@ -41,17 +70,6 @@ ActionsMenu::ActionsMenu(std::string title, std::vector<std::string> actions, Sq
 	mTopLeft = mTitle->Pos() - Square::Vector2(mWidth + PADDING * 0.5f, mTitle->ScaledDimensions().y + PADDING * 2.0f) * 0.5f;
 }
 
-ActionsMenu::~ActionsMenu()
-{
-	delete mTitle;
-
-	for (auto text : mActionsText)
-		delete text;
-
-	for (auto highlighted : mHighlightedText)
-		delete highlighted;
-}
-
 bool ActionsMenu::ContainsMouse() const
 {
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
@@ -68,9 +86,19 @@ std::string ActionsMenu::Action()
 	std::string action = "";
 
 	if (mSelectedAction != -1)
-		action = mActions[mSelectedAction];
+		action = Trim(Substring(mActions[mSelectedAction], "->"));
 
 	return action;
+}
+
+Square::GameObject* ActionsMenu::Object()
+{
+	Square::GameObject* object = nullptr;
+
+	if (mSelectedAction != -1 && mObjects.size() > mSelectedAction)
+		object = mObjects[mSelectedAction];
+
+	return object;
 }
 
 void ActionsMenu::Update()
