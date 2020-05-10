@@ -15,8 +15,6 @@ public:
 	PlayerInterface* playerUI;
 	Map map;
 
-	void HandlePathing();
-
 	GameLayer();
 	virtual ~GameLayer();
 

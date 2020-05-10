@@ -1,41 +1,24 @@
 #include "PlayerInterface.h"
 
 PlayerInterface::PlayerInterface(Player& player, Map& map)
-	: mPlayer(player), mMap(map), mCommandManager(&mPlayer)
+	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap)
 {
-	mWaitingForUse = false;
-	mWaitingForCast = false;
+	mMenuTabsInterface = new MenuTabsInterface(player);
 
-	AddButton("Magic");
-	AddButton("Prayer");
-	AddButton("Gear");
-	AddButton("Inventory");
-	AddButton("Stats");
-	AddButton("Combat");
+	mMessageLog = new MessageLog(50, 8, "Font/VeraMono.ttf", 14, { 15.0f, -15.0f });
+	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
 
-	mTabs["Inventory"] = new InventoryInterface(mPlayer.Inventory());
-	mTabs["Inventory"]->Parent(this);
-	mTabs["Inventory"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Inventory"]->Height()));
+	mMessageLog->AddMessage("1.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.", { 0, 0, 0, 255 });
+	mMessageLog->AddMessage("2. This is a test message.", { 178, 0, 0, 255 });
+	mMessageLog->AddMessage("3. This is a test message.", { 0, 178, 0, 255 });
+	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 178, 255 });
+	mMessageLog->AddMessage("5. This is a test message.", { 255, 255, 255, 255 });
+	mMessageLog->AddMessage("6. This is a test message.", { 178, 0, 0, 255 });
+	mMessageLog->AddMessage("7. This is a test message.", { 0, 178, 0, 255 });
 
-	mTabs["Gear"] = new GearInterface(mPlayer.Gear());
-	mTabs["Gear"]->Parent(this);
-	mTabs["Gear"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Gear"]->Height()));
-	mTabs["Gear"]->Active(false);
+	mCommand = "";
 
-	mTabs["Prayer"] = new PrayerInterface(mPlayer.PrayerBook());
-	mTabs["Prayer"]->Parent(this);
-	mTabs["Prayer"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Prayer"]->Height()));
-	mTabs["Prayer"]->Active(false);
-
-	mTabs["Magic"] = new MagicInterface(mPlayer.SpellBook());
-	mTabs["Magic"]->Parent(this);
-	mTabs["Magic"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Magic"]->Height()));
-	mTabs["Magic"]->Active(false);
-
-	mTabs["Stats"] = new StatsInterface(mPlayer.Skills());
-	mTabs["Stats"]->Parent(this);
-	mTabs["Stats"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Stats"]->Height()));
-	mTabs["Stats"]->Active(false);
+	mWaitingForInteraction = false;
 
 	mHoverText = "";
 	mHoverSprite = nullptr;
@@ -47,64 +30,12 @@ PlayerInterface::PlayerInterface(Player& player, Map& map)
 
 PlayerInterface::~PlayerInterface()
 {
-	for (auto button : mButtons)
-		delete button.second;
+	delete mMenuTabsInterface;
+	delete mMessageLog;
 
 	delete mHoverSprite;
 
 	delete mActionsMenu;
-}
-
-void PlayerInterface::AddButton(std::string button)
-{
-	mButtons[button] = new Button("Graphics/buttonSquare_brown.png");
-	mButtons[button]->Parent(this);
-	mButtons[button]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - mButtons[button]->Width() * 0.5f - (mButtons[button]->Width() * (mButtons.size() - 1)), 
-		Square::Graphics::SCREEN_HEIGHT - mButtons[button]->Height() * 0.5f));
-}
-
-bool PlayerInterface::ContainsClick() const
-{
-	for (const auto& button : mButtons)
-	{
-		if (button.second->Pressed())
-			return true;
-	}
-
-	for (const auto& tab : mTabs)
-	{
-		if (tab.second->ContainsClick())
-			return true;
-	}
-
-	return false;
-}
-
-void PlayerInterface::HandleButtons()
-{
-	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
-	{
-		for (auto& button : mButtons)
-		{
-			if (button.second->Pressed())
-				SwitchTab(button.first);
-		}
-	}
-}
-
-void PlayerInterface::SwitchTab(std::string key)
-{
-	for (auto& tab : mTabs)
-	{
-		if (tab.first == key)
-		{
-			tab.second->Active(!tab.second->Active());
-		}
-		else
-		{
-			tab.second->Active(false);
-		}
-	}
 }
 
 void PlayerInterface::SetHoverText()
@@ -113,18 +44,18 @@ void PlayerInterface::SetHoverText()
 
 	std::string hoverText = "";
 
-	if (mTabs["Inventory"]->Active())
+	if (mMenuTabsInterface->Tab("Inventory")->Active())
 	{
-		if (!mTabs["Inventory"]->MenuOpened() && mActionsMenu == nullptr)
+		if (!mMenuTabsInterface->Tab("Inventory")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (mWaitingForUse)
+			if (mWaitingForInteraction)
 			{
 				hoverText += "Use " + mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name() + " -> ";
 			}
 
-			if (Item* item = dynamic_cast<Item*>(mTabs["Inventory"]->GetSlot(pos, false)))
+			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(pos, false)))
 			{
-				if (mWaitingForUse)
+				if (mWaitingForInteraction)
 				{
 					hoverText += item->Name();
 				}
@@ -133,45 +64,45 @@ void PlayerInterface::SetHoverText()
 			}
 		}
 	}
-	else if (mTabs["Gear"]->Active())
+	else if (mMenuTabsInterface->Tab("Gear")->Active())
 	{
-		if (!mTabs["Gear"]->MenuOpened() && mActionsMenu == nullptr)
+		if (!mMenuTabsInterface->Tab("Gear")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Item* item = dynamic_cast<Item*>(mTabs["Gear"]->GetSlot(pos)))
+			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Gear")->GetSlot(pos)))
 				hoverText += "Unequip " + item->Name();
 		}
 	}
-	else if (mTabs["Prayer"]->Active())
+	else if (mMenuTabsInterface->Tab("Prayer")->Active())
 	{
-		if (!mTabs["Prayer"]->MenuOpened() && mActionsMenu == nullptr)
+		if (!mMenuTabsInterface->Tab("Prayer")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Aura* aura = dynamic_cast<Aura*>(mTabs["Prayer"]->GetSlot(pos)))
+			if (Aura* aura = dynamic_cast<Aura*>(mMenuTabsInterface->Tab("Prayer")->GetSlot(pos)))
 				hoverText += (aura->Activated() ? "Deactivate " : "Activate ") + aura->Name();
 		}
 	}
-	else if (mTabs["Magic"]->Active())
+	else if (mMenuTabsInterface->Tab("Magic")->Active())
 	{
-		if (!mTabs["Magic"]->MenuOpened() && mActionsMenu == nullptr)
+		if (!mMenuTabsInterface->Tab("Magic")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (mWaitingForCast)
+			if (mWaitingForInteraction)
 			{
 				hoverText += "Cast " + mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name() + " -> ";
 			}
 
-			if (Spell* spell = dynamic_cast<Spell*>(mTabs["Magic"]->GetSlot(pos)))
+			if (Spell* spell = dynamic_cast<Spell*>(mMenuTabsInterface->Tab("Magic")->GetSlot(pos)))
 			{
-				if (!mWaitingForCast)
+				if (!mWaitingForInteraction)
 				{
 					hoverText += "Cast " + spell->Name();
 				}
 			}
 		}
 	}
-	else if (mTabs["Stats"]->Active())
+	else if (mMenuTabsInterface->Tab("Stats")->Active())
 	{
-		if (!mTabs["Stats"]->MenuOpened() && mActionsMenu == nullptr)
+		if (!mMenuTabsInterface->Tab("Stats")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Skill* skill = dynamic_cast<Skill*>(mTabs["Stats"]->GetSlot(pos)))
+			if (Skill* skill = dynamic_cast<Skill*>(mMenuTabsInterface->Tab("Stats")->GetSlot(pos)))
 				hoverText += skill->SkillName() + " Skill";
 		}
 	}
@@ -192,72 +123,6 @@ void PlayerInterface::SetHoverText()
 	}
 }
 
-void PlayerInterface::UpdateInventory()
-{
-	mTabs["Inventory"]->Update();
-
-	if (mTabs["Inventory"]->Active() && !mTabs["Inventory"]->InUse())
-	{
-		mCommand = mTabs["Inventory"]->CurrentAction();
-
-		if (mCommand == "Use")
-		{
-			mTabs["Inventory"]->InUse(true);
-			mWaitingForUse = true;
-		}
-	}
-	else if (mTabs["Inventory"]->Active() && mTabs["Inventory"]->InUse() && !mWaitingForUse)
-		mTabs["Inventory"]->InUse(false);
-}
-
-void PlayerInterface::UpdateGear()
-{
-	mTabs["Gear"]->Update();
-
-	if (mTabs["Gear"]->Active())
-	{
-		mCommand = mTabs["Gear"]->CurrentAction();
-	}
-}
-
-void PlayerInterface::UpdatePrayer()
-{
-	mTabs["Prayer"]->Update();
-
-	if (mTabs["Prayer"]->Active())
-	{
-		mCommand = mTabs["Prayer"]->CurrentAction();
-	}
-}
-
-void PlayerInterface::UpdateMagic()
-{
-	mTabs["Magic"]->Update();
-
-	if (mTabs["Magic"]->Active() && !mTabs["Magic"]->InUse())
-	{
-		mCommand = mTabs["Magic"]->CurrentAction();
-
-		if (mCommand == "Cast")
-		{
-			mTabs["Magic"]->InUse(true);
-			mWaitingForCast = true;
-		}
-	}
-	else if (mTabs["Magic"]->Active() && mTabs["Magic"]->InUse() && !mWaitingForCast)
-		mTabs["Magic"]->InUse(false);
-}
-
-void PlayerInterface::UpdateStats()
-{
-	mTabs["Stats"]->Update();
-
-	if (mTabs["Stats"]->Active())
-	{
-		mCommand = mTabs["Stats"]->CurrentAction();
-	}
-}
-
 void PlayerInterface::HandleUse()
 {
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
@@ -268,12 +133,13 @@ void PlayerInterface::HandleUse()
 			if (!mActionsMenu->Action().empty())
 				mPlayer.Target(mTargetObject);
 		}
-		else if (mTabs["Inventory"]->ContainsClick())
+		else if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
 		{
-			mPlayer.Target(mTabs["Inventory"]->GetSlot(Square::InputHandler::Instance().MousePos(), false));
+			mPlayer.Target(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false));
 		}
 
-		mWaitingForUse = false;
+		mWaitingForInteraction = false;
+		mMenuTabsInterface->Reset();
 	}
 	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
@@ -282,9 +148,9 @@ void PlayerInterface::HandleUse()
 			std::string activeItem = mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name();
 			std::string targetObject = "";
 
-			if (mTabs["Inventory"]->ContainsClick())
+			if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
 			{
-				if (Item* item = dynamic_cast<Item*>(mTabs["Inventory"]->GetSlot(Square::InputHandler::Instance().MousePos(), false)))
+				if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false)))
 				{
 					targetObject = item->Name();
 					mTargetObject = item;
@@ -307,7 +173,8 @@ void PlayerInterface::HandleCast()
 				mPlayer.Target(mTargetObject);
 		}
 
-		mWaitingForCast = false;
+		mWaitingForInteraction = false;
+		mMenuTabsInterface->Reset();
 	}
 	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
@@ -321,25 +188,8 @@ void PlayerInterface::HandleCast()
 	}
 }
 
-void PlayerInterface::Update()
+void PlayerInterface::HandleActionsMenu()
 {
-	if (mWaitingForUse)
-	{
-		HandleUse();
-	}
-	else if (mWaitingForCast)
-	{
-		HandleCast();
-	}
-	else if (!mCommand.empty())
-	{
-		mCommandManager.Invoke(mCommand);
-		mCommand.clear();
-	}
-
-	HandleButtons();
-	SetHoverText();
-
 	if (mActionsMenu)
 	{
 		mActionsMenu->Update();
@@ -352,31 +202,86 @@ void PlayerInterface::Update()
 			mTargetObject = nullptr;
 		}
 	}
+}
 
-	if (ContainsClick())
+void PlayerInterface::HandleMove()
+{
+	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
-		UpdateInventory();
-		UpdateGear();
-		UpdatePrayer();
-		UpdateMagic();
-		UpdateStats();
+		if (mActionsMenu)
+		{
+			mActionsMenu->Active(false);
+			if (!mActionsMenu->Action().empty())
+				mPlayer.Target(mTargetObject);
+		}
+		else
+		{
+			Point target;
+			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
+			target.z = mPlayer.MapPosition().z;
+
+			mPlayer.Target(mMap.GetTile(target));
+		}
+		
+		if (!mWaitingForInteraction)
+		{
+			mCommand = "Walk Here";
+		}
 	}
-	else
+	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
-		mCommand = "Move";
+		Point target;
+		target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+		target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
+		target.z = mPlayer.MapPosition().z;
+
+		mTargetObject = mMap.GetTile(target);
+		mActionsMenu = new ActionsMenu("Options", { "Walk Here" }, Square::InputHandler::Instance().MousePos());
+	}
+}
+
+void PlayerInterface::Update()
+{
+	if (Square::InputHandler::Instance().KeyPressed(SDL_SCANCODE_Z))
+		mMessageLog->Active(!mMessageLog->Active());
+	mMessageLog->Update();
+
+	if (mMenuTabsInterface->WaitingForInteraction())
+	{
+		if (mCommand == "Use")
+			HandleUse();
+		else if (mCommand == "Cast")
+			HandleCast();
+	}
+	else if (!mCommand.empty())
+	{
+		mCommandManager.Invoke(mCommand);
+		mCommand.clear();
+	}
+
+	SetHoverText();
+
+	HandleActionsMenu();
+
+	if (!mMenuTabsInterface->ContainsClick() && !mMessageLog->ContainsClick() && mCommand.empty())
+		HandleMove();
+
+	mMenuTabsInterface->Update();
+
+	if (!mMenuTabsInterface->Command().empty())
+	{
+		mCommand = mMenuTabsInterface->Command();
+		mWaitingForInteraction = mMenuTabsInterface->WaitingForInteraction();
 	}
 }
 
 void PlayerInterface::Render()
 {
-	for (auto& button : mButtons)
-			button.second->Render();
-
-	for (auto& tab : mTabs)
-	{
-		if (tab.second->Active())
-			tab.second->Render();
-	}
+	mMenuTabsInterface->Render();
+	
+	if (mMessageLog->Active())
+		mMessageLog->Render();
 
 	if (mHoverSprite) mHoverSprite->Render(true);
 

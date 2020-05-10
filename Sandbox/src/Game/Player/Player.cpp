@@ -19,9 +19,6 @@ Player::Player()
 
 	mTarget = nullptr;
 
-	mMoving = false;
-	mMoveSpeed = 64.0f;
-	mMapPosition = { 0, 0, 0 };
 	Pos(Square::Vector2(16.0, 16.0));
 }
 
@@ -49,7 +46,7 @@ void Player::SetDrinkDelay()
 {
 	if (mInCombat)
 	{
-		mCombatDelay += 1.8f - mEatDelay;
+		//mCombatDelay += 1.8f - mEatDelay;
 		mDrinkDelay = 1.8f;
 	}
 	else
@@ -97,26 +94,6 @@ void Player::HandlePrayer()
 	}
 }
 
-void Player::HandleMovement()
-{
-	if (mMoving)
-	{
-		Square::Vector2 endPosition = Square::Vector2(mMapPosition.x * 32 + 16, mMapPosition.y * 32 + 16);
-
-		if ((Pos() - endPosition).Magnitude() > 1.0f)
-		{
-			Square::Vector2 direction = (endPosition - Pos()).Normalize();
-			float angle = atan2(direction.y, direction.x) * RAD_TO_DEG;
-			Translate(Square::RotateVector(mMoveSpeed * Square::Timer::Instance().DeltaTime(), angle));
-		}
-		else
-		{
-			Pos(endPosition);
-			mMoving = false;
-		}
-	}
-}
-
 void Player::CalculateBonuses()
 {
 	mStatBonus.Reset();
@@ -128,12 +105,6 @@ void Player::CalculateBonuses()
 			mStatBonus += equipment->Bonuses();
 		}
 	}
-}
-
-void Player::MoveTo(Point point)
-{
-	mMoving = true;
-	mMapPosition = point;
 }
 
 void Player::Update()

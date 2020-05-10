@@ -2,8 +2,8 @@
 
 #include <Square.h>
 
-#include "Game/Interface/ActionsMenu.h"
-#include "Game/Interface/Tooltip.h"
+#include "Game/Interface/Tools/ActionsMenu.h"
+#include "Game/Interface/Tools/Tooltip.h"
 
 class IMenuTab : public Square::GameObject
 {

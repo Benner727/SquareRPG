@@ -117,6 +117,9 @@ std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
 
 	mOpenNodes.push_back(n);
 
+	if (source == destination)
+		return path;
+
 	while (!mOpenNodes.empty())
 	{
 		mClosedNodes.push_back(mOpenNodes.front());

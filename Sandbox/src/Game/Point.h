@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Square.h>
+
 enum Direction {
 	north,
 	east,
@@ -19,6 +21,13 @@ struct Point
 	Point(int _x = 0, int _y = 0, int _z = 0)
 		: x(_x), y(_y), z(_z)
 	{
+	}
+
+	Point(Square::Vector2 pos, int _z = 0)
+	{
+		x = pos.x / 32.0f;
+		y = pos.y / 32.0f;
+		z = _z;
 	}
 
 	void Translate(int dir)

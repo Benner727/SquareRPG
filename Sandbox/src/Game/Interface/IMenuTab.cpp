@@ -62,6 +62,9 @@ bool IMenuTab::ContainsClick() const
 {
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
+	if (mActionsMenu)
+		return true;
+
 	if (pos.x >= mBackground->Pos().x - mBackground->ScaledDimensions().x * 0.5f &&
 		pos.x <= mBackground->Pos().x + mBackground->ScaledDimensions().x * 0.5f &&
 		pos.y >= mBackground->Pos().y - mBackground->ScaledDimensions().y * 0.5f &&

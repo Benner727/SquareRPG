@@ -1,13 +1,14 @@
 #pragma once
 
 #include <Square.h>
+#include <list>
 
 #include "Skills.h"
 #include "Game/Player/Inventory.h"
 #include "Game/Player/Gear.h"
 #include "Game/Player/Magic/StandardSpellBook.h"
 #include "Game/Player/Prayer/StandardPrayerBook.h"
-#include "Game/Point.h"
+#include "Game/MovableEntity.h"
 
 enum class CombatOption {
 	melee_accurate, melee_aggressive, melee_defensive, melee_controlled,
@@ -15,13 +16,10 @@ enum class CombatOption {
 	magic_standard, magic_defensive
 };
 
-class Player : public Square::GameObject
+class Player : public MovableEntity
 {
 private:
 	Square::Sprite* mSprite;
-	Point mMapPosition;
-	bool mMoving;
-	float mMoveSpeed;
 
 	CombatOption mCombatStance;
 	bool mAutoAttack;
@@ -46,7 +44,6 @@ private:
 
 	void HandleDelays();
 	void HandlePrayer();
-	void HandleMovement();
 
 public:
 	Player();
@@ -86,10 +83,6 @@ public:
 	void CalculateBonuses();
 
 	inline bool Dead() const { return mSkills.EffectiveLevel(Skills::SkillIndex::hitpoints) < 1; }
-
-	inline Point MapPosition() const { return mMapPosition; }
-	void MoveTo(Point point);
-	inline bool Moving() const { return mMoving; }
 
 	void Update();
 	void Render();
