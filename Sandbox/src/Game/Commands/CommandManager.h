@@ -50,7 +50,7 @@ public:
 		mCommands["Activate"] = new TogglePrayerCommand(mPlayer);
 		mCommands["Deactivate"] = new TogglePrayerCommand(mPlayer);
 		mCommands["Cast"] = new CastSpellCommand(mPlayer);
-		mCommands["Move"] = new MoveCommand(mPlayer, mMap);
+		mCommands["Walk Here"] = new MoveCommand(mPlayer, mMap);
 	}
 	
 	~CommandManager()

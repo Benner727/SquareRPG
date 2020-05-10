@@ -3,6 +3,7 @@
 #include "Game/Commands/CommandManager.h"
 #include "Game/Interface/MenuTabsInterface.h"
 #include "Game/Map/Map.h"
+#include "Game/Interface/MessageLog.h"
 
 class PlayerInterface : public Square::GameObject
 {
@@ -11,6 +12,7 @@ private:
 	Map& mMap;
 
 	MenuTabsInterface* mMenuTabsInterface;
+	MessageLog* mMessageLog;
 
 	CommandManager mCommandManager;
 	std::string mCommand;
@@ -27,6 +29,8 @@ private:
 
 	void HandleUse();
 	void HandleCast();
+
+	void HandleActionsMenu();
 
 	void HandleMove();
 

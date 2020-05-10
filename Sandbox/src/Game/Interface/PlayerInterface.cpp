@@ -5,6 +5,17 @@ PlayerInterface::PlayerInterface(Player& player, Map& map)
 {
 	mMenuTabsInterface = new MenuTabsInterface(player);
 
+	mMessageLog = new MessageLog(50, 8, "Font/VeraMono.ttf", 14, { 15.0f, -15.0f });
+	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
+
+	mMessageLog->AddMessage("1.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.", { 0, 0, 0, 255 });
+	mMessageLog->AddMessage("2. This is a test message.", { 178, 0, 0, 255 });
+	mMessageLog->AddMessage("3. This is a test message.", { 0, 178, 0, 255 });
+	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 178, 255 });
+	mMessageLog->AddMessage("5. This is a test message.", { 255, 255, 255, 255 });
+	mMessageLog->AddMessage("6. This is a test message.", { 178, 0, 0, 255 });
+	mMessageLog->AddMessage("7. This is a test message.", { 0, 178, 0, 255 });
+
 	mCommand = "";
 
 	mWaitingForInteraction = false;
@@ -20,6 +31,7 @@ PlayerInterface::PlayerInterface(Player& player, Map& map)
 PlayerInterface::~PlayerInterface()
 {
 	delete mMenuTabsInterface;
+	delete mMessageLog;
 
 	delete mHoverSprite;
 
@@ -176,25 +188,65 @@ void PlayerInterface::HandleCast()
 	}
 }
 
+void PlayerInterface::HandleActionsMenu()
+{
+	if (mActionsMenu)
+	{
+		mActionsMenu->Update();
+
+		if (!mActionsMenu->Active())
+		{
+			delete mActionsMenu;
+			mActionsMenu = nullptr;
+
+			mTargetObject = nullptr;
+		}
+	}
+}
+
 void PlayerInterface::HandleMove()
 {
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
+	{
+		if (mActionsMenu)
+		{
+			mActionsMenu->Active(false);
+			if (!mActionsMenu->Action().empty())
+				mPlayer.Target(mTargetObject);
+		}
+		else
+		{
+			Point target;
+			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
+			target.z = mPlayer.MapPosition().z;
+
+			mPlayer.Target(mMap.GetTile(target));
+		}
+		
+		if (!mWaitingForInteraction)
+		{
+			mCommand = "Walk Here";
+		}
+	}
+	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
 		Point target;
 		target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
 		target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
 		target.z = mPlayer.MapPosition().z;
 
-		mPlayer.Target(mMap.GetTile(target));
-		if (!mWaitingForInteraction)
-		{
-			mCommand = "Move";
-		}
+		mTargetObject = mMap.GetTile(target);
+		mActionsMenu = new ActionsMenu("Options", { "Walk Here" }, Square::InputHandler::Instance().MousePos());
 	}
 }
 
 void PlayerInterface::Update()
 {
+	if (Square::InputHandler::Instance().KeyPressed(SDL_SCANCODE_Z))
+		mMessageLog->Active(!mMessageLog->Active());
+	mMessageLog->Update();
+
 	if (mMenuTabsInterface->WaitingForInteraction())
 	{
 		if (mCommand == "Use")
@@ -210,20 +262,9 @@ void PlayerInterface::Update()
 
 	SetHoverText();
 
-	if (mActionsMenu)
-	{
-		mActionsMenu->Update();
+	HandleActionsMenu();
 
-		if (!mActionsMenu->Active())
-		{
-			delete mActionsMenu;
-			mActionsMenu = nullptr;
-
-			mTargetObject = nullptr;
-		}
-	}
-
-	if (!mMenuTabsInterface->ContainsClick() && mCommand.empty())
+	if (!mMenuTabsInterface->ContainsClick() && !mMessageLog->ContainsClick() && mCommand.empty())
 		HandleMove();
 
 	mMenuTabsInterface->Update();
@@ -238,6 +279,9 @@ void PlayerInterface::Update()
 void PlayerInterface::Render()
 {
 	mMenuTabsInterface->Render();
+	
+	if (mMessageLog->Active())
+		mMessageLog->Render();
 
 	if (mHoverSprite) mHoverSprite->Render(true);
 
