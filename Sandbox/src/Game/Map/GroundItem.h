@@ -40,5 +40,5 @@ public:
 	inline bool Expired() const { return (mLifeTimer <= 0.0f); }
 
 	inline void Update() { mLifeTimer -= Square::Timer::Instance().DeltaTime(); }
-	inline void Render() { mItem->Render(); }
+	inline void Render() { if (mItem) mItem->Render(); }
 };

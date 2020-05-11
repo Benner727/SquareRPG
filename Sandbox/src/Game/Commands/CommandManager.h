@@ -12,6 +12,7 @@
 #include "Game/Commands/TogglePrayerCommand.h"
 #include "Game/Commands/CastSpellCommand.h"
 #include "Game/Commands/MoveCommand.h"
+#include "Game/Commands/PickUpCommand.h"
 
 class CommandManager
 {
@@ -51,6 +52,7 @@ public:
 		mCommands["Deactivate"] = new TogglePrayerCommand(mPlayer);
 		mCommands["Cast"] = new CastSpellCommand(mPlayer);
 		mCommands["Walk Here"] = new MoveCommand(mPlayer, mMap);
+		mCommands["Pick Up"] = new PickUpCommand(mPlayer, mMap);
 	}
 	
 	~CommandManager()

@@ -106,6 +106,20 @@ void PlayerInterface::SetHoverText()
 				hoverText += skill->SkillName() + " Skill";
 		}
 	}
+	
+	if (hoverText.empty() && !mMenuTabsInterface->ContainsClick() && (!mMessageLog->ContainsClick() || mActionsMenu))
+	{
+		if (mActionsMenu == nullptr)
+		{
+			Point target;
+			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
+			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
+			target.z = mPlayer.MapPosition().z;
+
+			if (mGameGrid.GetGridObjects(target).size())
+				hoverText += mGameGrid.GetGridObjects(target).front()->Command();
+		}
+	}
 
 	if (mHoverText != hoverText)
 	{
@@ -226,7 +240,7 @@ void PlayerInterface::HandleInteraction()
 		{
 			if (mGameGrid.GetGridObjects(target).size())
 			{
-				mCommand = mGameGrid.GetGridObjects(target).front()->Command();
+				mCommand = Trim(Substring(mGameGrid.GetGridObjects(target).front()->Command(), "->"));
 				mPlayer.Target(mGameGrid.GetGridObjects(target).front()->Target());
 			}
 		}

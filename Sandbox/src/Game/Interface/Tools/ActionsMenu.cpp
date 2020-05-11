@@ -60,11 +60,15 @@ void ActionsMenu::Init(std::string title, std::vector<std::string> actions, Squa
 
 	mWidth += PADDING;
 
-	if (pos.x + mWidth * 0.5f > Square::Graphics::Instance().Camera().x + Square::Graphics::Instance().Camera().w)
-		pos.x = Square::Graphics::Instance().Camera().x + Square::Graphics::Instance().Camera().w - mWidth * 0.5f;
+	if (pos.x + mWidth * 0.5f > Square::Graphics::Instance().Camera().w)
+		pos.x = Square::Graphics::Instance().Camera().w - mWidth * 0.5f;
+	else if (pos.x - mWidth * 0.5f < 0.0f)
+		pos.x = mWidth * 0.5f;
 
-	if (pos.y + mHeight * 0.5f > Square::Graphics::Instance().Camera().y + Square::Graphics::Instance().Camera().h)
-		pos.y = Square::Graphics::Instance().Camera().y + Square::Graphics::Instance().Camera().h - mHeight * 0.5f;
+	if (pos.y + mHeight * 0.5f > Square::Graphics::Instance().Camera().h)
+		pos.y = Square::Graphics::Instance().Camera().h - mHeight * 0.5f;
+	else if(pos.y - mHeight * 0.5f < 0.0f)
+		pos.y = mHeight * 0.5f;
 
 	Pos(pos);
 	mTopLeft = mTitle->Pos() - Square::Vector2(mWidth + PADDING * 0.5f, mTitle->ScaledDimensions().y + PADDING * 2.0f) * 0.5f;
