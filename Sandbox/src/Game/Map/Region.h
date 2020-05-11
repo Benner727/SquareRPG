@@ -3,7 +3,7 @@
 #include <vector>
 #include <map>
 
-#include "Game/Map/Tile.h"
+#include "Game/Map/Cell.h"
 #include "Game/Point.h"
 
 class Region
@@ -15,15 +15,15 @@ private:
 	int mTopLeftX;
 	int mTopLeftY;
 
-	std::map<int, std::vector<Tile*>> mLayers;
+	std::map<int, std::vector<Cell*>> mLayers;
 	
 public:
-	Region(int topLeftX, int topLeftY, std::map<int, std::vector<Tile*>> tiles);
+	Region(int topLeftX, int topLeftY, std::map<int, std::vector<Cell*>> cells);
 	~Region();
 
 	inline int TopLeftX() const { return mTopLeftX; }
 	inline int TopLeftY() const { return mTopLeftY; }
-	inline std::vector<Tile*> Tiles(int depth) { return mLayers[depth]; }
+	inline std::vector<Cell*> Cells(int depth) { return mLayers[depth]; }
 
 	bool Contains(Point p);
 };

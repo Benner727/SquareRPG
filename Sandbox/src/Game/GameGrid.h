@@ -8,10 +8,10 @@
 class GameGrid
 {
 private:
-	Map mMap;
+	Map* mMap;
 
 public:
-	GameGrid(Map& map);
+	GameGrid(Map* map);
 	~GameGrid();
 
 	std::vector<GridObject*> GetGridObjects(Point p);

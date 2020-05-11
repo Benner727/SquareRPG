@@ -1,7 +1,7 @@
 #include "PlayerInterface.h"
 
 PlayerInterface::PlayerInterface(Player& player, Map& map)
-	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap), mGameGrid(mMap)
+	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap), mGameGrid(&mMap)
 {
 	mMenuTabsInterface = new MenuTabsInterface(player);
 
@@ -217,18 +217,18 @@ void PlayerInterface::HandleInteraction()
 		{
 			mActionsMenu->Active(false);
 			if (!mActionsMenu->Action().empty())
+			{
+				mCommand = mActionsMenu->Action();
 				mPlayer.Target(mActionsMenu->Object());
+			}
 		}
-		else
+		else if (!mWaitingForInteraction)
 		{
 			if (mGameGrid.GetGridObjects(target).size())
-				mPlayer.Target(mGameGrid.GetGridObjects(target).front()->Target());
-		}
-		
-		if (!mWaitingForInteraction)
-		{
-			if (mGameGrid.GetGridObjects(target).size())
+			{
 				mCommand = mGameGrid.GetGridObjects(target).front()->Command();
+				mPlayer.Target(mGameGrid.GetGridObjects(target).front()->Target());
+			}
 		}
 	}
 	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))

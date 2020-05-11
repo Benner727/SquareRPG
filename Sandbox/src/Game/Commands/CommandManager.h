@@ -42,7 +42,7 @@ public:
 	{
 		mCommands["Attack"] = new AutoAttackCommand(mPlayer);
 		mCommands["Drink"] = new DrinkCommand(mPlayer);
-		mCommands["Drop"] = new DropCommand(mPlayer);
+		mCommands["Drop"] = new DropCommand(mPlayer, mMap);
 		mCommands["Eat"] = new EatCommand(mPlayer);
 		mCommands["Equip"] = new EquipCommand(mPlayer);
 		mCommands["Unequip"] = new UnequipCommand(mPlayer);

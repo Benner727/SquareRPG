@@ -22,12 +22,11 @@ public:
 	int Width() const { return mWidth; }
 	int Height() const { return mHeight; }
 
-	Tile* GetTile(Point p) const;
+	Cell* GetCell(Point p) const;
 	std::vector<std::string> TileCommands(Point p);
 	bool TileWalkable (Point p) const;
 	bool TileCanAttackOver (Point p) const;
 
 	void Update(int z);
 	void Render(int z);
-
 };

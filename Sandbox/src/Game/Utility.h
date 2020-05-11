@@ -29,7 +29,6 @@ inline std::string Substring(const std::string& str,  const std::string& delimit
 	std::string token;
 	while ((pos = s.find(delimiter)) != std::string::npos) {
 		token = s.substr(0, pos);
-		std::cout << token << std::endl;
 		s.erase(0, pos + delimiter.length());
 	}
 

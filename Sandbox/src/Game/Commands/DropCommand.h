@@ -2,16 +2,19 @@
 
 #include "Game/Commands/ICommand.h"
 #include "Game/Player/Player.h"
+#include "Game/Map/Map.h"
 
 class DropCommand : public ICommand
 {
 private:
 	Player* mPlayer;
+	Map* mMap;
 
 public:
-	DropCommand(Player* player)
+	DropCommand(Player* player, Map* map)
 	{
 		mPlayer = player;
+		mMap = map;
 	}
 
 	~DropCommand() = default;
@@ -33,7 +36,7 @@ public:
 		Item* item = mPlayer->Inventory().GetItem(activeSlot);
 		mPlayer->Inventory().SetNull(activeSlot);
 		
-		// To do - Place item on ground
+		mMap->GetCell(mPlayer->MapPosition())->AddGroundItem(item);
 
 		mPlayer->Inventory().ActiveSlot(-1);
 	}

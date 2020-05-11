@@ -70,8 +70,11 @@ void ItemRepository::LoadItemDefinitions()
 		inventoryActions.push_back("Use");
 		inventoryActions.push_back("Drop");
 
+		std::vector<std::string> groundActions = DelimitedStringToVector(delimitedGroundActions);
+		groundActions.insert(groundActions.begin(), "Pickup");
+
 		mItemDefinitions[index] = new ItemDefinition(name, index, stackable, alchemyPrice, generalPrice, spritePath,
-			inventoryActions, DelimitedStringToVector(delimitedGroundActions));
+			inventoryActions, groundActions);
 	}
 
 	infile.close();

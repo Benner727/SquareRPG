@@ -1,6 +1,6 @@
 #include "Region.h"
 
-Region::Region(int topLeftX, int topLeftY, std::map<int, std::vector<Tile*>> layers)
+Region::Region(int topLeftX, int topLeftY, std::map<int, std::vector<Cell*>> layers)
 	: mTopLeftX(topLeftX), mTopLeftY(topLeftY), mLayers(layers)
 {
 	int x = 0;
@@ -8,9 +8,9 @@ Region::Region(int topLeftX, int topLeftY, std::map<int, std::vector<Tile*>> lay
 
 	for (auto layer : mLayers)
 	{
-		for (auto tile : layer.second)
+		for (auto cell : layer.second)
 		{
-			tile->Pos(Square::Vector2(x + mTopLeftX, y + mTopLeftY) * 32 + 16);
+			cell->Pos(Square::Vector2(x + mTopLeftX, y + mTopLeftY) * 32 + 16);
 			
 			x++;
 			if (x == SIZE)
@@ -26,9 +26,9 @@ Region::~Region()
 {
 	for (auto layer : mLayers)
 	{
-		for (auto tile : layer.second)
+		for (auto cell : layer.second)
 		{
-			delete tile;
+			delete cell;
 		}
 	}
 }
