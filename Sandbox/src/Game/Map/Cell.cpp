@@ -19,9 +19,9 @@ Cell::~Cell()
 
 void Cell::AddGroundItem(Item* item)
 { 
-	mGroundItems.push_back(new GroundItem(item));
-	mGroundItems.back()->Parent(this);
-	mGroundItems.back()->Pos(Square::VEC2_ZERO);
+	mGroundItems.insert(mGroundItems.begin(), new GroundItem(item));
+	mGroundItems.front()->Parent(this);
+	mGroundItems.front()->Pos(Square::VEC2_ZERO);
 }
 
 void Cell::Update()

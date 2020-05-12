@@ -212,6 +212,8 @@ void IMenuTab::Render()
 
 			obj->Render(true);
 		}
+		else if (i < mIcons.size())
+			mIcons[i]->Render(true);
 	}
 
 	if (mActionsMenu) mActionsMenu->Render();

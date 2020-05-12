@@ -24,7 +24,10 @@ public:
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
 		if (GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target()))
-			return mPlayer->Inventory().CanAdd(groundItem->GetItem());
+		{
+			if (mPlayer->MapPosition() == Point(groundItem->Pos()))
+				return mPlayer->Inventory().CanAdd(groundItem->GetItem());
+		}
 
 		return false;
 	}

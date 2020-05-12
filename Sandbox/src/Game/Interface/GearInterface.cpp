@@ -1,15 +1,9 @@
 #include "GearInterface.h"
 
 GearInterface::GearInterface(Gear& gear)
-	: IMenuTab("Graphics/panel_brown.png", 32, false, false), mGear(gear)
+	: IMenuTab("Graphics/panel_gear.png", 32, false, false), mGear(gear)
 {
-	for (int y = 0; y < 5; y++)
-	{
-		for (int x = 0; x < 2; x++)
-		{
-			mSlotPos.push_back(Square::Vector2(x * 48.0f + 32.0f, y * 48.0f + 32.0f));
-		}
-	}
+	Init();
 }
 
 std::string GearInterface::GetAction()
@@ -24,6 +18,40 @@ std::string GearInterface::GetAction()
 	}
 
 	return action;
+}
+
+void GearInterface::Init()
+{
+	mSlotPos.resize(Gear::EquipmentSlot::TOTAL_SLOTS);
+	mSlotPos[Gear::EquipmentSlot::head] = { COL_THREE_X, ROW_ONE_Y };
+	mSlotPos[Gear::EquipmentSlot::cape] = { COL_TWO_X, ROW_TWO_Y };
+	mSlotPos[Gear::EquipmentSlot::neck] = { COL_THREE_X, ROW_TWO_Y };
+	mSlotPos[Gear::EquipmentSlot::weapon] = { COL_ONE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::chest] = { COL_THREE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::shield] = { COL_FIVE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::legs] = { COL_THREE_X, ROW_FOUR_Y };
+	mSlotPos[Gear::EquipmentSlot::gloves] = { COL_ONE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::boots] = { COL_THREE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::ring] = { COL_FIVE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::ammo] = { COL_FOUR_X, ROW_TWO_Y };
+
+	mIcons.push_back(new Square::Sprite("GearIcons/head.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/cape.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/neck.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/weapon.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/chest.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/shield.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/legs.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/gloves.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/boots.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/ring.png"));
+	mIcons.push_back(new Square::Sprite("GearIcons/ammo.png"));
+
+	for (int i = 0; i < mIcons.size(); i++)
+	{
+		mIcons[i]->Parent(this);
+		mIcons[i]->Pos(mSlotPos[i]);
+	}
 }
 
 void GearInterface::CreateActionMenu()
