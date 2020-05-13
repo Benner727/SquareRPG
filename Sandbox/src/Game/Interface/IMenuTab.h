@@ -38,7 +38,7 @@ protected:
 
 	float mHoverTimer;
 
-	virtual int PosToSlot(Square::Vector2 pos);
+	int PosToSlot(Square::Vector2 pos);
 	virtual std::string GetAction() = 0;
 
 	virtual void CreateActionMenu();

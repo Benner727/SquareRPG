@@ -6,7 +6,6 @@
 class GearInterface : public IMenuTab
 {
 private:
-	static const int SLOT_SIZE = 40;
 	static const int ROW_ONE_Y = 34;
 	static const int ROW_TWO_Y = 80;
 	static const int ROW_THREE_Y = 127;
@@ -22,7 +21,6 @@ private:
 	Gear& mGear;
 
 	std::string GetAction();
-	int PosToSlot(Square::Vector2 pos);
 
 	void CreateActionMenu();
 	void InitializeGearPositions();

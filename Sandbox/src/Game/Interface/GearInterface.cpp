@@ -40,26 +40,6 @@ void GearInterface::InitializeGearPositions()
 	}
 }
 
-int GearInterface::PosToSlot(Square::Vector2 pos)
-{
-	for (int slot = 0; slot < mSlotPos.size(); slot++)
-	{
-		Square::Vector2 slotStartPos = mSlotPos[slot];
-		Square::Vector2 slotEndPos = slotStartPos + SLOT_SIZE;
-
-		bool WithinSlot = (
-			this->Pos().x + slotStartPos.x - SLOT_SIZE / 2 <= pos.x &&
-			this->Pos().y + slotStartPos.y - SLOT_SIZE / 2 <= pos.y &&
-			this->Pos().x + slotEndPos.x - SLOT_SIZE / 2 > pos.x &&
-			this->Pos().y + slotEndPos.y - SLOT_SIZE / 2 > pos.y
-		);
-
-		if (WithinSlot)
-			return slot;
-	}
-	return -1;
-}
-
 std::string GearInterface::GetAction()
 {
 	std::string action = "";
