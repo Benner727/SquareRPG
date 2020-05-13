@@ -9,6 +9,7 @@
 #include "Game/Player/Magic/StandardSpellBook.h"
 #include "Game/Player/Prayer/StandardPrayerBook.h"
 #include "Game/MovableEntity.h"
+#include "Game/Actions/IAction.h"
 
 enum class CombatOption {
 	melee_accurate, melee_aggressive, melee_defensive, melee_controlled,
@@ -25,6 +26,8 @@ private:
 	bool mAutoAttack;
 
 	Square::GameObject* mTarget;
+
+	IAction* mAction;
 
 	float mEatDelay;
 	float mDrinkDelay;
@@ -58,6 +61,8 @@ public:
 
 	inline ISpellBook& SpellBook() { return *mSpellBook; }
 	inline IPrayerBook& PrayerBook() { return *mPrayerBook; }
+
+	void SetAction(IAction* action);
 
 	inline CombatOption CombatStance() const { return mCombatStance; }
 	inline void CombatStance(CombatOption combatStance) { mCombatStance = combatStance; }

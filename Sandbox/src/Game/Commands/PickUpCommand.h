@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
-#include "Game/Map/Map.h"
+#include "Game/Actions/WalkToPickUpAction.h"
 
 class PickUpCommand : public ICommand
 {
@@ -25,8 +24,13 @@ public:
 
 		if (GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target()))
 		{
-			if (mPlayer->MapPosition() == Point(groundItem->Pos()))
-				return mPlayer->Inventory().CanAdd(groundItem->GetItem());
+			if (!groundItem->Expired())
+			{
+				if (mPlayer->MapPosition() == Point(groundItem->Pos()))
+					return mPlayer->Inventory().CanAdd(groundItem->GetItem());
+				else
+					mPlayer->SetAction(new WalkToPickUpAction(mPlayer, mMap));
+			}
 		}
 
 		return false;

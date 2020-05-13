@@ -1,12 +1,11 @@
 #pragma once
 
-#include <Square.h>
-
+#include "Game/MovableEntity.h"
 #include "Game/Definitions/NpcDefinition.h"
 #include "Game/Definitions/NpcCombatDefinition.h"
 #include "Game/Definitions/NpcDropDefinition.h"
 
-class Npc : public Square::GameObject
+class Npc : public MovableEntity
 {
 private:
 	int mIndex;

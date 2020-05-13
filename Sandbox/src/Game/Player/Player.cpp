@@ -19,6 +19,8 @@ Player::Player()
 
 	mTarget = nullptr;
 
+	mAction = nullptr;
+
 	Pos(Square::Vector2(16.0, 16.0));
 }
 
@@ -29,6 +31,13 @@ Player::~Player()
 	delete mSpellBook;
 	delete mPrayerBook;
 
+	delete mAction;
+}
+
+void Player::SetAction(IAction* action)
+{
+	delete mAction;
+	mAction = action;
 }
 
 void Player::SetEatDelay()
@@ -116,6 +125,16 @@ void Player::Update()
 	HandlePrayer();
 
 	HandleMovement();
+
+	if (mAction)
+	{
+		mAction->Update();
+		if (mAction->Complete())
+		{
+			delete mAction;
+			mAction = nullptr;
+		}
+	}
 
 	Square::Graphics::Instance().Camera(Pos());
 }

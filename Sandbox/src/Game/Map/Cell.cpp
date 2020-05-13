@@ -1,43 +1,39 @@
 #include "Cell.h"
 
-Cell::Cell(Tile* tile, std::vector<GroundItem*> groundItems)
-	: mTile(tile), mGroundItems(groundItems)
+Cell::Cell(Tile* tile, std::vector<Item*> groundItems)
+	: mTile(tile)
 {
 	mTile->Parent(this);
 	
-	for (auto groundItem : mGroundItems)
-		groundItem->Parent(this);
+	for (auto groundItem : groundItems)
+		AddGroundItem(groundItem);
 }
 
 Cell::~Cell()
 {
 	delete mTile;
-
-	for (auto groundItem : mGroundItems)
-		delete groundItem;
 }
 
 void Cell::AddGroundItem(Item* item)
 { 
-	mGroundItems.insert(mGroundItems.begin(), new GroundItem(item));
-	mGroundItems.front()->Parent(this);
-	mGroundItems.front()->Pos(Square::VEC2_ZERO);
+	mGroundItems.insert(mGroundItems.begin(), std::make_shared<GroundItem*>(new GroundItem(item)));
+	(*mGroundItems.front())->Parent(this);
+	(*mGroundItems.front())->Pos(Square::VEC2_ZERO);
 }
 
 void Cell::Update()
 {
 	mTile->Update();
 
-	for (std::vector<GroundItem*>::iterator it = mGroundItems.begin(); it != mGroundItems.end();)
+	for (std::vector<std::shared_ptr<GroundItem*>>::iterator it = mGroundItems.begin(); it != mGroundItems.end();)
 	{
-		if ((*it)->Expired())
+		if ((**it)->Expired())
 		{
-			delete* it;
 			it = mGroundItems.erase(it);
 		}
 		else
 		{
-			(*it)->Update();
+			(**it)->Update();
 			++it;
 		}
 	}
@@ -48,5 +44,5 @@ void Cell::Render()
 	mTile->Render();
 
 	for (auto groundItem : mGroundItems)
-		groundItem->Render();
+		(*groundItem)->Render();
 }

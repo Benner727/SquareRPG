@@ -18,9 +18,9 @@ std::vector<GridObject*> GameGrid::GetGridObjects(Point p)
 	{
 		for (const auto& groundItem : cell->GetGroundItems())
 		{
-			for (const auto& action : groundItem->Actions())
+			for (const auto& action : (*groundItem)->Actions())
 			{
-				mGridObjects.push_back(new GridObject(action, groundItem));
+				mGridObjects.push_back(new GridObject(action, (*groundItem)));
 			}
 		}
 

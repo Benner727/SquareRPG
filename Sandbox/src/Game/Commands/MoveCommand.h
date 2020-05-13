@@ -42,6 +42,7 @@ public:
 
 	void Execute()
 	{
+		mPlayer->SetAction(nullptr);
 		mPlayer->PathTo(mPath);
 		mPlayer->Target(nullptr);
 	}
