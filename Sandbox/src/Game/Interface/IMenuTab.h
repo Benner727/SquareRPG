@@ -22,8 +22,6 @@ protected:
 	ActionsMenu* mActionsMenu;
 	Tooltip* mTooltip;
 
-	std::vector<Square::Sprite*> mIcons;
-
 	SDL_Color mActiveColor;
 
 	std::vector<Square::Sprite*> mIcons;
