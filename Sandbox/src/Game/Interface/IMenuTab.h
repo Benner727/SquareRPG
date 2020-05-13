@@ -26,6 +26,7 @@ protected:
 
 	SDL_Color mActiveColor;
 
+	std::vector<Square::Sprite*> mIcons;
 	std::vector<Square::Vector2> mSlotPos;
 	int mItemSize;
 

@@ -3,24 +3,10 @@
 GearInterface::GearInterface(Gear& gear)
 	: IMenuTab("Graphics/panel_gear.png", 32, false, false), mGear(gear)
 {
-	Init();
+	InitializeGearPositions();
 }
 
-std::string GearInterface::GetAction()
-{
-	std::string action = "";
-
-	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
-
-	if (Item* item = dynamic_cast<Item*>(GetSlot(pos)))
-	{
-		action = "Unequip";
-	}
-
-	return action;
-}
-
-void GearInterface::Init()
+void GearInterface::InitializeGearPositions()
 {
 	mSlotPos.resize(Gear::EquipmentSlot::TOTAL_SLOTS);
 	mSlotPos[Gear::EquipmentSlot::head] = { COL_THREE_X, ROW_ONE_Y };
@@ -35,23 +21,37 @@ void GearInterface::Init()
 	mSlotPos[Gear::EquipmentSlot::ring] = { COL_FIVE_X, ROW_FIVE_Y };
 	mSlotPos[Gear::EquipmentSlot::ammo] = { COL_FOUR_X, ROW_TWO_Y };
 
-	mIcons.push_back(new Square::Sprite("GearIcons/head.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/cape.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/neck.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/weapon.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/chest.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/shield.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/legs.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/gloves.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/boots.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/ring.png"));
-	mIcons.push_back(new Square::Sprite("GearIcons/ammo.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/head.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/cape.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/neck.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/weapon.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/chest.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/shield.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/legs.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/gloves.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/boots.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/ring.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/ammo.png"));
 
 	for (int i = 0; i < mIcons.size(); i++)
 	{
 		mIcons[i]->Parent(this);
 		mIcons[i]->Pos(mSlotPos[i]);
 	}
+}
+
+std::string GearInterface::GetAction()
+{
+	std::string action = "";
+
+	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
+
+	if (Item* item = dynamic_cast<Item*>(GetSlot(pos)))
+	{
+		action = "Unequip";
+	}
+
+	return action;
 }
 
 void GearInterface::CreateActionMenu()
@@ -79,6 +79,5 @@ Square::GameObject* GearInterface::GetSlot(int slot, bool includeActive)
 Square::GameObject* GearInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
-
 	return GetSlot(slot, includeActive);
 }
