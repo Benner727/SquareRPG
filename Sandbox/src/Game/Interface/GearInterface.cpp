@@ -8,72 +8,54 @@ GearInterface::GearInterface(Gear& gear)
 
 void GearInterface::InitializeGearPositions()
 {
-	mGearPositions = {
-	{ Gear::EquipmentSlot::head, {COL_THREE_X, ROW_ONE_Y} },
-	{ Gear::EquipmentSlot::cape, {COL_TWO_X, ROW_TWO_Y} },
-	{ Gear::EquipmentSlot::neck, {COL_THREE_X, ROW_TWO_Y} },
-	{ Gear::EquipmentSlot::weapon, {COL_ONE_X, ROW_THREE_Y} },
-	{ Gear::EquipmentSlot::chest, {COL_THREE_X, ROW_THREE_Y} },
-	{ Gear::EquipmentSlot::shield, {COL_FIVE_X, ROW_THREE_Y} },
-	{ Gear::EquipmentSlot::legs, {COL_THREE_X, ROW_FOUR_Y} },
-	{ Gear::EquipmentSlot::gloves, {COL_ONE_X, ROW_FIVE_Y} },
-	{ Gear::EquipmentSlot::boots, {COL_THREE_X, ROW_FIVE_Y} },
-	{ Gear::EquipmentSlot::ring, {COL_FIVE_X, ROW_FIVE_Y} },
-	{ Gear::EquipmentSlot::ammo, {COL_FOUR_X, ROW_TWO_Y} },
-	};
+	mSlotPos.resize(Gear::EquipmentSlot::TOTAL_SLOTS);
+	mSlotPos[Gear::EquipmentSlot::head] = { COL_THREE_X, ROW_ONE_Y };
+	mSlotPos[Gear::EquipmentSlot::cape] = { COL_TWO_X, ROW_TWO_Y };
+	mSlotPos[Gear::EquipmentSlot::neck] = { COL_THREE_X, ROW_TWO_Y };
+	mSlotPos[Gear::EquipmentSlot::weapon] = { COL_ONE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::chest] = { COL_THREE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::shield] = { COL_FIVE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::legs] = { COL_THREE_X, ROW_FOUR_Y };
+	mSlotPos[Gear::EquipmentSlot::gloves] = { COL_ONE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::boots] = { COL_THREE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::ring] = { COL_FIVE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::ammo] = { COL_FOUR_X, ROW_TWO_Y };
 
-	mGearDefaultSprites = {
-	{ Gear::EquipmentSlot::head, Square::Sprite("Graphics/head.png") },
-	{ Gear::EquipmentSlot::cape, Square::Sprite("Graphics/cape.png") },
-	{ Gear::EquipmentSlot::neck, Square::Sprite("Graphics/neck.png") },
-	{ Gear::EquipmentSlot::weapon, Square::Sprite("Graphics/weapon.png") },
-	{ Gear::EquipmentSlot::chest, Square::Sprite("Graphics/chest.png") },
-	{ Gear::EquipmentSlot::shield, Square::Sprite("Graphics/shield.png") },
-	{ Gear::EquipmentSlot::legs, Square::Sprite("Graphics/legs.png") },
-	{ Gear::EquipmentSlot::gloves, Square::Sprite("Graphics/gloves.png") },
-	{ Gear::EquipmentSlot::boots, Square::Sprite("Graphics/boots.png") },
-	{ Gear::EquipmentSlot::ring, Square::Sprite("Graphics/ring.png") },
-	{ Gear::EquipmentSlot::ammo, Square::Sprite("Graphics/ammo.png") },
-	};
-}
+	mIcons.push_back(new Square::Sprite("Graphics/head.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/cape.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/neck.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/weapon.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/chest.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/shield.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/legs.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/gloves.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/boots.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/ring.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/ammo.png"));
 
-void GearInterface::CustomRender()
-{
-	for (int slot = 0; slot < Gear::EquipmentSlot::TOTAL_SLOTS; slot++)
+	for (int i = 0; i < mIcons.size(); i++)
 	{
-		if (Item* item = mGear.GetItem(slot))
-		{
-			item->Parent(this);
-			item->Pos(mGearPositions[(Gear::EquipmentSlot)slot]);
-			item->Render(true);
-		}
-		else
-		{
-			Square::Sprite defaultSprite = mGearDefaultSprites[(Gear::EquipmentSlot)slot];
-			defaultSprite.Parent(this);
-			defaultSprite.Pos(mGearPositions[(Gear::EquipmentSlot)slot]);
-			defaultSprite.Render(true);
-		}
+		mIcons[i]->Parent(this);
+		mIcons[i]->Pos(mSlotPos[i]);
 	}
 }
 
 int GearInterface::PosToSlot(Square::Vector2 pos)
 {
-	for (auto const& gear : mGearPositions)
+	for (int slot = 0; slot < mSlotPos.size(); slot++)
 	{
-		Square::Vector2 gearStartPos = gear.second;
-		Square::Vector2 gearEndPos = gearStartPos + SLOT_SIZE;
+		Square::Vector2 slotStartPos = mSlotPos[slot];
+		Square::Vector2 slotEndPos = slotStartPos + SLOT_SIZE;
 
 		bool WithinSlot = (
-			this->Pos().x + gearStartPos.x - SLOT_SIZE / 2 <= pos.x &&
-			this->Pos().y + gearStartPos.y - SLOT_SIZE / 2 <= pos.y &&
-			this->Pos().x + gearEndPos.x - SLOT_SIZE / 2 > pos.x&&
-			this->Pos().y + gearEndPos.y - SLOT_SIZE / 2 > pos.y
-			);
+			this->Pos().x + slotStartPos.x - SLOT_SIZE / 2 <= pos.x &&
+			this->Pos().y + slotStartPos.y - SLOT_SIZE / 2 <= pos.y &&
+			this->Pos().x + slotEndPos.x - SLOT_SIZE / 2 > pos.x &&
+			this->Pos().y + slotEndPos.y - SLOT_SIZE / 2 > pos.y
+		);
+
 		if (WithinSlot)
-		{
-			return gear.first;
-		}
+			return slot;
 	}
 	return -1;
 }

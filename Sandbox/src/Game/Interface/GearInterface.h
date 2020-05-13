@@ -20,8 +20,6 @@ private:
 	static const int COL_FIVE_X = 170;
 
 	Gear& mGear;
-	std::map<Gear::EquipmentSlot, Square::Vector2> mGearPositions;
-	std::map<Gear::EquipmentSlot, Square::Sprite> mGearDefaultSprites;
 
 	std::string GetAction();
 	int PosToSlot(Square::Vector2 pos);
@@ -33,8 +31,6 @@ private:
 	inline bool IsActiveSlot(int slot) { return slot == mGear.ActiveSlot(); }
 	inline void Swap(int slotOne, int slotTwo) {}
 	Square::GameObject* GetSlot(int slot, bool includeActive = true);
-
-	void CustomRender();
 
 public:
 	GearInterface(Gear& gear);

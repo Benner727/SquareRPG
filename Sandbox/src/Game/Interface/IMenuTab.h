@@ -24,6 +24,7 @@ protected:
 
 	SDL_Color mActiveColor;
 
+	std::vector<Square::Sprite*> mIcons;
 	std::vector<Square::Vector2> mSlotPos;
 	int mItemSize;
 
@@ -42,7 +43,6 @@ protected:
 
 	virtual void CreateActionMenu();
 	virtual void CreateTooltip();
-	virtual void CustomRender();
 
 	virtual void SetActiveSlot(int slot) = 0;
 	virtual bool IsActiveSlot(int slot) = 0;

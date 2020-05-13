@@ -50,10 +50,6 @@ int IMenuTab::PosToSlot(Square::Vector2 pos)
 	return slot;
 }
 
-void IMenuTab::CustomRender()
-{
-}
-
 void IMenuTab::CreateActionMenu()
 {
 }
@@ -214,9 +210,9 @@ void IMenuTab::Render()
 
 			obj->Render(true);
 		}
+		else if (i < mIcons.size())
+			mIcons[i]->Render(true);
 	}
-
-	CustomRender();
 
 	if (mActionsMenu) mActionsMenu->Render();
 	if (mTooltip) mTooltip->Render();
