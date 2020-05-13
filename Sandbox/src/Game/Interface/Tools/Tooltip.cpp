@@ -21,11 +21,15 @@ Tooltip::Tooltip(std::vector<std::string> infoText, Square::Vector2 pos)
 
 	mWidth += PADDING;
 
-	if (pos.x + mWidth * 0.5f > Square::Graphics::Instance().Camera().x + Square::Graphics::Instance().Camera().w)
-		pos.x = Square::Graphics::Instance().Camera().x + Square::Graphics::Instance().Camera().w - mWidth * 0.5f;
+	if (pos.x + mWidth * 0.5f > Square::Graphics::Instance().Camera().w)
+		pos.x = Square::Graphics::Instance().Camera().w - mWidth * 0.5f;
+	else if (pos.y - mWidth * 0.5f < 0.0f)
+		pos.y = mWidth * 0.5f;
 
-	if (pos.y + mHeight * 0.5f > Square::Graphics::Instance().Camera().y + Square::Graphics::Instance().Camera().h)
-		pos.y = Square::Graphics::Instance().Camera().y + Square::Graphics::Instance().Camera().h - mHeight * 0.5f;
+	if (pos.y + mHeight * 0.5f > Square::Graphics::Instance().Camera().h)
+		pos.y = Square::Graphics::Instance().Camera().h - mHeight * 0.5f;
+	else if (pos.y - mHeight * 0.5f < 0.0f)
+		pos.y = mHeight * 0.5f;
 
 	Pos(pos);
 	mTopLeft = mInfoText.front()->Pos() - Square::Vector2(mWidth + PADDING * 0.5f, mInfoText.front()->ScaledDimensions().y + PADDING * 2.0f) * 0.5f;
