@@ -65,13 +65,10 @@ bool IMenuTab::ContainsClick() const
 	if (mActionsMenu)
 		return true;
 
-	if (pos.x >= mBackground->Pos().x - mBackground->ScaledDimensions().x * 0.5f &&
-		pos.x <= mBackground->Pos().x + mBackground->ScaledDimensions().x * 0.5f &&
-		pos.y >= mBackground->Pos().y - mBackground->ScaledDimensions().y * 0.5f &&
-		pos.y <= mBackground->Pos().y + mBackground->ScaledDimensions().y * 0.5f)
-		return true;
-
-	return false;
+	return (pos.x >= mBackground->Pos().x - mBackground->ScaledDimensions().x * 0.5f &&
+			pos.x <= mBackground->Pos().x + mBackground->ScaledDimensions().x * 0.5f &&
+			pos.y >= mBackground->Pos().y - mBackground->ScaledDimensions().y * 0.5f &&
+			pos.y <= mBackground->Pos().y + mBackground->ScaledDimensions().y * 0.5f);
 }
 
 void IMenuTab::HandleLeftClick()
@@ -94,6 +91,7 @@ void IMenuTab::HandleLeftClick()
 
 			if (GetSlot(mLastPos))
 				mSelectedSlot = PosToSlot(mLastPos);
+
 		}
 	}
 	else if (Square::InputHandler::Instance().MouseButtonReleased(Square::InputHandler::left) && mLastClick != 0)
@@ -212,6 +210,8 @@ void IMenuTab::Render()
 
 			obj->Render(true);
 		}
+		else if (i < mIcons.size())
+			mIcons[i]->Render(true);
 	}
 
 	if (mActionsMenu) mActionsMenu->Render();

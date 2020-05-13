@@ -1,14 +1,42 @@
 #include "GearInterface.h"
 
 GearInterface::GearInterface(Gear& gear)
-	: IMenuTab("Graphics/panel_brown.png", 32, false, false), mGear(gear)
+	: IMenuTab("Graphics/panel_gear.png", 32, false, false), mGear(gear)
 {
-	for (int y = 0; y < 5; y++)
+	InitializeGearPositions();
+}
+
+void GearInterface::InitializeGearPositions()
+{
+	mSlotPos.resize(Gear::EquipmentSlot::TOTAL_SLOTS);
+	mSlotPos[Gear::EquipmentSlot::head] = { COL_THREE_X, ROW_ONE_Y };
+	mSlotPos[Gear::EquipmentSlot::cape] = { COL_TWO_X, ROW_TWO_Y };
+	mSlotPos[Gear::EquipmentSlot::neck] = { COL_THREE_X, ROW_TWO_Y };
+	mSlotPos[Gear::EquipmentSlot::weapon] = { COL_ONE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::chest] = { COL_THREE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::shield] = { COL_FIVE_X, ROW_THREE_Y };
+	mSlotPos[Gear::EquipmentSlot::legs] = { COL_THREE_X, ROW_FOUR_Y };
+	mSlotPos[Gear::EquipmentSlot::gloves] = { COL_ONE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::boots] = { COL_THREE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::ring] = { COL_FIVE_X, ROW_FIVE_Y };
+	mSlotPos[Gear::EquipmentSlot::ammo] = { COL_FOUR_X, ROW_TWO_Y };
+
+	mIcons.push_back(new Square::Sprite("Graphics/head.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/cape.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/neck.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/weapon.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/chest.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/shield.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/legs.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/gloves.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/boots.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/ring.png"));
+	mIcons.push_back(new Square::Sprite("Graphics/ammo.png"));
+
+	for (int i = 0; i < mIcons.size(); i++)
 	{
-		for (int x = 0; x < 2; x++)
-		{
-			mSlotPos.push_back(Square::Vector2(x * 48.0f + 32.0f, y * 48.0f + 32.0f));
-		}
+		mIcons[i]->Parent(this);
+		mIcons[i]->Pos(mSlotPos[i]);
 	}
 }
 
@@ -51,6 +79,5 @@ Square::GameObject* GearInterface::GetSlot(int slot, bool includeActive)
 Square::GameObject* GearInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
-
 	return GetSlot(slot, includeActive);
 }
