@@ -13,7 +13,7 @@ Inventory::~Inventory()
 	Clear();
 }
 
-bool Inventory::CanAdd(Item* item) const
+bool Inventory::CanAdd(std::shared_ptr<Item> item) const
 {
 	for (int i = 0; i < INVENTORY_SIZE; i++)
 	{
@@ -34,7 +34,7 @@ bool Inventory::CanAdd(Item* item) const
 	return false;
 }
 
-void Inventory::Add(Item* item)
+void Inventory::Add(std::shared_ptr<Item> item)
 {
 	if (CanAdd(item))
 	{
@@ -72,17 +72,15 @@ void Inventory::Remove(int slot, int amount)
 
 		if (mItems[slot]->Amount() < 1)
 		{
-			delete mItems[slot];
 			mItems[slot] = nullptr;
 		}
 	}
 }
 
-void Inventory::Replace(int slot, Item* item)
+void Inventory::Replace(int slot, std::shared_ptr<Item> item)
 {
 	if (slot > -1 && slot < INVENTORY_SIZE)
 	{
-		delete mItems[slot];
 		mItems[slot] = item;
 	}
 }
@@ -93,7 +91,7 @@ void Inventory::Swap(int firstSlot, int secondSlot)
 	{
 		if (secondSlot > -1 && secondSlot < INVENTORY_SIZE)
 		{
-			Item* temp = mItems[firstSlot];
+			std::shared_ptr<Item> temp = mItems[firstSlot];
 			mItems[firstSlot] = mItems[secondSlot];
 			mItems[secondSlot] = temp;
 		}
@@ -106,7 +104,7 @@ void Inventory::SetNull(int slot)
 		mItems[slot] = nullptr;
 }
 
-Item* Inventory::GetItem(int slot) const
+std::shared_ptr<Item> Inventory::GetItem(int slot) const
 {
 	if (slot > -1 && slot < INVENTORY_SIZE)
 		return mItems[slot];
@@ -132,7 +130,7 @@ bool Inventory::HasItem(int index, int amount) const
 	return (total >= amount);
 }
 
-bool Inventory::HasItems(std::vector<Item*> items) const
+bool Inventory::HasItems(std::vector<std::shared_ptr<Item>> items) const
 {
 	for (auto item : items)
 	{
@@ -164,7 +162,7 @@ void Inventory::RemoveItem(int index, int amount)
 	} while (amount > 0);
 }
 
-void Inventory::RemoveItems(std::vector<Item*> items)
+void Inventory::RemoveItems(std::vector<std::shared_ptr<Item>> items)
 {
 	for (const auto& item : items)
 		RemoveItem(item->Index(), item->Amount());
@@ -174,7 +172,6 @@ void Inventory::Clear()
 {
 	for (int i = 0; i < INVENTORY_SIZE; i++)
 	{
-		delete mItems[i];
 		mItems[i] = nullptr;
 	}
 }

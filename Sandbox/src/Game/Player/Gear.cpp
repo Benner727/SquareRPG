@@ -13,9 +13,9 @@ Gear::~Gear()
 	Clear();
 }
 
-bool Gear::CanAdd(Item* item) const
+bool Gear::CanAdd(std::shared_ptr<Item> item) const
 {
-	if (Equipment* equipment = dynamic_cast<Equipment*>(item))
+	if (Equipment* equipment = dynamic_cast<Equipment*>(item.get()))
 	{
 		return (mItems[equipment->Slot()] == nullptr);
 	}
@@ -23,11 +23,11 @@ bool Gear::CanAdd(Item* item) const
 	return false;
 }
 
-void Gear::Add(Item* item)
+void Gear::Add(std::shared_ptr<Item> item)
 {
 	if (CanAdd(item))
 	{
-		if (Equipment* equipment = dynamic_cast<Equipment*>(item))
+		if (std::shared_ptr<Equipment> equipment = std::dynamic_pointer_cast<Equipment>(item))
 		{
 			mItems[equipment->Slot()] = equipment;
 		}
@@ -42,17 +42,15 @@ void Gear::Remove(int slot, int amount)
 
 		if (mItems[slot]->Amount() < 1)
 		{
-			delete mItems[slot];
 			mItems[slot] = nullptr;
 		}
 	}
 }
 
-void Gear::Replace(int slot, Item* item)
+void Gear::Replace(int slot, std::shared_ptr<Item> item)
 {
 	if (slot > -1 && slot < GEAR_SIZE)
 	{
-		delete mItems[slot];
 		mItems[slot] = item;
 	}
 }
@@ -63,7 +61,7 @@ void Gear::SetNull(int slot)
 		mItems[slot] = nullptr;
 }
 
-Item* Gear::GetItem(int slot) const
+std::shared_ptr<Item> Gear::GetItem(int slot) const
 {
 	if (slot > -1 && slot < GEAR_SIZE)
 	{
@@ -91,7 +89,7 @@ bool Gear::HasItem(int index, int amount) const
 	return (total >= amount);
 }
 
-bool Gear::HasItems(std::vector<Item*> items) const
+bool Gear::HasItems(std::vector<std::shared_ptr<Item>> items) const
 {
 	for (auto item : items)
 	{
@@ -127,7 +125,6 @@ void Gear::Clear()
 {
 	for (int i = 0; i < GEAR_SIZE; i++)
 	{
-		delete mItems[i];
 		mItems[i] = nullptr;
 	}
 }

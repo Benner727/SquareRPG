@@ -29,7 +29,7 @@ namespace RangedFormulas
 	{
 		int rangedStrength = 0;
 
-		if (Weapon* weapon = dynamic_cast<Weapon*>(player.Gear().GetItem(Gear::EquipmentSlot::weapon)))
+		if (Weapon* weapon = dynamic_cast<Weapon*>(player.Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 		{
 			if (weapon->Type() == 1)
 			{
@@ -38,7 +38,7 @@ namespace RangedFormulas
 					// To do
 				}
 			}
-			else if (Equipment* ammo = dynamic_cast<Equipment*>(player.Gear().GetItem(Gear::EquipmentSlot::ammo)))
+			else if (Equipment* ammo = dynamic_cast<Equipment*>(player.Gear().GetItem(Gear::EquipmentSlot::ammo).get()))
 			{
 				switch (ammo->Index())
 				{

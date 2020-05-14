@@ -20,7 +20,7 @@ private:
 			mPlayer->CombatStance() == CombatOption::ranged_rapid ||
 			mPlayer->CombatStance() == CombatOption::ranged_longrange);
 
-		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 		{
 			if (weapon->Type() == 1)
 			{
@@ -76,7 +76,7 @@ public:
 			defenseRoll = RangedFormulas::DefenseRoll(*mNpc);
 			damage = RangedFormulas::BaseDamage(*mPlayer);
 
-			if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 			{
 				if (weapon->Type() == 1)
 					mPlayer->Gear().Remove(Gear::EquipmentSlot::ammo);

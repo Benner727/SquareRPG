@@ -23,7 +23,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			return true;
 
 		return false;
@@ -33,10 +33,8 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		Item* item = mPlayer->Inventory().GetItem(activeSlot);
+		mMap->GetCell(mPlayer->MapPosition())->AddGroundItem(mPlayer->Inventory().GetItem(activeSlot));
 		mPlayer->Inventory().SetNull(activeSlot);
-		
-		mMap->GetCell(mPlayer->MapPosition())->AddGroundItem(item);
 
 		mPlayer->Inventory().ActiveSlot(-1);
 	}

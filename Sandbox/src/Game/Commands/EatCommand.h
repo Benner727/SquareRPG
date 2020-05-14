@@ -21,7 +21,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			return !mPlayer->HasEatDelay();
 
 		return false;
@@ -31,7 +31,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 		
-		if (Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Food* food = dynamic_cast<Food*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 		{
 			mPlayer->SetEatDelay();
 			mPlayer->Skills().Heal(food->HealAmount());

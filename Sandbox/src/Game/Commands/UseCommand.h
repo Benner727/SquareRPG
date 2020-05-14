@@ -21,7 +21,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			return (mPlayer->Target() != nullptr);
 
 		return false;
@@ -37,7 +37,7 @@ public:
 
 		if (Item* target = dynamic_cast<Item*>(mPlayer->Target()))
 		{
-			if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot)))
+			if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			{
 				std::cout << selected->Name() << " -> " << target->Name() << std::endl;
 			}

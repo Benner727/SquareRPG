@@ -21,7 +21,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			return !mPlayer->HasDrinkDelay();
 
 		return false;
@@ -31,7 +31,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 		
-		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 		{
 			mPlayer->SetDrinkDelay();
 

@@ -17,5 +17,5 @@ private:
 public:
 	static NpcFactory& Instance();
 
-	Npc* GetNpc(int index);
+	std::shared_ptr<Npc> GetNpc(int index);
 };

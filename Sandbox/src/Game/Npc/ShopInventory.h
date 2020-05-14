@@ -9,7 +9,7 @@ class ShopInventory : public IItemContainer
 private:
 	static const int MAX_SHOP_SIZE = 20;
 
-	std::vector<Item*> mItems;
+	std::vector<std::shared_ptr<Item>> mItems;
 	std::vector<ItemStock> mStock;
 
 public:
@@ -18,13 +18,13 @@ public:
 
 	void SetStock(std::vector<ItemStock> stock);
 
-	bool CanAdd(Item* item) const;
-	void Add(Item* item);
+	bool CanAdd(std::shared_ptr<Item> item) const;
+	void Add(std::shared_ptr<Item> item);
 
 	void Remove(int slot, int amount = 1);
 	void SetNull(int slot);
 
-	Item* GetItem(int slot) const;
+	std::shared_ptr<Item> GetItem(int slot) const;
 
 	void Clear();
 	void Reset();

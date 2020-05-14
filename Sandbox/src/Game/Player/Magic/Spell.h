@@ -10,13 +10,13 @@ private:
 	int mIndex;
 	std::string mName;
 	int mLevelReq;
-	std::vector<Item*> mCastReq;
+	std::vector<std::shared_ptr<Item>> mCastReq;
 	int mDamage;
 	int mBaseExperience;
 	Square::Sprite* mSprite;
 
 public:
-	Spell(int index, std::string name, int levelReq, std::vector<Item*> castReq, int damage, int baseExperience, std::string spritePath)
+	Spell(int index, std::string name, int levelReq, std::vector<std::shared_ptr<Item>> castReq, int damage, int baseExperience, std::string spritePath)
 	{
 		mIndex = index;
 		mName = name;
@@ -37,7 +37,7 @@ public:
 	inline int Index() const { return mIndex; }
 	inline std::string Name() const { return mName; }
 	inline int LevelReq() const { return mLevelReq; }
-	inline std::vector<Item*> const CastReq() { return mCastReq; }
+	inline std::vector<std::shared_ptr<Item>> const CastReq() { return mCastReq; }
 	inline int Damage() const { return mDamage; }
 	inline int BaseExperience() const { return mBaseExperience; }
 	

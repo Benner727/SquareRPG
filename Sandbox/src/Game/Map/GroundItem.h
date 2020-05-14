@@ -5,12 +5,12 @@
 class GroundItem : public Square::GameObject
 {
 private:
-	Item* mItem;
+	std::shared_ptr<Item> mItem;
 	std::vector<std::string> mActions;
 	float mLifeTimer;
 
 public:
-	GroundItem(Item* item)
+	GroundItem(std::shared_ptr<Item> item)
 	{
 		mItem = item;
 		mItem->Parent(this);
@@ -24,10 +24,10 @@ public:
 
 	~GroundItem()
 	{
-		delete mItem;
+
 	}
 
-	inline Item* GetItem() const { return mItem; }
+	inline std::shared_ptr<Item> GetItem() const { return mItem; }
 	inline std::vector<std::string> Actions() const { return mActions; }
 
 	inline void RemoveItem()

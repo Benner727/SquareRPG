@@ -8,16 +8,17 @@ Map::Map()
 	{
 		for (int x = 0; x < 256; x++)
 		{
-			cells[0].push_back(new Cell(std::make_shared<Tile*>(new Tile(true, false, new Square::Sprite("Tile.png"), nullptr, {"Walk Here"}))));
+			std::vector<std::string> actions = { "Walk Here" };
+			cells[0].push_back(new Cell(std::make_shared<Tile>(true, false, new Square::Sprite("Tile.png"), nullptr, actions)));
 		}
 	}
 
-	cells[0].at(3 + 5 * 256) = new Cell(std::make_shared<Tile*>(new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {})));
-	cells[0].at(3 + 6 * 256) = new Cell(std::make_shared<Tile*>(new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {})));
-	cells[0].at(3 + 7 * 256) = new Cell(std::make_shared<Tile*>(new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {})));
-	cells[0].at(3 + 8 * 256) = new Cell(std::make_shared<Tile*>(new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {})));
-	cells[0].at(4 + 5 * 256) = new Cell(std::make_shared<Tile*>(new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {})));
-	cells[0].at(5 + 5 * 256) = new Cell(std::make_shared<Tile*>(new Tile(false, false, new Square::Sprite("Wall.png"), nullptr, {})));
+	cells[0].at(3 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(3 + 6 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(3 + 7 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(3 + 8 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(4 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(5 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
 
 	mRegions.push_back(new Region(0, 0, cells));
 
@@ -51,7 +52,7 @@ std::vector<std::string> Map::TileCommands(Point p)
 	Cell* cell = GetCell(p);
 	if (cell)
 	{
-		Tile* tile = *cell->GetTile();
+		Tile* tile = cell->GetTile().get();
 		return (tile) ? tile->Commands() : std::vector<std::string>();
 	}
 
@@ -63,7 +64,7 @@ bool Map::TileWalkable(Point p) const
 	Cell* cell = GetCell(p);
 	if (cell)
 	{
-		Tile* tile = *cell->GetTile();
+		Tile* tile = cell->GetTile().get();
 		return (tile) ? tile->Walkable() : false;
 	}
 
@@ -75,7 +76,7 @@ bool Map::TileCanAttackOver(Point p) const
 	Cell* cell = GetCell(p);
 	if (cell)
 	{
-		Tile* tile = *cell->GetTile();
+		Tile* tile = cell->GetTile().get();
 		return (tile) ? tile->CanAttackOver() : false;
 	}
 

@@ -6,17 +6,17 @@
 class Cell : public Square::GameObject
 {
 private:
-	std::shared_ptr<Tile*> mTile;
-	std::vector<std::shared_ptr<GroundItem*>> mGroundItems;
+	std::shared_ptr<Tile> mTile;
+	std::vector<std::shared_ptr<GroundItem>> mGroundItems;
 
 public:
-	Cell(std::shared_ptr<Tile*> tile = std::make_shared<Tile*>(), std::vector<Item*> groundItems = {});
+	Cell(std::shared_ptr<Tile> tile = std::make_shared<Tile>(), std::vector<std::shared_ptr<Item>> groundItems = {});
 	~Cell();
 
-	inline std::shared_ptr<Tile*> GetTile() const { return mTile; }
-	inline std::vector<std::shared_ptr<GroundItem*>>& GetGroundItems() { return mGroundItems; }
+	inline std::shared_ptr<Tile> GetTile() const { return mTile; }
+	inline std::vector<std::shared_ptr<GroundItem>>& GetGroundItems() { return mGroundItems; }
 
-	void AddGroundItem(Item* item);
+	void AddGroundItem(std::shared_ptr<Item> item);
 
 	void Update();
 	void Render();

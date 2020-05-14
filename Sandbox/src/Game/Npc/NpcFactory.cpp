@@ -17,31 +17,31 @@ NpcFactory::~NpcFactory()
 
 }
 
-Npc* NpcFactory::GetNpc(int index)
+std::shared_ptr<Npc> NpcFactory::GetNpc(int index)
 {
-	Npc* npc = nullptr;
+	std::shared_ptr<Npc> npc;
 
 	if (mNpcRepository.FindNpcCombatDefinition(index))
 	{
-		npc = new NpcFighter(index);
+		npc = std::make_shared<NpcFighter>(NpcFighter(index));
 
-		dynamic_cast<NpcFighter*>(npc)->mNpcCombatDefinition = mNpcRepository.FindNpcCombatDefinition(index);
-		dynamic_cast<NpcFighter*>(npc)->mNpcDropDefinition = mNpcRepository.FindNpcDropDefinition(index);
-		dynamic_cast<NpcFighter*>(npc)->Init();
+		std::dynamic_pointer_cast<NpcFighter>(npc)->mNpcCombatDefinition = mNpcRepository.FindNpcCombatDefinition(index);
+		std::dynamic_pointer_cast<NpcFighter>(npc)->mNpcDropDefinition = mNpcRepository.FindNpcDropDefinition(index);
+		std::dynamic_pointer_cast<NpcFighter>(npc)->Init();
 	}
 	else if (mNpcRepository.FindNpcShopDefinition(index))
 	{
-		npc = new NpcTrader(index);
+		npc = std::make_shared<NpcTrader>(NpcTrader(index));
 
-		dynamic_cast<NpcTrader*>(npc)->mNpcShopDefinition = mNpcRepository.FindNpcShopDefinition(index);
-		dynamic_cast<NpcTrader*>(npc)->Init();
+		std::dynamic_pointer_cast<NpcTrader>(npc)->mNpcShopDefinition = mNpcRepository.FindNpcShopDefinition(index);
+		std::dynamic_pointer_cast<NpcTrader>(npc)->Init();
 	}
 	else
-		npc = new Npc(index);
+		npc = std::make_shared<Npc>(Npc(index));
 
 	npc->mNpcDefinition = mNpcRepository.FindNpcDefinition(index);
 	npc->mSprite = new Square::Sprite(npc->mNpcDefinition->SpritePath());
-	npc->mSprite->Parent(npc);
+	npc->mSprite->Parent(npc.get());
 
 	return npc;
 }

@@ -20,7 +20,7 @@ void ShopInventory::SetStock(std::vector<ItemStock> stock)
 	}
 }
 
-bool ShopInventory::CanAdd(Item* item) const
+bool ShopInventory::CanAdd(std::shared_ptr<Item> item) const
 {
 	if (Size() < MAX_SHOP_SIZE)
 		return true;
@@ -34,7 +34,7 @@ bool ShopInventory::CanAdd(Item* item) const
 	return false;
 }
 
-void ShopInventory::Add(Item* item)
+void ShopInventory::Add(std::shared_ptr<Item> item)
 {
 	if (CanAdd(item))
 	{
@@ -61,7 +61,6 @@ void ShopInventory::Remove(int slot, int amount)
 		{
 			if (slot >= mStock.size() || mStock[slot].Index() != mItems[slot]->Index())
 			{
-				delete mItems[slot];
 				mItems.erase(mItems.begin() + slot);
 			}
 		}
@@ -76,7 +75,7 @@ void ShopInventory::SetNull(int slot)
 	}
 }
 
-Item* ShopInventory::GetItem(int slot) const
+std::shared_ptr<Item> ShopInventory::GetItem(int slot) const
 {
 	if (slot > -1 && slot < Size())
 		return mItems[slot];
@@ -86,8 +85,6 @@ Item* ShopInventory::GetItem(int slot) const
 
 void ShopInventory::Clear()
 {
-	for (auto item : mItems)
-		delete item;
 	mItems.clear();
 }
 

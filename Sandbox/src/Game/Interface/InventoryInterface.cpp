@@ -43,7 +43,7 @@ Square::GameObject* InventoryInterface::GetSlot(int slot, bool includeActive)
 	if (slot != -1)
 	{
 		if (includeActive || (slot != mInventory.ActiveSlot() && !includeActive))
-			item = mInventory.GetItem(slot);
+			item = mInventory.GetItem(slot).get();
 	}
 
 	return item;

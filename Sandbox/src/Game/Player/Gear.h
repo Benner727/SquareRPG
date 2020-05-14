@@ -12,24 +12,24 @@ public:
 	static const int GEAR_SIZE = EquipmentSlot::TOTAL_SLOTS;
 
 private:
-	Item* mItems[GEAR_SIZE];
+	std::shared_ptr<Item> mItems[GEAR_SIZE];
 
 public:
 	Gear();
 	~Gear();
 
-	bool CanAdd(Item* item) const;
-	void Add(Item* item);
+	bool CanAdd(std::shared_ptr<Item> item) const;
+	void Add(std::shared_ptr<Item> item);
 
 	void Remove(int slot, int amount = 1);
-	void Replace(int slot, Item* item);
+	void Replace(int slot, std::shared_ptr<Item> item);
 
 	void SetNull(int slot);
 
-	Item* GetItem(int slot) const;
+	std::shared_ptr<Item> GetItem(int slot) const;
 
 	bool HasItem(int index, int amount = 1) const;
-	bool HasItems(std::vector<Item*> items) const;
+	bool HasItems(std::vector<std::shared_ptr<Item>> items) const;
 
 	void RemoveItem(int index, int amount = 1);
 

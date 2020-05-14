@@ -20,5 +20,5 @@ private:
 public:
 	static ItemFactory& Instance();
 
-	Item* GetItem(int index, int amount = 1);
+	std::shared_ptr<Item> GetItem(int index, int amount = 1);
 };

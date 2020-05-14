@@ -21,9 +21,9 @@ public:
 	{
 		int activeSlot = mPlayer->Gear().ActiveSlot();
 
-		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Gear().GetItem(activeSlot)))
+		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Gear().GetItem(activeSlot).get()))
 		{
-			return mPlayer->Inventory().CanAdd(equipment);
+			return mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(activeSlot));
 		}
 
 		return false;
@@ -33,7 +33,7 @@ public:
 	{
 		int activeSlot = mPlayer->Gear().ActiveSlot();
 
-		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Gear().GetItem(activeSlot)))
+		if (std::shared_ptr<Equipment> equipment = std::dynamic_pointer_cast<Equipment>(mPlayer->Gear().GetItem(activeSlot)))
 		{
 			mPlayer->Gear().SetNull(activeSlot);
 			mPlayer->Inventory().Add(equipment);

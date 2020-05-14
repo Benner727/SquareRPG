@@ -70,7 +70,7 @@ Square::GameObject* GearInterface::GetSlot(int slot, bool includeActive)
 	if (slot != -1)
 	{
 		if (includeActive || (slot != mGear.ActiveSlot() && !includeActive))
-			item = mGear.GetItem(slot);
+			item = mGear.GetItem(slot).get();
 	}
 
 	return item;
