@@ -9,12 +9,12 @@
 class MoveCommand : public ICommand
 {
 private:
-	Player* mPlayer;
-	Map* mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 	std::list<Point> mPath;
 
 public:
-	MoveCommand(Player* player, Map* map)
+	MoveCommand(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 	{
 		mPlayer = player;
 		mMap = map;

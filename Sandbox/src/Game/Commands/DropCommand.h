@@ -7,11 +7,11 @@
 class DropCommand : public ICommand
 {
 private:
-	Player* mPlayer;
-	Map* mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 
 public:
-	DropCommand(Player* player, Map* map)
+	DropCommand(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 	{
 		mPlayer = player;
 		mMap = map;

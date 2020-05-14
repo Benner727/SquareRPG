@@ -10,10 +10,12 @@
 
 class GameLayer : public Square::Layer
 {
+private:
+	std::shared_ptr<Player> mPlayer;
+	PlayerInterface* mPlayerUI;
+	std::shared_ptr<Map> mMap;
+
 public:
-	Player* player;
-	PlayerInterface* playerUI;
-	Map map;
 
 	GameLayer();
 	virtual ~GameLayer();

@@ -7,10 +7,10 @@
 class EquipCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	EquipCommand(Player* player)
+	EquipCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}

@@ -3,7 +3,7 @@
 #include "Game/Commands/MoveCommand.h"
 #include "Game/Commands/PickUpCommand.h"
 
-WalkToPickUpAction::WalkToPickUpAction(Player* player, Map* map)
+WalkToPickUpAction::WalkToPickUpAction(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 	: mPlayer(player), mMap(map)
 {
 	mTarget = mPlayer->Target();

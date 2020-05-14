@@ -8,8 +8,8 @@
 class PlayerInterface : public Square::GameObject
 {
 private:
-	Player& mPlayer;
-	Map& mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 
 	GameGrid mGameGrid;
 
@@ -37,7 +37,7 @@ private:
 	void HandleInteraction();
 
 public:
-	PlayerInterface(Player& player, Map& map);
+	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map);
 	~PlayerInterface();
 
 	void Update();

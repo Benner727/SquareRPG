@@ -1,6 +1,6 @@
 #include "GameGrid.h"
 
-GameGrid::GameGrid(Map* map)
+GameGrid::GameGrid(std::shared_ptr<Map> map)
 	: mMap(map)
 {
 }
@@ -24,8 +24,8 @@ std::vector<GridObject*> GameGrid::GetGridObjects(Point p)
 			}
 		}
 
-		for (const auto& command : cell->GetTile()->Commands())
-			mGridObjects.push_back(new GridObject(command, cell->GetTile()));
+		for (const auto& command : (*cell->GetTile())->Commands())
+			mGridObjects.push_back(new GridObject(command, (*cell->GetTile())));
 	}
 
 	return mGridObjects;

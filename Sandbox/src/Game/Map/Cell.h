@@ -6,14 +6,14 @@
 class Cell : public Square::GameObject
 {
 private:
-	Tile* mTile;
+	std::shared_ptr<Tile*> mTile;
 	std::vector<std::shared_ptr<GroundItem*>> mGroundItems;
 
 public:
-	Cell(Tile* tile = nullptr, std::vector<Item*> groundItems = {});
+	Cell(std::shared_ptr<Tile*> tile = std::make_shared<Tile*>(), std::vector<Item*> groundItems = {});
 	~Cell();
 
-	inline Tile* GetTile() const { return mTile; }
+	inline std::shared_ptr<Tile*> GetTile() const { return mTile; }
 	inline std::vector<std::shared_ptr<GroundItem*>>& GetGroundItems() { return mGroundItems; }
 
 	void AddGroundItem(Item* item);

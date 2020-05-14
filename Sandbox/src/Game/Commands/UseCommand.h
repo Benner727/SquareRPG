@@ -7,10 +7,10 @@
 class UseCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	UseCommand(Player* player)
+	UseCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}

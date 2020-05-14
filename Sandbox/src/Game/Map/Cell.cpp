@@ -1,9 +1,9 @@
 #include "Cell.h"
 
-Cell::Cell(Tile* tile, std::vector<Item*> groundItems)
+Cell::Cell(std::shared_ptr<Tile*> tile, std::vector<Item*> groundItems)
 	: mTile(tile)
 {
-	mTile->Parent(this);
+	(*mTile)->Parent(this);
 	
 	for (auto groundItem : groundItems)
 		AddGroundItem(groundItem);
@@ -11,7 +11,6 @@ Cell::Cell(Tile* tile, std::vector<Item*> groundItems)
 
 Cell::~Cell()
 {
-	delete mTile;
 }
 
 void Cell::AddGroundItem(Item* item)
@@ -23,7 +22,7 @@ void Cell::AddGroundItem(Item* item)
 
 void Cell::Update()
 {
-	mTile->Update();
+	(*mTile)->Update();
 
 	for (std::vector<std::shared_ptr<GroundItem*>>::iterator it = mGroundItems.begin(); it != mGroundItems.end();)
 	{
@@ -41,7 +40,7 @@ void Cell::Update()
 
 void Cell::Render()
 {
-	mTile->Render();
+	(*mTile)->Render();
 
 	for (auto groundItem : mGroundItems)
 		(*groundItem)->Render();

@@ -1,9 +1,9 @@
 #include "PlayerInterface.h"
 
-PlayerInterface::PlayerInterface(Player& player, Map& map)
-	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap), mGameGrid(&mMap)
+PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
+	: mPlayer(player), mMap(map), mCommandManager(mPlayer, mMap), mGameGrid(mMap)
 {
-	mMenuTabsInterface = new MenuTabsInterface(player);
+	mMenuTabsInterface = new MenuTabsInterface(mPlayer);
 
 	mMessageLog = new MessageLog(50, 8, "Font/VeraMono.ttf", 14, { 15.0f, -15.0f });
 	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
@@ -50,7 +50,7 @@ void PlayerInterface::SetHoverText()
 		{
 			if (mWaitingForInteraction)
 			{
-				hoverText += "Use " + mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name() + " -> ";
+				hoverText += "Use " + mPlayer->Inventory().GetItem(mPlayer->Inventory().ActiveSlot())->Name() + " -> ";
 			}
 
 			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(pos, false)))
@@ -86,7 +86,7 @@ void PlayerInterface::SetHoverText()
 		{
 			if (mWaitingForInteraction)
 			{
-				hoverText += "Cast " + mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name() + " -> ";
+				hoverText += "Cast " + mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->Name() + " -> ";
 			}
 
 			if (Spell* spell = dynamic_cast<Spell*>(mMenuTabsInterface->Tab("Magic")->GetSlot(pos)))
@@ -114,7 +114,7 @@ void PlayerInterface::SetHoverText()
 			Point target;
 			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
 			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-			target.z = mPlayer.MapPosition().z;
+			target.z = mPlayer->MapPosition().z;
 
 			if (mGameGrid.GetGridObjects(target).size())
 				hoverText += mGameGrid.GetGridObjects(target).front()->Command();
@@ -145,11 +145,11 @@ void PlayerInterface::HandleUse()
 		{
 			mActionsMenu->Active(false);
 			if (!mActionsMenu->Action().empty())
-				mPlayer.Target(mTargetObject);
+				mPlayer->Target(mTargetObject);
 		}
 		else if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
 		{
-			mPlayer.Target(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false));
+			mPlayer->Target(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false));
 		}
 
 		mWaitingForInteraction = false;
@@ -159,7 +159,7 @@ void PlayerInterface::HandleUse()
 	{
 		if (mActionsMenu == nullptr)
 		{
-			std::string activeItem = mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name();
+			std::string activeItem = mPlayer->Inventory().GetItem(mPlayer->Inventory().ActiveSlot())->Name();
 			std::string targetObject = "";
 
 			if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
@@ -184,7 +184,7 @@ void PlayerInterface::HandleCast()
 		{
 			mActionsMenu->Active(false);
 			if (!mActionsMenu->Action().empty())
-				mPlayer.Target(mTargetObject);
+				mPlayer->Target(mTargetObject);
 		}
 
 		mWaitingForInteraction = false;
@@ -194,7 +194,7 @@ void PlayerInterface::HandleCast()
 	{
 		if (mActionsMenu == nullptr)
 		{
-			std::string activeItem = mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name();
+			std::string activeItem = mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->Name();
 			std::string targetObject = "";
 
 			mActionsMenu = new ActionsMenu("Options", { mHoverText }, Square::InputHandler::Instance().MousePos());
@@ -223,7 +223,7 @@ void PlayerInterface::HandleInteraction()
 	Point target;
 	target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
 	target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-	target.z = mPlayer.MapPosition().z;
+	target.z = mPlayer->MapPosition().z;
 
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
@@ -233,7 +233,7 @@ void PlayerInterface::HandleInteraction()
 			if (!mActionsMenu->Action().empty())
 			{
 				mCommand = mActionsMenu->Action();
-				mPlayer.Target(mActionsMenu->Object());
+				mPlayer->Target(mActionsMenu->Object());
 			}
 		}
 		else if (!mWaitingForInteraction)
@@ -241,7 +241,7 @@ void PlayerInterface::HandleInteraction()
 			if (mGameGrid.GetGridObjects(target).size())
 			{
 				mCommand = Trim(Substring(mGameGrid.GetGridObjects(target).front()->Command(), "->"));
-				mPlayer.Target(mGameGrid.GetGridObjects(target).front()->Target());
+				mPlayer->Target(mGameGrid.GetGridObjects(target).front()->Target());
 			}
 		}
 	}

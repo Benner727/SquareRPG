@@ -1,6 +1,6 @@
 #include "MenuTabsInterface.h"
 
-MenuTabsInterface::MenuTabsInterface(Player& player)
+MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 	: mPlayer(player)
 {
 	mCommand = "";
@@ -13,26 +13,26 @@ MenuTabsInterface::MenuTabsInterface(Player& player)
 	AddButton("Stats");
 	AddButton("Combat");
 
-	mTabs["Inventory"] = new InventoryInterface(mPlayer.Inventory());
+	mTabs["Inventory"] = new InventoryInterface(mPlayer->Inventory());
 	mTabs["Inventory"]->Parent(this);
 	mTabs["Inventory"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Inventory"]->Height()));
 
-	mTabs["Gear"] = new GearInterface(mPlayer.Gear());
+	mTabs["Gear"] = new GearInterface(mPlayer->Gear());
 	mTabs["Gear"]->Parent(this);
 	mTabs["Gear"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Gear"]->Height()));
 	mTabs["Gear"]->Active(false);
 
-	mTabs["Prayer"] = new PrayerInterface(mPlayer.PrayerBook());
+	mTabs["Prayer"] = new PrayerInterface(mPlayer->PrayerBook());
 	mTabs["Prayer"]->Parent(this);
 	mTabs["Prayer"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Prayer"]->Height()));
 	mTabs["Prayer"]->Active(false);
 
-	mTabs["Magic"] = new MagicInterface(mPlayer.SpellBook());
+	mTabs["Magic"] = new MagicInterface(mPlayer->SpellBook());
 	mTabs["Magic"]->Parent(this);
 	mTabs["Magic"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Magic"]->Height()));
 	mTabs["Magic"]->Active(false);
 
-	mTabs["Stats"] = new StatsInterface(mPlayer.Skills());
+	mTabs["Stats"] = new StatsInterface(mPlayer->Skills());
 	mTabs["Stats"]->Parent(this);
 	mTabs["Stats"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Stats"]->Height()));
 	mTabs["Stats"]->Active(false);

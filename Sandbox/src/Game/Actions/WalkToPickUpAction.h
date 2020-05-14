@@ -7,13 +7,13 @@
 class WalkToPickUpAction : public IAction
 {
 private:
-	Player* mPlayer;
-	Map* mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 
 	Square::GameObject* mTarget;
 
 public:
-	WalkToPickUpAction(Player* player, Map* map);
+	WalkToPickUpAction(std::shared_ptr<Player> player, std::shared_ptr<Map> map);
 
 	virtual ~WalkToPickUpAction() = default;
 

@@ -7,10 +7,10 @@
 class UnequipCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	UnequipCommand(Player* player)
+	UnequipCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}

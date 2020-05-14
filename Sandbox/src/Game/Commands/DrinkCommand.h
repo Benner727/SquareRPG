@@ -7,10 +7,10 @@
 class DrinkCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	DrinkCommand(Player* player)
+	DrinkCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}
