@@ -16,10 +16,6 @@ GameLayer::GameLayer()
 
 	mMap = std::make_shared<Map>();
 
-	{
-		std::shared_ptr<Npc> npc = NpcFactory::Instance().GetNpc(1);
-	}
-
 	mPlayerUI = new PlayerInterface(mPlayer, mMap);
 }
 

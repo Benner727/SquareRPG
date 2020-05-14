@@ -22,7 +22,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target()))
+		if (GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target().get()))
 		{
 			if (!groundItem->Expired())
 			{
@@ -38,7 +38,7 @@ public:
 
 	void Execute()
 	{
-		GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target());
+		GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target().get());
 
 		mPlayer->Inventory().Add(groundItem->GetItem());
 		groundItem->RemoveItem();

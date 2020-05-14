@@ -8,18 +8,14 @@ private:
 	int mActiveSpell;
 
 protected:
-	std::vector<Spell*> mSpells;
+	std::vector<std::shared_ptr<Spell>> mSpells;
 
 public:
 	ISpellBook() : mActiveSpell(-1) {}
 
-	virtual ~ISpellBook()
-	{
-		for (auto& spell : mSpells)
-			delete spell;
-	}
+	virtual ~ISpellBook() = default;
 
-	inline std::vector<Spell*> Spells() const { return mSpells; }
+	inline std::vector<std::shared_ptr<Spell>> Spells() const { return mSpells; }
 
 	inline int ActiveSpell() const { return mActiveSpell; }
 	inline void ActiveSpell(int activespell) { mActiveSpell = activespell; }

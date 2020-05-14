@@ -13,14 +13,14 @@ public:
 		ranged, prayer, magic, TOTAL_SKILLS};
 
 private:
-	std::vector<Skill*> mSkills;
+	std::vector<std::shared_ptr<Skill>> mSkills;
 	int mCombatLevel;
 
 	void CalculateCombatLevel();
 
 public:
 	Skills();
-	~Skills();
+	~Skills() = default;
 
 	inline int Experience(int index) const { return mSkills[index]->Experience(); }
 	inline int EffectiveLevel(int index) const { return mSkills[index]->EffectiveLevel(); }
@@ -36,7 +36,7 @@ public:
 	void BoostSkill(int skill, int add, int modifier, bool restoreOnly);
 	void RestoreSkill(int skill);
 
-	std::vector<Skill*> GetSkills() { return mSkills; }
+	std::vector<std::shared_ptr<Skill>> GetSkills() { return mSkills; }
 
 	void Update();
 };

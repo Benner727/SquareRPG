@@ -10,8 +10,8 @@ private:
 	std::vector<std::shared_ptr<GroundItem>> mGroundItems;
 
 public:
-	Cell(std::shared_ptr<Tile> tile = std::make_shared<Tile>(), std::vector<std::shared_ptr<Item>> groundItems = {});
-	~Cell();
+	Cell(std::shared_ptr<Tile> tile = nullptr, std::vector<std::shared_ptr<Item>> groundItems = {});
+	~Cell() = default;
 
 	inline std::shared_ptr<Tile> GetTile() const { return mTile; }
 	inline std::vector<std::shared_ptr<GroundItem>>& GetGroundItems() { return mGroundItems; }

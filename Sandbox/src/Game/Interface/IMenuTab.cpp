@@ -192,7 +192,7 @@ void IMenuTab::Render()
 
 	for (int i = 0; i < mSlotPos.size(); i++)
 	{
-		if (Square::GameObject* obj = GetSlot(i))
+		if (Square::GameObject* obj = GetSlot(i).get())
 		{
 			if (mDragSlot == i)
 			{

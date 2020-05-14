@@ -13,9 +13,15 @@ MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 	AddButton("Stats");
 	AddButton("Combat");
 
+	mTabs["Stats"] = new StatsInterface(mPlayer->Skills());
+	mTabs["Stats"]->Parent(this);
+	mTabs["Stats"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Stats"]->Height()));
+	mTabs["Stats"]->Active(false);
+
 	mTabs["Inventory"] = new InventoryInterface(mPlayer->Inventory());
 	mTabs["Inventory"]->Parent(this);
 	mTabs["Inventory"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Inventory"]->Height()));
+	//mTabs["Inventory"]->Active(false);
 
 	mTabs["Gear"] = new GearInterface(mPlayer->Gear());
 	mTabs["Gear"]->Parent(this);
@@ -31,11 +37,6 @@ MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 	mTabs["Magic"]->Parent(this);
 	mTabs["Magic"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Magic"]->Height()));
 	mTabs["Magic"]->Active(false);
-
-	mTabs["Stats"] = new StatsInterface(mPlayer->Skills());
-	mTabs["Stats"]->Parent(this);
-	mTabs["Stats"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Stats"]->Height()));
-	mTabs["Stats"]->Active(false);
 }
 
 MenuTabsInterface::~MenuTabsInterface()
@@ -59,10 +60,23 @@ void MenuTabsInterface::HandleButtons()
 {
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
-		for (auto& button : mButtons)
+		bool menuOpened = false;
+		for (const auto& tab : mTabs)
 		{
-			if (button.second->Pressed())
-				SwitchTab(button.first);
+			if (tab.second->Active())
+			{
+				if (tab.second->MenuOpened())
+					menuOpened = true;
+			}
+		}
+
+		if (!menuOpened)
+		{
+			for (auto& button : mButtons)
+			{
+				if (button.second->Pressed())
+					SwitchTab(button.first);
+			}
 		}
 	}
 }

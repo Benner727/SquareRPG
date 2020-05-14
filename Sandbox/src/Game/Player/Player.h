@@ -25,7 +25,7 @@ private:
 	CombatOption mCombatStance;
 	bool mAutoAttack;
 
-	Square::GameObject* mTarget;
+	std::shared_ptr<Square::GameObject> mTarget;
 
 	IAction* mAction;
 
@@ -70,8 +70,8 @@ public:
 	inline bool AutoAttack() const { return mAutoAttack; }
 	inline void AutoAttack(bool autoAttack) { mAutoAttack = autoAttack; }
 
-	inline void Target(Square::GameObject* target) { mTarget = target; }
-	inline Square::GameObject* Target() const { return mTarget; }
+	inline void Target(std::shared_ptr<Square::GameObject> target) { mTarget = target; }
+	inline std::shared_ptr<Square::GameObject> Target() const { return mTarget; }
 
 	inline bool HasEatDelay() const { return (mEatDelay > 0.0f); }
 	void SetEatDelay();

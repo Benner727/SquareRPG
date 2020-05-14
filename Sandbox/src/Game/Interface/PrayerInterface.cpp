@@ -18,7 +18,7 @@ std::string PrayerInterface::GetAction()
 
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
-	if (Aura* aura = dynamic_cast<Aura*>(GetSlot(pos)))
+	if (Aura* aura = dynamic_cast<Aura*>(GetSlot(pos).get()))
 	{
 		action = aura->Activated() ? "Deactivate" : "Activate";
 	}
@@ -28,7 +28,7 @@ std::string PrayerInterface::GetAction()
 
 void PrayerInterface::CreateActionMenu()
 {
-	if (Aura* aura = dynamic_cast<Aura*>(GetSlot(Square::InputHandler::Instance().MousePos())))
+	if (Aura* aura = dynamic_cast<Aura*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
 		std::string action = aura->Activated() ? "Deactivate" : "Activate";
 		mActionsMenu = new ActionsMenu(aura->Name(), { action }, Square::InputHandler::Instance().MousePos());
@@ -41,7 +41,7 @@ void PrayerInterface::CreateActionMenu()
 
 void PrayerInterface::CreateTooltip()
 {
-	if (Aura* aura = dynamic_cast<Aura*>(GetSlot(Square::InputHandler::Instance().MousePos())))
+	if (Aura* aura = dynamic_cast<Aura*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 
@@ -52,9 +52,9 @@ void PrayerInterface::CreateTooltip()
 		mSelectedSlot = -1;
 }
 
-Square::GameObject* PrayerInterface::GetSlot(int slot, bool includeActive)
+std::shared_ptr<Square::GameObject> PrayerInterface::GetSlot(int slot, bool includeActive)
 {
-	Aura* aura = nullptr;
+	std::shared_ptr<Aura> aura = nullptr;
 
 	if (slot >= 0 && slot < mPrayerBook.PrayerAuras().size())
 	{
@@ -65,7 +65,7 @@ Square::GameObject* PrayerInterface::GetSlot(int slot, bool includeActive)
 	return aura;
 }
 
-Square::GameObject* PrayerInterface::GetSlot(Square::Vector2 pos, bool includeActive)
+std::shared_ptr<Square::GameObject> PrayerInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 

@@ -16,11 +16,11 @@ private:
 	inline void SetActiveSlot(int slot) {}
 	inline bool IsActiveSlot(int slot) { return false; }
 	inline void Swap(int slotOne, int slotTwo) {}
-	Square::GameObject* GetSlot(int slot, bool includeActive = true);
+	std::shared_ptr<Square::GameObject> GetSlot(int slot, bool includeActive = true);
 
 public:
 	StatsInterface(Skills& skills);
 	~StatsInterface() = default;
 
-	Square::GameObject* GetSlot(Square::Vector2 pos, bool includeActive = true);
+	std::shared_ptr<Square::GameObject> GetSlot(Square::Vector2 pos, bool includeActive = true);
 };

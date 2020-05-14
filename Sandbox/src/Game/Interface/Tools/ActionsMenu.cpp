@@ -8,7 +8,7 @@ ActionsMenu::ActionsMenu(std::string title, std::vector<std::string> actions, Sq
 	Init(title, actions, pos);
 }
 
-ActionsMenu::ActionsMenu(std::string title, std::vector<GridObject*> gridObjects, Square::Vector2 pos)
+ActionsMenu::ActionsMenu(std::string title, std::vector<std::shared_ptr<GridObject>> gridObjects, Square::Vector2 pos)
 	: mSelectedAction(-1)
 {
 	std::vector<std::string> actions;
@@ -95,9 +95,9 @@ std::string ActionsMenu::Action()
 	return action;
 }
 
-Square::GameObject* ActionsMenu::Object()
+std::shared_ptr<Square::GameObject> ActionsMenu::Object()
 {
-	Square::GameObject* object = nullptr;
+	std::shared_ptr<Square::GameObject> object;
 
 	if (mSelectedAction != -1 && mObjects.size() > mSelectedAction)
 		object = mObjects[mSelectedAction];

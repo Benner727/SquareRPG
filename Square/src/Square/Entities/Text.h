@@ -29,9 +29,6 @@ namespace Square {
 		void Flash();
 
 		void Render(bool ignoreCamera = false);
-
-		Text& operator=(Text other);
-		Text(const Text& other);
 	};
 
 }

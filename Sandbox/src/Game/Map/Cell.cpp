@@ -9,10 +9,6 @@ Cell::Cell(std::shared_ptr<Tile> tile, std::vector<std::shared_ptr<Item>> ground
 		AddGroundItem(groundItem);
 }
 
-Cell::~Cell()
-{
-}
-
 void Cell::AddGroundItem(std::shared_ptr<Item> item)
 { 
 	mGroundItems.insert(mGroundItems.begin(), std::make_shared<GroundItem>(item));

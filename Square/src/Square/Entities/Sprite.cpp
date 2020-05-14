@@ -184,47 +184,4 @@ namespace Square {
 		}
 	}
 
-	Sprite& Sprite::operator=(Sprite other)
-	{
-		GameObject::operator=(other);
-
-		mTexture = other.mTexture;
-
-		mClipped = other.mClipped;
-
-		mWidth = other.mWidth;
-		mHeight = other.mHeight;
-
-		mRenderRect = other.mRenderRect;
-
-		mFlip = other.mFlip;
-		mColor = other.mColor;
-
-		mFlash = other.mFlash;
-		mFlashColor = other.mFlashColor;
-		mFlashFrames = other.mFlashFrames;
-
-		return *this;
-	}
-
-	Sprite::Sprite(const Sprite& other)
-		: GameObject(other), mGraphics(Graphics::Instance())
-	{
-		mTexture = other.mTexture;
-
-		mClipped = other.mClipped;
-
-		mWidth = other.mWidth;
-		mHeight = other.mHeight;
-
-		mRenderRect = other.mRenderRect;
-
-		mFlip = other.mFlip;
-		mColor = other.mColor;
-
-		mFlash = other.mFlash;
-		mFlashColor = other.mFlashColor;
-		mFlashFrames = other.mFlashFrames;
-	}
-
 }

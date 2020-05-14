@@ -17,8 +17,6 @@ Player::Player()
 	mInCombat = false;
 	mCombatDelay = 0.0f;
 
-	mTarget = nullptr;
-
 	mAction = nullptr;
 
 	Pos(Square::Vector2(16.0, 16.0));

@@ -53,7 +53,7 @@ void PlayerInterface::SetHoverText()
 				hoverText += "Use " + mPlayer->Inventory().GetItem(mPlayer->Inventory().ActiveSlot())->Name() + " -> ";
 			}
 
-			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(pos, false)))
+			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(pos, false).get()))
 			{
 				if (mWaitingForInteraction)
 				{
@@ -68,7 +68,7 @@ void PlayerInterface::SetHoverText()
 	{
 		if (!mMenuTabsInterface->Tab("Gear")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Gear")->GetSlot(pos)))
+			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Gear")->GetSlot(pos).get()))
 				hoverText += "Unequip " + item->Name();
 		}
 	}
@@ -76,7 +76,7 @@ void PlayerInterface::SetHoverText()
 	{
 		if (!mMenuTabsInterface->Tab("Prayer")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Aura* aura = dynamic_cast<Aura*>(mMenuTabsInterface->Tab("Prayer")->GetSlot(pos)))
+			if (Aura* aura = dynamic_cast<Aura*>(mMenuTabsInterface->Tab("Prayer")->GetSlot(pos).get()))
 				hoverText += (aura->Activated() ? "Deactivate " : "Activate ") + aura->Name();
 		}
 	}
@@ -89,7 +89,7 @@ void PlayerInterface::SetHoverText()
 				hoverText += "Cast " + mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->Name() + " -> ";
 			}
 
-			if (Spell* spell = dynamic_cast<Spell*>(mMenuTabsInterface->Tab("Magic")->GetSlot(pos)))
+			if (Spell* spell = dynamic_cast<Spell*>(mMenuTabsInterface->Tab("Magic")->GetSlot(pos).get()))
 			{
 				if (!mWaitingForInteraction)
 				{
@@ -102,7 +102,7 @@ void PlayerInterface::SetHoverText()
 	{
 		if (!mMenuTabsInterface->Tab("Stats")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Skill* skill = dynamic_cast<Skill*>(mMenuTabsInterface->Tab("Stats")->GetSlot(pos)))
+			if (Skill* skill = dynamic_cast<Skill*>(mMenuTabsInterface->Tab("Stats")->GetSlot(pos).get()))
 				hoverText += skill->SkillName() + " Skill";
 		}
 	}
@@ -164,7 +164,7 @@ void PlayerInterface::HandleUse()
 
 			if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
 			{
-				if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false)))
+				if (std::shared_ptr<Item> item = std::dynamic_pointer_cast<Item>(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false)))
 				{
 					targetObject = item->Name();
 					mTargetObject = item;
@@ -256,6 +256,8 @@ void PlayerInterface::HandleInteraction()
 
 void PlayerInterface::Update()
 {
+	bool menuOpened = (mActionsMenu != nullptr);
+
 	if (Square::InputHandler::Instance().KeyPressed(SDL_SCANCODE_Z))
 		mMessageLog->Active(!mMessageLog->Active());
 	mMessageLog->Update();

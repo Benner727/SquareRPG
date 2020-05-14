@@ -25,7 +25,8 @@ private:
 	Square::Text* mHoverSprite;
 
 	ActionsMenu* mActionsMenu;
-	Square::GameObject* mTargetObject;
+
+	std::shared_ptr<Square::GameObject> mTargetObject;
 
 	void SetHoverText();
 

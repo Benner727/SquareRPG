@@ -46,7 +46,7 @@ std::string GearInterface::GetAction()
 
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
-	if (Item* item = dynamic_cast<Item*>(GetSlot(pos)))
+	if (Item* item = dynamic_cast<Item*>(GetSlot(pos).get()))
 	{
 		action = "Unequip";
 	}
@@ -56,27 +56,27 @@ std::string GearInterface::GetAction()
 
 void GearInterface::CreateActionMenu()
 {
-	if (Item* item = dynamic_cast<Item*>(GetSlot(Square::InputHandler::Instance().MousePos())))
+	if (Item* item = dynamic_cast<Item*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
 		mActionsMenu = new ActionsMenu(item->Name(), { "Unequip" }, Square::InputHandler::Instance().MousePos());
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 	}
 }
 
-Square::GameObject* GearInterface::GetSlot(int slot, bool includeActive)
+std::shared_ptr<Square::GameObject> GearInterface::GetSlot(int slot, bool includeActive)
 {
-	Item* item = nullptr;
+	std::shared_ptr<Item> item = nullptr;
 
 	if (slot != -1)
 	{
 		if (includeActive || (slot != mGear.ActiveSlot() && !includeActive))
-			item = mGear.GetItem(slot).get();
+			item = mGear.GetItem(slot);
 	}
 
 	return item;
 }
 
-Square::GameObject* GearInterface::GetSlot(Square::Vector2 pos, bool includeActive)
+std::shared_ptr<Square::GameObject> GearInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 	return GetSlot(slot, includeActive);

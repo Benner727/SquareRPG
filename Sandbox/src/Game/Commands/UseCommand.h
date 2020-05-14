@@ -35,7 +35,7 @@ public:
 		// We might separate use types and execute different commands
 		// This will just be the generic use command that calls the others
 
-		if (Item* target = dynamic_cast<Item*>(mPlayer->Target()))
+		if (Item* target = dynamic_cast<Item*>(mPlayer->Target().get()))
 		{
 			if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			{

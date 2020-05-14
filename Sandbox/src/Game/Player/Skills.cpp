@@ -14,22 +14,16 @@ Skills::Skills()
 {
 	mCombatLevel = 1;
 
-	mSkills.push_back(new Skill("Hitpoints", 1154, 10, 10));
-	mSkills.push_back(new Skill("Attack"));
-	mSkills.push_back(new Skill("Strength"));
-	mSkills.push_back(new Skill("Defense"));
-	mSkills.push_back(new Skill("Ranged"));
-	mSkills.push_back(new Skill("Prayer"));
-	mSkills.push_back(new Skill("Magic"));
+	mSkills.push_back(std::make_shared<Skill>("Hitpoints", 1154, 10, 10));
+	mSkills.push_back(std::make_shared<Skill>("Attack"));
+	mSkills.push_back(std::make_shared<Skill>("Strength"));
+	mSkills.push_back(std::make_shared<Skill>("Defense"));
+	mSkills.push_back(std::make_shared<Skill>("Ranged"));
+	mSkills.push_back(std::make_shared<Skill>("Prayer"));
+	mSkills.push_back(std::make_shared<Skill>("Magic"));
 
 	if (mSkills.size() != SkillIndex::TOTAL_SKILLS)
 		LOG(ERROR) << "Skills size do nat match.";
-}
-
-Skills::~Skills()
-{
-	for (auto& skill : mSkills)
-		delete skill;
 }
 
 void Skills::CalculateCombatLevel()
