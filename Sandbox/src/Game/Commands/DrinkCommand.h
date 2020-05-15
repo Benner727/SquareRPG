@@ -7,10 +7,10 @@
 class DrinkCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	DrinkCommand(Player* player)
+	DrinkCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}
@@ -21,7 +21,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			return !mPlayer->HasDrinkDelay();
 
 		return false;
@@ -31,7 +31,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 		
-		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Potion* potion = dynamic_cast<Potion*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 		{
 			mPlayer->SetDrinkDelay();
 

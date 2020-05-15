@@ -22,8 +22,6 @@ protected:
 	ActionsMenu* mActionsMenu;
 	Tooltip* mTooltip;
 
-	std::vector<Square::Sprite*> mIcons;
-
 	SDL_Color mActiveColor;
 
 	std::vector<Square::Sprite*> mIcons;
@@ -49,7 +47,7 @@ protected:
 	virtual void SetActiveSlot(int slot) = 0;
 	virtual bool IsActiveSlot(int slot) = 0;
 	virtual void Swap(int slotOne, int slotTwo) = 0;
-	virtual Square::GameObject* GetSlot(int slot, bool includeActive = true) = 0;
+	virtual std::shared_ptr<Square::GameObject> GetSlot(int slot, bool includeActive = true) = 0;
 
 public:
 	IMenuTab(std::string backgroundPath, int itemSize, bool canDrag = false, bool hasHover = false);
@@ -60,7 +58,7 @@ public:
 
 	bool ContainsClick() const;
 	
-	virtual Square::GameObject* GetSlot(Square::Vector2 pos, bool includeActive = true) = 0;
+	virtual std::shared_ptr<Square::GameObject> GetSlot(Square::Vector2 pos, bool includeActive = true) = 0;
 
 	inline bool MenuOpened() const { return (mActionsMenu != nullptr); }
 	inline std::string CurrentAction() const { return mCurrentAction; }

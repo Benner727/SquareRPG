@@ -46,9 +46,6 @@ namespace Square {
 
 		virtual void Update();
 		virtual void Render(bool ignoreCamera = false);
-
-		GameObject& operator=(GameObject other);
-		GameObject(const GameObject& other);
 	};
 
 }

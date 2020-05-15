@@ -9,8 +9,8 @@
 class AutoAttackCommand : public ICommand
 {
 private:
-	Player* mPlayer;
-	NpcFighter* mNpc;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<NpcFighter> mNpc;
 
 	inline bool HasAmmo() const
 	{
@@ -20,7 +20,7 @@ private:
 			mPlayer->CombatStance() == CombatOption::ranged_rapid ||
 			mPlayer->CombatStance() == CombatOption::ranged_longrange);
 
-		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 		{
 			if (weapon->Type() == 1)
 			{
@@ -49,10 +49,10 @@ private:
 	}
 
 public:
-	AutoAttackCommand(Player* player)
+	AutoAttackCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
-		mNpc = dynamic_cast<NpcFighter*>(player->Target());
+		//mNpc = std::dynamic_pointer_cast<NpcFighter>(player->Target());
 	}
 
 	~AutoAttackCommand() = default;
@@ -76,7 +76,7 @@ public:
 			defenseRoll = RangedFormulas::DefenseRoll(*mNpc);
 			damage = RangedFormulas::BaseDamage(*mPlayer);
 
-			if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 			{
 				if (weapon->Type() == 1)
 					mPlayer->Gear().Remove(Gear::EquipmentSlot::ammo);
@@ -105,7 +105,7 @@ public:
 			rand.Init();
 
 			damage = std::min((int)(damage * rand.Float()) + 1, mNpc->RemainingHitpoints());
-			AddCombatExperience(mPlayer, damage);
+			AddCombatExperience(mPlayer.get(), damage);
 		}
 		else
 			damage = 0;

@@ -48,9 +48,6 @@ namespace Square {
 		bool IsAnimating() const;
 
 		void Update();
-
-		AnimatedSprite& operator=(AnimatedSprite other);
-		AnimatedSprite(const AnimatedSprite& other);
 	};
 
 }

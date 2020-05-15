@@ -28,6 +28,9 @@ IMenuTab::~IMenuTab()
 {
 	delete mBackground;
 
+	for (auto icon : mIcons)
+		delete icon;
+
 	delete mActionsMenu;
 	delete mTooltip;
 }
@@ -192,7 +195,7 @@ void IMenuTab::Render()
 
 	for (int i = 0; i < mSlotPos.size(); i++)
 	{
-		if (Square::GameObject* obj = GetSlot(i))
+		if (Square::GameObject* obj = GetSlot(i).get())
 		{
 			if (mDragSlot == i)
 			{

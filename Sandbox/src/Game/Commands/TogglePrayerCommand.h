@@ -6,10 +6,10 @@
 class TogglePrayerCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	TogglePrayerCommand(Player* player)
+	TogglePrayerCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}

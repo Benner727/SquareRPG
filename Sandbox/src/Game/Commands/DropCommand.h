@@ -7,11 +7,11 @@
 class DropCommand : public ICommand
 {
 private:
-	Player* mPlayer;
-	Map* mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 
 public:
-	DropCommand(Player* player, Map* map)
+	DropCommand(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 	{
 		mPlayer = player;
 		mMap = map;
@@ -23,7 +23,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Item* selected = dynamic_cast<Item*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 			return true;
 
 		return false;
@@ -33,10 +33,8 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		Item* item = mPlayer->Inventory().GetItem(activeSlot);
+		mMap->GetCell(mPlayer->MapPosition())->AddGroundItem(mPlayer->Inventory().GetItem(activeSlot));
 		mPlayer->Inventory().SetNull(activeSlot);
-		
-		mMap->GetCell(mPlayer->MapPosition())->AddGroundItem(item);
 
 		mPlayer->Inventory().ActiveSlot(-1);
 	}

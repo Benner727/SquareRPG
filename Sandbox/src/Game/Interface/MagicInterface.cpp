@@ -18,7 +18,7 @@ std::string MagicInterface::GetAction()
 
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
-	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(pos)))
+	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(pos).get()))
 	{
 		action = "Cast";
 	}
@@ -28,7 +28,7 @@ std::string MagicInterface::GetAction()
 
 void MagicInterface::CreateActionMenu()
 {
-	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(Square::InputHandler::Instance().MousePos())))
+	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
 		mActionsMenu = new ActionsMenu(spell->Name(), { "Cast" }, Square::InputHandler::Instance().MousePos());
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
@@ -40,7 +40,7 @@ void MagicInterface::CreateActionMenu()
 
 void MagicInterface::CreateTooltip()
 {
-	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(Square::InputHandler::Instance().MousePos())))
+	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 
@@ -60,9 +60,9 @@ void MagicInterface::CreateTooltip()
 		mSelectedSlot = -1;
 }
 
-Square::GameObject* MagicInterface::GetSlot(int slot, bool includeActive)
+std::shared_ptr<Square::GameObject> MagicInterface::GetSlot(int slot, bool includeActive)
 {
-	Spell* spell = nullptr;
+	std::shared_ptr<Spell> spell = nullptr;
 
 	if (slot >= 0 && slot < mSpellBook.Spells().size())
 	{
@@ -73,7 +73,7 @@ Square::GameObject* MagicInterface::GetSlot(int slot, bool includeActive)
 	return spell;
 }
 
-Square::GameObject* MagicInterface::GetSlot(Square::Vector2 pos, bool includeActive)
+std::shared_ptr<Square::GameObject> MagicInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 

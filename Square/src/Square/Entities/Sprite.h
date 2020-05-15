@@ -47,9 +47,6 @@ namespace Square {
 		void Flash();
 
 		virtual void Render(bool ignoreCamera = false);
-
-		Sprite& operator=(Sprite other);
-		Sprite(const Sprite& other);
 	};
 
 }

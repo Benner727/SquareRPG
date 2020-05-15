@@ -13,7 +13,9 @@ MessageLog::MessageLog(int width, int height, std::string fontPath, int fontSize
 
 MessageLog::~MessageLog()
 {
-	for (auto& text : mText)
+	delete mBackground;
+
+	for (auto text : mText)
 		delete text;
 }
 
@@ -39,7 +41,11 @@ void MessageLog::AddMessage(Square::Text* message)
 	mText.back()->Parent(this);
 
 	if (mText.size() > mHeight)
-		mText.erase(mText.begin());
+	{
+		std::vector<Square::Text*>::iterator i = mText.begin();
+		delete (*i);
+		mText.erase(i);
+	}
 
 	int lines = 0;
 	for (auto it = mText.rbegin(); it != mText.rend(); ++it)

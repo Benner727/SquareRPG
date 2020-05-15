@@ -1,20 +1,20 @@
 #include "PlayerInterface.h"
 
-PlayerInterface::PlayerInterface(Player& player, Map& map)
-	: mPlayer(player), mMap(map), mCommandManager(&mPlayer, &mMap), mGameGrid(&mMap)
+PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
+	: mPlayer(player), mMap(map), mCommandManager(mPlayer, mMap), mGameGrid(mMap)
 {
-	mMenuTabsInterface = new MenuTabsInterface(player);
+	mMenuTabsInterface = new MenuTabsInterface(mPlayer);
 
 	mMessageLog = new MessageLog(50, 8, "Font/VeraMono.ttf", 14, { 15.0f, -15.0f });
 	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
 
 	mMessageLog->AddMessage("1.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.", { 0, 0, 0, 255 });
-	mMessageLog->AddMessage("2. This is a test message.", { 178, 0, 0, 255 });
-	mMessageLog->AddMessage("3. This is a test message.", { 0, 178, 0, 255 });
-	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 178, 255 });
-	mMessageLog->AddMessage("5. This is a test message.", { 255, 255, 255, 255 });
-	mMessageLog->AddMessage("6. This is a test message.", { 178, 0, 0, 255 });
-	mMessageLog->AddMessage("7. This is a test message.", { 0, 178, 0, 255 });
+	mMessageLog->AddMessage("2. This is a test message.", {128, 0, 0, 255 });
+	mMessageLog->AddMessage("3. This is a test message.", { 0, 128, 0, 255 });
+	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 128, 255 });
+	mMessageLog->AddMessage("5. This is a test message.", { 128, 128, 128, 255 });
+	mMessageLog->AddMessage("6. This is a test message.", { 128, 0, 128, 255 });
+	mMessageLog->AddMessage("7. This is a test message.", { 0, 128, 128, 255 });
 
 	mCommand = "";
 
@@ -50,10 +50,10 @@ void PlayerInterface::SetHoverText()
 		{
 			if (mWaitingForInteraction)
 			{
-				hoverText += "Use " + mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name() + " -> ";
+				hoverText += "Use " + mPlayer->Inventory().GetItem(mPlayer->Inventory().ActiveSlot())->Name() + " -> ";
 			}
 
-			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(pos, false)))
+			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(pos, false).get()))
 			{
 				if (mWaitingForInteraction)
 				{
@@ -68,7 +68,7 @@ void PlayerInterface::SetHoverText()
 	{
 		if (!mMenuTabsInterface->Tab("Gear")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Gear")->GetSlot(pos)))
+			if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Gear")->GetSlot(pos).get()))
 				hoverText += "Unequip " + item->Name();
 		}
 	}
@@ -76,7 +76,7 @@ void PlayerInterface::SetHoverText()
 	{
 		if (!mMenuTabsInterface->Tab("Prayer")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Aura* aura = dynamic_cast<Aura*>(mMenuTabsInterface->Tab("Prayer")->GetSlot(pos)))
+			if (Aura* aura = dynamic_cast<Aura*>(mMenuTabsInterface->Tab("Prayer")->GetSlot(pos).get()))
 				hoverText += (aura->Activated() ? "Deactivate " : "Activate ") + aura->Name();
 		}
 	}
@@ -86,10 +86,10 @@ void PlayerInterface::SetHoverText()
 		{
 			if (mWaitingForInteraction)
 			{
-				hoverText += "Cast " + mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name() + " -> ";
+				hoverText += "Cast " + mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->Name() + " -> ";
 			}
 
-			if (Spell* spell = dynamic_cast<Spell*>(mMenuTabsInterface->Tab("Magic")->GetSlot(pos)))
+			if (Spell* spell = dynamic_cast<Spell*>(mMenuTabsInterface->Tab("Magic")->GetSlot(pos).get()))
 			{
 				if (!mWaitingForInteraction)
 				{
@@ -102,7 +102,7 @@ void PlayerInterface::SetHoverText()
 	{
 		if (!mMenuTabsInterface->Tab("Stats")->MenuOpened() && mActionsMenu == nullptr)
 		{
-			if (Skill* skill = dynamic_cast<Skill*>(mMenuTabsInterface->Tab("Stats")->GetSlot(pos)))
+			if (Skill* skill = dynamic_cast<Skill*>(mMenuTabsInterface->Tab("Stats")->GetSlot(pos).get()))
 				hoverText += skill->SkillName() + " Skill";
 		}
 	}
@@ -114,7 +114,7 @@ void PlayerInterface::SetHoverText()
 			Point target;
 			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
 			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-			target.z = mPlayer.MapPosition().z;
+			target.z = mPlayer->MapPosition().z;
 
 			if (mGameGrid.GetGridObjects(target).size())
 				hoverText += mGameGrid.GetGridObjects(target).front()->Command();
@@ -145,11 +145,11 @@ void PlayerInterface::HandleUse()
 		{
 			mActionsMenu->Active(false);
 			if (!mActionsMenu->Action().empty())
-				mPlayer.Target(mTargetObject);
+				mPlayer->Target(mTargetObject);
 		}
 		else if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
 		{
-			mPlayer.Target(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false));
+			mPlayer->Target(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false));
 		}
 
 		mWaitingForInteraction = false;
@@ -159,12 +159,12 @@ void PlayerInterface::HandleUse()
 	{
 		if (mActionsMenu == nullptr)
 		{
-			std::string activeItem = mPlayer.Inventory().GetItem(mPlayer.Inventory().ActiveSlot())->Name();
+			std::string activeItem = mPlayer->Inventory().GetItem(mPlayer->Inventory().ActiveSlot())->Name();
 			std::string targetObject = "";
 
 			if (mMenuTabsInterface->Tab("Inventory")->ContainsClick())
 			{
-				if (Item* item = dynamic_cast<Item*>(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false)))
+				if (std::shared_ptr<Item> item = std::dynamic_pointer_cast<Item>(mMenuTabsInterface->Tab("Inventory")->GetSlot(Square::InputHandler::Instance().MousePos(), false)))
 				{
 					targetObject = item->Name();
 					mTargetObject = item;
@@ -184,7 +184,7 @@ void PlayerInterface::HandleCast()
 		{
 			mActionsMenu->Active(false);
 			if (!mActionsMenu->Action().empty())
-				mPlayer.Target(mTargetObject);
+				mPlayer->Target(mTargetObject);
 		}
 
 		mWaitingForInteraction = false;
@@ -194,7 +194,7 @@ void PlayerInterface::HandleCast()
 	{
 		if (mActionsMenu == nullptr)
 		{
-			std::string activeItem = mPlayer.SpellBook().Spells()[mPlayer.SpellBook().ActiveSpell()]->Name();
+			std::string activeItem = mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->Name();
 			std::string targetObject = "";
 
 			mActionsMenu = new ActionsMenu("Options", { mHoverText }, Square::InputHandler::Instance().MousePos());
@@ -223,7 +223,7 @@ void PlayerInterface::HandleInteraction()
 	Point target;
 	target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
 	target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-	target.z = mPlayer.MapPosition().z;
+	target.z = mPlayer->MapPosition().z;
 
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
@@ -233,7 +233,7 @@ void PlayerInterface::HandleInteraction()
 			if (!mActionsMenu->Action().empty())
 			{
 				mCommand = mActionsMenu->Action();
-				mPlayer.Target(mActionsMenu->Object());
+				mPlayer->Target(mActionsMenu->Object());
 			}
 		}
 		else if (!mWaitingForInteraction)
@@ -241,7 +241,7 @@ void PlayerInterface::HandleInteraction()
 			if (mGameGrid.GetGridObjects(target).size())
 			{
 				mCommand = Trim(Substring(mGameGrid.GetGridObjects(target).front()->Command(), "->"));
-				mPlayer.Target(mGameGrid.GetGridObjects(target).front()->Target());
+				mPlayer->Target(mGameGrid.GetGridObjects(target).front()->Target());
 			}
 		}
 	}
@@ -256,6 +256,8 @@ void PlayerInterface::HandleInteraction()
 
 void PlayerInterface::Update()
 {
+	bool menuOpened = (mActionsMenu != nullptr);
+
 	if (Square::InputHandler::Instance().KeyPressed(SDL_SCANCODE_Z))
 		mMessageLog->Active(!mMessageLog->Active());
 	mMessageLog->Update();

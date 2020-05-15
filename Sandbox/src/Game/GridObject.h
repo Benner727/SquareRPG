@@ -6,10 +6,10 @@ class GridObject
 {
 private:
 	std::string mCommand;
-	Square::GameObject* mTarget;
+	std::shared_ptr<Square::GameObject> mTarget;
 
 public:
-	GridObject(std::string command = "", Square::GameObject* target = nullptr)
+	GridObject(std::string command = "", std::shared_ptr<Square::GameObject> target = nullptr)
 		: mCommand (command), mTarget(target)
 	{
 
@@ -18,5 +18,5 @@ public:
 	virtual ~GridObject() = default;
 
 	inline std::string Command() const { return mCommand; }
-	inline Square::GameObject* Target() const { return mTarget; }
+	inline std::shared_ptr<Square::GameObject> Target() const { return mTarget; }
 };

@@ -8,11 +8,11 @@
 class GameGrid
 {
 private:
-	Map* mMap;
+	std::shared_ptr<Map> mMap;
 
 public:
-	GameGrid(Map* map);
+	GameGrid(std::shared_ptr<Map> map);
 	~GameGrid();
 
-	std::vector<GridObject*> GetGridObjects(Point p);
+	std::vector<std::shared_ptr<GridObject>> GetGridObjects(Point p);
 };

@@ -14,7 +14,7 @@
 class MenuTabsInterface : public Square::GameObject
 {
 private:
-	Player& mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 	std::map<std::string, IMenuTab*> mTabs;
 	std::map<std::string, Button*> mButtons;
@@ -34,7 +34,7 @@ private:
 	void UpdateStats();
 
 public:
-	MenuTabsInterface(Player& player);
+	MenuTabsInterface(std::shared_ptr<Player> player);
 	~MenuTabsInterface();
 
 	inline std::string Command() const { return mCommand; }

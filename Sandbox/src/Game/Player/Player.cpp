@@ -17,8 +17,6 @@ Player::Player()
 	mInCombat = false;
 	mCombatDelay = 0.0f;
 
-	mTarget = nullptr;
-
 	mAction = nullptr;
 
 	Pos(Square::Vector2(16.0, 16.0));
@@ -64,7 +62,7 @@ void Player::SetDrinkDelay()
 
 void Player::SetCombatDelay()
 {
-	if (Weapon* weapon = dynamic_cast<Weapon*>(mGear.GetItem(Gear::EquipmentSlot::weapon)))
+	if (Weapon* weapon = dynamic_cast<Weapon*>(mGear.GetItem(Gear::EquipmentSlot::weapon).get()))
 		mCombatDelay += weapon->Speed();
 	else
 		mCombatDelay += 2.4f;
@@ -109,7 +107,7 @@ void Player::CalculateBonuses()
 
 	for (int i = 0; i < Gear::GEAR_SIZE; i++)
 	{
-		if (Equipment* equipment = dynamic_cast<Equipment*>(mGear.GetItem(i)))
+		if (Equipment* equipment = dynamic_cast<Equipment*>(mGear.GetItem(i).get()))
 		{
 			mStatBonus += equipment->Bonuses();
 		}

@@ -16,11 +16,11 @@ private:
 	inline void SetActiveSlot(int slot) { mPrayerBook.ActiveSlot(slot); }
 	inline bool IsActiveSlot(int slot) { return mPrayerBook.PrayerAuras()[slot]->Activated(); }
 	inline void Swap(int slotOne, int slotTwo) {}
-	Square::GameObject* GetSlot(int slot, bool includeActive = true);
+	std::shared_ptr<Square::GameObject> GetSlot(int slot, bool includeActive = true);
 
 public:
 	PrayerInterface(IPrayerBook& prayerBook);
 	~PrayerInterface() = default;
 
-	Square::GameObject* GetSlot(Square::Vector2 pos, bool includeActive = true);
+	std::shared_ptr<Square::GameObject> GetSlot(Square::Vector2 pos, bool includeActive = true);
 };

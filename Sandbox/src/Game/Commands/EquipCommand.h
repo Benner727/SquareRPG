@@ -7,10 +7,10 @@
 class EquipCommand : public ICommand
 {
 private:
-	Player* mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 public:
-	EquipCommand(Player* player)
+	EquipCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
 	}
@@ -21,7 +21,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Inventory().GetItem(activeSlot).get()))
 		{
 			for (auto requirement : equipment->Requirements())
 			{
@@ -39,10 +39,10 @@ public:
 			}
 			else if (equipment->Slot() == Gear::EquipmentSlot::shield)
 			{
-				if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+				if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 				{
 					if (weapon->TwoHanded())
-						return mPlayer->Inventory().CanAdd(weapon);
+						return mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon));
 				}
 			}
 
@@ -56,21 +56,21 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Inventory().GetItem(activeSlot)))
+		if (std::shared_ptr<Equipment> equipment = std::dynamic_pointer_cast<Equipment>(mPlayer->Inventory().GetItem(activeSlot)))
 		{
 			bool unequipWeapon = false;
 			bool unequipShield = false;
 
 			if (equipment->Slot() == Gear::EquipmentSlot::shield)
 			{
-				if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+				if (std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
 					unequipWeapon = weapon->TwoHanded();
 			}
-			else if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			else if (std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
 				unequipShield = weapon->TwoHanded();
 
 			mPlayer->Inventory().SetNull(activeSlot);
-			if (Item* unequippedSlot = mPlayer->Gear().GetItem(equipment->Slot()))
+			if (std::shared_ptr<Item> unequippedSlot = mPlayer->Gear().GetItem(equipment->Slot()))
 			{
 				mPlayer->Inventory().Add(unequippedSlot);
 				mPlayer->Gear().SetNull(equipment->Slot());
@@ -80,7 +80,7 @@ public:
 
 			if (unequipWeapon)
 			{
-				if (Item* item = mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon))
+				if (std::shared_ptr<Item> item = mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon))
 				{
 					mPlayer->Inventory().Add(item);
 					mPlayer->Gear().SetNull(Gear::EquipmentSlot::weapon);
@@ -88,7 +88,7 @@ public:
 			}
 			else if (unequipShield)
 			{
-				if (Item* item = mPlayer->Gear().GetItem(Gear::EquipmentSlot::shield))
+				if (std::shared_ptr<Item> item = mPlayer->Gear().GetItem(Gear::EquipmentSlot::shield))
 				{
 					mPlayer->Inventory().Add(item);
 					mPlayer->Gear().SetNull(Gear::EquipmentSlot::shield);

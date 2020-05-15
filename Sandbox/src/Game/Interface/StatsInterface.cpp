@@ -18,7 +18,7 @@ std::string StatsInterface::GetAction()
 
 	Square::Vector2 pos = Square::InputHandler::Instance().MousePos();
 
-	if (Skill* skill = dynamic_cast<Skill*>(GetSlot(pos)))
+	if (Skill* skill = dynamic_cast<Skill*>(GetSlot(pos).get()))
 	{
 		action = "";
 	}
@@ -33,7 +33,7 @@ void StatsInterface::CreateActionMenu()
 
 void StatsInterface::CreateTooltip()
 {
-	if (Skill* skill = dynamic_cast<Skill*>(GetSlot(Square::InputHandler::Instance().MousePos())))
+	if (Skill* skill = dynamic_cast<Skill*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 
@@ -44,9 +44,9 @@ void StatsInterface::CreateTooltip()
 		mSelectedSlot = -1;
 }
 
-Square::GameObject* StatsInterface::GetSlot(int slot, bool includeActive)
+std::shared_ptr<Square::GameObject> StatsInterface::GetSlot(int slot, bool includeActive)
 {
-	Skill* skill = nullptr;
+	std::shared_ptr<Skill> skill = nullptr;
 
 	if (slot >= 0 && slot < mSkills.GetSkills().size())
 	{
@@ -56,7 +56,7 @@ Square::GameObject* StatsInterface::GetSlot(int slot, bool includeActive)
 	return skill;
 }
 
-Square::GameObject* StatsInterface::GetSlot(Square::Vector2 pos, bool includeActive)
+std::shared_ptr<Square::GameObject> StatsInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 

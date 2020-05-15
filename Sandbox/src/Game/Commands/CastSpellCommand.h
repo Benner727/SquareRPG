@@ -7,14 +7,14 @@
 class CastSpellCommand : public ICommand
 {
 private:
-	Player* mPlayer;
-	NpcFighter* mNpc;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<NpcFighter> mNpc;
 
 public:
-	CastSpellCommand(Player* player)
+	CastSpellCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
-		mNpc = dynamic_cast<NpcFighter*>(player->Target());
+		//mNpc = std::dynamic_pointer_cast<NpcFighter>(player->Target());
 	}
 
 	~CastSpellCommand() = default;

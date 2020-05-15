@@ -157,34 +157,4 @@ namespace Square {
 
 	}
 
-	GameObject& GameObject::operator=(GameObject other)
-	{
-		mPos = other.mPos;
-		mPrevPos = other.mPrevPos;
-
-		mRotation = other.mRotation;
-
-		mActive = other.mActive;
-
-		mParent = other.mParent;
-
-		mScale = other.mScale;
-
-		return *this;
-	}
-
-	GameObject::GameObject(const GameObject& other)
-	{
-		mPos = other.mPos;
-		mPrevPos = other.mPrevPos;
-
-		mRotation = other.mRotation;
-
-		mActive = other.mActive;
-
-		mParent = other.mParent;
-
-		mScale = other.mScale;
-	}
-
 }

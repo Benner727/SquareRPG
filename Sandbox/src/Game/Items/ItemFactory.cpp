@@ -17,43 +17,43 @@ ItemFactory::~ItemFactory()
 
 }
 
-Item* ItemFactory::GetItem(int index, int amount)
+std::shared_ptr<Item> ItemFactory::GetItem(int index, int amount)
 {
-	Item* item = nullptr;
+	std::shared_ptr<Item> item;
 
 	if (mItemRepository.FindFoodDefinition(index))
 	{
-		item = new Food(index, amount);
-		dynamic_cast<Food*>(item)->mFoodDefinition = mItemRepository.FindFoodDefinition(index);
+		item = std::make_shared<Food>(Food(index, amount));
+		std::dynamic_pointer_cast<Food>(item)->mFoodDefinition = mItemRepository.FindFoodDefinition(index);
 	}
 	else if (mItemRepository.FindPotionDefinition(index))
 	{
-		item = new Potion(index, amount);
-		dynamic_cast<Potion*>(item)->mPotionDefinition = mItemRepository.FindPotionDefinition(index);
+		item = std::make_shared<Potion>(Potion(index, amount));
+		std::dynamic_pointer_cast<Potion>(item)->mPotionDefinition = mItemRepository.FindPotionDefinition(index);
 	}
 	else if (mItemRepository.FindEquipmentDefinition(index))
 	{
 		if (mItemRepository.FindWeaponDefinition(index))
 		{
-			item = new Weapon(index, amount);
+			item = std::make_shared<Weapon>(Weapon(index, amount));
 
-			dynamic_cast<Weapon*>(item)->mWeaponDefinition = mItemRepository.FindWeaponDefinition(index);
-			dynamic_cast<Weapon*>(item)->mRangedDefinition = mItemRepository.FindRangedDefinition(index);
+			std::dynamic_pointer_cast<Weapon>(item)->mWeaponDefinition = mItemRepository.FindWeaponDefinition(index);
+			std::dynamic_pointer_cast<Weapon>(item)->mRangedDefinition = mItemRepository.FindRangedDefinition(index);
 		}
 		else
-			item = new Equipment(index, amount);
+			item = std::make_shared<Equipment>(Equipment(index, amount));
 
-		dynamic_cast<Equipment*>(item)->mItemBonusDefinition = mItemRepository.FindItemBonusDefinition(index);
-		dynamic_cast<Equipment*>(item)->mEquipmentDefinition = mItemRepository.FindEquipmentDefinition(index);
+		std::dynamic_pointer_cast<Equipment>(item)->mItemBonusDefinition = mItemRepository.FindItemBonusDefinition(index);
+		std::dynamic_pointer_cast<Equipment>(item)->mEquipmentDefinition = mItemRepository.FindEquipmentDefinition(index);
 	}
 	else
 	{
-		item = new Item(index, amount);
+		item = std::make_shared<Item>(Item(index, amount));
 	}
 
 	item->mItemDefinition = mItemRepository.FindItemDefinition(index);
 	item->mSprite = new Square::Sprite("Items/" + item->mItemDefinition->SpritePath());
-	item->mSprite->Parent(item);
+	item->mSprite->Parent(item.get());
 
 	return item;
 }

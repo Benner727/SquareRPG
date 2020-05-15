@@ -8,8 +8,8 @@
 class PlayerInterface : public Square::GameObject
 {
 private:
-	Player& mPlayer;
-	Map& mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 
 	GameGrid mGameGrid;
 
@@ -25,7 +25,8 @@ private:
 	Square::Text* mHoverSprite;
 
 	ActionsMenu* mActionsMenu;
-	Square::GameObject* mTargetObject;
+
+	std::shared_ptr<Square::GameObject> mTargetObject;
 
 	void SetHoverText();
 
@@ -37,7 +38,7 @@ private:
 	void HandleInteraction();
 
 public:
-	PlayerInterface(Player& player, Map& map);
+	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map);
 	~PlayerInterface();
 
 	void Update();

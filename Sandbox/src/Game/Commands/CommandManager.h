@@ -17,8 +17,8 @@
 class CommandManager
 {
 private:
-	Player* mPlayer;
-	Map* mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 	std::map<std::string, ICommand*> mCommands;
 
 	inline void Invoke(ICommand* command)
@@ -38,7 +38,7 @@ private:
 	}
 
 public:
-	CommandManager(Player* player, Map* map)
+	CommandManager(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 		: mPlayer(player), mMap(map)
 	{
 		mCommands["Attack"] = new AutoAttackCommand(mPlayer);

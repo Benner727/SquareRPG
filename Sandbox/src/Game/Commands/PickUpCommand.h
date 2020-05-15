@@ -6,11 +6,11 @@
 class PickUpCommand : public ICommand
 {
 private:
-	Player* mPlayer;
-	Map* mMap;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Map> mMap;
 
 public:
-	PickUpCommand(Player* player, Map* map)
+	PickUpCommand(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 	{
 		mPlayer = player;
 		mMap = map;
@@ -22,7 +22,7 @@ public:
 	{
 		int activeSlot = mPlayer->Inventory().ActiveSlot();
 
-		if (GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target()))
+		if (GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target().get()))
 		{
 			if (!groundItem->Expired())
 			{
@@ -38,7 +38,7 @@ public:
 
 	void Execute()
 	{
-		GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target());
+		GroundItem* groundItem = dynamic_cast<GroundItem*>(mPlayer->Target().get());
 
 		mPlayer->Inventory().Add(groundItem->GetItem());
 		groundItem->RemoveItem();

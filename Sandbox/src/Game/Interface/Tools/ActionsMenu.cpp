@@ -8,7 +8,7 @@ ActionsMenu::ActionsMenu(std::string title, std::vector<std::string> actions, Sq
 	Init(title, actions, pos);
 }
 
-ActionsMenu::ActionsMenu(std::string title, std::vector<GridObject*> gridObjects, Square::Vector2 pos)
+ActionsMenu::ActionsMenu(std::string title, std::vector<std::shared_ptr<GridObject>> gridObjects, Square::Vector2 pos)
 	: mSelectedAction(-1)
 {
 	std::vector<std::string> actions;
@@ -65,10 +65,10 @@ void ActionsMenu::Init(std::string title, std::vector<std::string> actions, Squa
 	else if (pos.x - mWidth * 0.5f < 0.0f)
 		pos.x = mWidth * 0.5f;
 
-	if (pos.y + mHeight * 0.5f > Square::Graphics::Instance().Camera().h)
-		pos.y = Square::Graphics::Instance().Camera().h - mHeight * 0.5f;
-	else if(pos.y - mHeight * 0.5f < 0.0f)
-		pos.y = mHeight * 0.5f;
+	if (pos.y + mHeight + mTitle->ScaledDimensions().y > Square::Graphics::Instance().Camera().h)
+		pos.y = Square::Graphics::Instance().Camera().h - mHeight + mTitle->ScaledDimensions().y;
+	else if(pos.y - (mTitle->ScaledDimensions().y + PADDING) * 0.5f < 0.0f)
+		pos.y = (mTitle->ScaledDimensions().y + PADDING) * 0.5f;
 
 	Pos(pos);
 	mTopLeft = mTitle->Pos() - Square::Vector2(mWidth + PADDING * 0.5f, mTitle->ScaledDimensions().y + PADDING * 2.0f) * 0.5f;
@@ -95,9 +95,9 @@ std::string ActionsMenu::Action()
 	return action;
 }
 
-Square::GameObject* ActionsMenu::Object()
+std::shared_ptr<Square::GameObject> ActionsMenu::Object()
 {
-	Square::GameObject* object = nullptr;
+	std::shared_ptr<Square::GameObject> object;
 
 	if (mSelectedAction != -1 && mObjects.size() > mSelectedAction)
 		object = mObjects[mSelectedAction];
