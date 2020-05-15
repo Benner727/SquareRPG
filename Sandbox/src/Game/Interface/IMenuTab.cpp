@@ -28,6 +28,9 @@ IMenuTab::~IMenuTab()
 {
 	delete mBackground;
 
+	for (auto icon : mIcons)
+		delete icon;
+
 	delete mActionsMenu;
 	delete mTooltip;
 }
