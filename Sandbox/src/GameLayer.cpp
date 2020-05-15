@@ -1,5 +1,5 @@
 #include "GameLayer.h"
-#include "Game//Npc/NpcFactory.h"
+
 GameLayer::GameLayer()
 {
 	mPlayer = std::make_shared<Player>();
@@ -26,14 +26,14 @@ GameLayer::~GameLayer()
 
 void GameLayer::OnUpdate()
 {
-	mMap->Update(0);
+	mMap->Update(mPlayer->MapPosition().z);
 	mPlayer->Update();
 	mPlayerUI->Update();
 }
 
 void GameLayer::OnRender()
 {
-	mMap->Render(0);
+	mMap->Render(mPlayer->MapPosition().z);
 	mPlayer->Render();
 	mPlayerUI->Render();
 }

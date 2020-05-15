@@ -9,12 +9,12 @@ PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr
 	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
 
 	mMessageLog->AddMessage("1.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.", { 0, 0, 0, 255 });
-	mMessageLog->AddMessage("2. This is a test message.", { 178, 0, 0, 255 });
-	mMessageLog->AddMessage("3. This is a test message.", { 0, 178, 0, 255 });
-	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 178, 255 });
-	mMessageLog->AddMessage("5. This is a test message.", { 255, 255, 255, 255 });
-	mMessageLog->AddMessage("6. This is a test message.", { 178, 0, 0, 255 });
-	mMessageLog->AddMessage("7. This is a test message.", { 0, 178, 0, 255 });
+	mMessageLog->AddMessage("2. This is a test message.", {128, 0, 0, 255 });
+	mMessageLog->AddMessage("3. This is a test message.", { 0, 128, 0, 255 });
+	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 128, 255 });
+	mMessageLog->AddMessage("5. This is a test message.", { 128, 128, 128, 255 });
+	mMessageLog->AddMessage("6. This is a test message.", { 128, 0, 128, 255 });
+	mMessageLog->AddMessage("7. This is a test message.", { 0, 128, 128, 255 });
 
 	mCommand = "";
 
