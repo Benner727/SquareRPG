@@ -50,7 +50,7 @@ public:
 	inline void Damage(int amount) { mRemainingHitpoints -= amount; if (mRemainingHitpoints < 0) mRemainingHitpoints = 0; }
 	inline void Heal(int amount) { mRemainingHitpoints += amount; if (mRemainingHitpoints > Hitpoints()) mRemainingHitpoints = Hitpoints(); }
 	inline int RemainingHitpoints() const { return mRemainingHitpoints; }
-	inline bool Dead() const { return mRemainingHitpoints < 1; }
+	inline bool Dead() const override { return mRemainingHitpoints < 1; }
 
 	inline bool WeakTo(int flag) const { return((Weakness() & flag) == flag); }
 

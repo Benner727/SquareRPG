@@ -9,6 +9,12 @@ MovableEntity::MovableEntity()
 	mEnergy = 100;
 }
 
+void MovableEntity::MapPosition(Point p)
+{
+	mMapPosition = p;
+	Pos(mMapPosition.ToVector2());
+}
+
 void MovableEntity::HandleMovement()
 {
 	int speed = mMoveSpeed;

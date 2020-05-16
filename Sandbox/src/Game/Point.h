@@ -30,6 +30,15 @@ struct Point
 		z = _z;
 	}
 
+	Square::Vector2 ToVector2()
+	{
+		Square::Vector2 vec;
+		vec.x = x * 32.0f + 16.0f;
+		vec.y = y * 32.0f + 16.0f;
+
+		return vec;
+	}
+
 	void Translate(int dir)
 	{
 		switch (dir)
@@ -63,6 +72,11 @@ struct Point
 			x--;
 			break;
 		}
+	}
+
+	bool operator< (const Point& rhs) const
+	{
+		return x != rhs.x ? x < rhs.x : y < rhs.y;
 	}
 
 	bool operator == (const Point& other)

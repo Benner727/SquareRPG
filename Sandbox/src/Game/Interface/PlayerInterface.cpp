@@ -1,7 +1,7 @@
 #include "PlayerInterface.h"
 
-PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
-	: mPlayer(player), mMap(map), mCommandManager(mPlayer, mMap), mGameGrid(mMap)
+PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map, NpcHandler& npcHandler)
+	: mPlayer(player), mMap(map), mCommandManager(mPlayer, mMap), mGameGrid(mMap, npcHandler)
 {
 	mMenuTabsInterface = new MenuTabsInterface(mPlayer);
 
@@ -111,13 +111,12 @@ void PlayerInterface::SetHoverText()
 	{
 		if (mActionsMenu == nullptr)
 		{
-			Point target;
-			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
-			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-			target.z = mPlayer->MapPosition().z;
+			Square::Vector2 target;
+			target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x);
+			target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y);
 
-			if (mGameGrid.GetGridObjects(target).size())
-				hoverText += mGameGrid.GetGridObjects(target).front()->Command();
+			if (mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z).size())
+				hoverText += mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z).front()->Command();
 		}
 	}
 
@@ -220,10 +219,9 @@ void PlayerInterface::HandleActionsMenu()
 
 void PlayerInterface::HandleInteraction()
 {
-	Point target;
-	target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x) / 32.0f;
-	target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y) / 32.0f;
-	target.z = mPlayer->MapPosition().z;
+	Square::Vector2 target;
+	target.x = (Square::InputHandler::Instance().MousePos().x + Square::Graphics::Instance().Camera().x);
+	target.y = (Square::InputHandler::Instance().MousePos().y + Square::Graphics::Instance().Camera().y);
 
 	if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::left))
 	{
@@ -238,18 +236,18 @@ void PlayerInterface::HandleInteraction()
 		}
 		else if (!mWaitingForInteraction)
 		{
-			if (mGameGrid.GetGridObjects(target).size())
+			if (mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z).size())
 			{
-				mCommand = Trim(Substring(mGameGrid.GetGridObjects(target).front()->Command(), "->"));
-				mPlayer->Target(mGameGrid.GetGridObjects(target).front()->Target());
+				mCommand = Trim(Substring(mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z).front()->Command(), "->"));
+				mPlayer->Target(mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z).front()->Target());
 			}
 		}
 	}
 	else if (Square::InputHandler::Instance().MouseButtonPressed(Square::InputHandler::right))
 	{
-		if (mGameGrid.GetGridObjects(target).size())
+		if (mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z).size())
 		{
-			mActionsMenu = new ActionsMenu("Options", mGameGrid.GetGridObjects(target), Square::InputHandler::Instance().MousePos());
+			mActionsMenu = new ActionsMenu("Options", mGameGrid.GetGridObjects(target, mPlayer->MapPosition().z), Square::InputHandler::Instance().MousePos());
 		}
 	}
 }

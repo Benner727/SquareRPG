@@ -14,9 +14,15 @@ GameLayer::GameLayer()
 	mPlayer->Inventory().Remove(7);
 	mPlayer->Inventory().Remove(17);
 
+	mPlayer->MapPosition(Point(2, 2, 0));
+
 	mMap = std::make_shared<Map>();
 
-	mPlayerUI = new PlayerInterface(mPlayer, mMap);
+	mPlayerUI = new PlayerInterface(mPlayer, mMap, mNpcHandler);
+
+	std::shared_ptr<Npc> npc = NpcFactory::Instance().GetNpc(1);
+	npc->MapPosition(Point(10, 7));
+	mNpcHandler.AddNpc(npc);
 }
 
 GameLayer::~GameLayer()
@@ -27,6 +33,7 @@ GameLayer::~GameLayer()
 void GameLayer::OnUpdate()
 {
 	mMap->Update(mPlayer->MapPosition().z);
+	mNpcHandler.Update();
 	mPlayer->Update();
 	mPlayerUI->Update();
 }
@@ -34,6 +41,7 @@ void GameLayer::OnUpdate()
 void GameLayer::OnRender()
 {
 	mMap->Render(mPlayer->MapPosition().z);
+	mNpcHandler.Render();
 	mPlayer->Render();
 	mPlayerUI->Render();
 }

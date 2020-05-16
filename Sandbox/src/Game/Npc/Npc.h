@@ -26,5 +26,9 @@ public:
 	inline std::string Name() const { return mNpcDefinition->Name(); }
 	inline std::vector<std::string> Actions() const { return mNpcDefinition->Actions(); }
 
+	inline virtual bool Dead() const { return false; }
+
+	inline Square::Vector2 Size() const { return mSprite->ScaledDimensions(); }
+
 	void Render();
 };

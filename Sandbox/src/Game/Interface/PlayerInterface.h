@@ -38,7 +38,7 @@ private:
 	void HandleInteraction();
 
 public:
-	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map);
+	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map, NpcHandler& npcHandler);
 	~PlayerInterface();
 
 	void Update();

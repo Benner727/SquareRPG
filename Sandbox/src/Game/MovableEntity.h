@@ -26,6 +26,8 @@ public:
 	virtual ~MovableEntity() = default;
 
 	inline Point MapPosition() const { return mMapPosition; }
+	void MapPosition(Point p);
+
 	inline std::list<Point> CurrentPath() const { return mCurrentPath; }
 	
 	void MoveTo(Point point);

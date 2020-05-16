@@ -14,6 +14,7 @@ private:
 	std::shared_ptr<Player> mPlayer;
 	PlayerInterface* mPlayerUI;
 	std::shared_ptr<Map> mMap;
+	NpcHandler mNpcHandler;
 
 public:
 
