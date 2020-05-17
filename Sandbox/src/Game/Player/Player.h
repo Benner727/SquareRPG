@@ -8,21 +8,16 @@
 #include "Game/Player/Gear.h"
 #include "Game/Player/Magic/StandardSpellBook.h"
 #include "Game/Player/Prayer/StandardPrayerBook.h"
+#include "Game/Player/CombatStance.h"
 #include "Game/MovableEntity.h"
 #include "Game/Actions/IAction.h"
-
-enum class CombatOption {
-	melee_accurate, melee_aggressive, melee_defensive, melee_controlled,
-	ranged_accurate, ranged_rapid, ranged_longrange,
-	magic_standard, magic_defensive
-};
 
 class Player : public MovableEntity
 {
 private:
 	Square::Sprite* mSprite;
 
-	CombatOption mCombatStance;
+	CombatStance mCombatStance;
 	bool mAutoAttack;
 
 	std::shared_ptr<Square::GameObject> mTarget;
@@ -33,6 +28,7 @@ private:
 	float mDrinkDelay;
 
 	bool mInCombat;
+	float mCombatTimer;
 	float mCombatDelay;
 
 	Skills mSkills;
@@ -64,8 +60,7 @@ public:
 
 	void SetAction(IAction* action);
 
-	inline CombatOption CombatStance() const { return mCombatStance; }
-	inline void CombatStance(CombatOption combatStance) { mCombatStance = combatStance; }
+	inline CombatStance& GetCombatStance() { return mCombatStance; }
 
 	inline bool AutoAttack() const { return mAutoAttack; }
 	inline void AutoAttack(bool autoAttack) { mAutoAttack = autoAttack; }
@@ -79,7 +74,7 @@ public:
 	inline bool HasDrinkDelay() const { return (mDrinkDelay > 0.0f); }
 	void SetDrinkDelay();
 
-	inline void InCombat(bool inCombat) { mInCombat = inCombat; }
+	inline void InCombat(bool inCombat) { mInCombat = inCombat; if (inCombat) mCombatTimer = 10.0f; }
 	inline bool HasCombatDelay() const { return (mCombatDelay > 0.0f); }
 	void SetCombatDelay();
 

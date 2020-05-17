@@ -26,7 +26,7 @@ protected:
 
 	std::vector<Square::Sprite*> mIcons;
 	std::vector<Square::Vector2> mSlotPos;
-	int mItemSize;
+	Square::Vector2 mItemSize;
 
 	std::string mCurrentAction;
 	int mSelectedSlot;
@@ -49,8 +49,10 @@ protected:
 	virtual void Swap(int slotOne, int slotTwo) = 0;
 	virtual std::shared_ptr<Square::GameObject> GetSlot(int slot, bool includeActive = true) = 0;
 
+	virtual void PrivateUpdate() {}
+
 public:
-	IMenuTab(std::string backgroundPath, int itemSize, bool canDrag = false, bool hasHover = false);
+	IMenuTab(std::string backgroundPath, Square::Vector2 itemSize, bool canDrag = false, bool hasHover = false);
 	virtual ~IMenuTab();
 
 	inline bool InUse() const { return mInUse; }

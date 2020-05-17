@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "Game/Commands/AutoAttackCommand.h"
+#include "Game/Commands/AttackCommand.h"
 #include "Game/Commands/DrinkCommand.h"
 #include "Game/Commands/DropCommand.h"
 #include "Game/Commands/EatCommand.h"
@@ -41,7 +41,7 @@ public:
 	CommandManager(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 		: mPlayer(player), mMap(map)
 	{
-		mCommands["Attack"] = new AutoAttackCommand(mPlayer);
+		mCommands["Attack"] = new AttackCommand(mPlayer, mMap);
 		mCommands["Drink"] = new DrinkCommand(mPlayer);
 		mCommands["Drop"] = new DropCommand(mPlayer, mMap);
 		mCommands["Eat"] = new EatCommand(mPlayer);

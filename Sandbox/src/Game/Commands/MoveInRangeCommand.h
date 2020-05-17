@@ -6,7 +6,7 @@
 
 #include <list>
 
-class MoveCommand : public ICommand
+class MoveInRangeCommand : public ICommand
 {
 private:
 	std::shared_ptr<Player> mPlayer;
@@ -14,13 +14,13 @@ private:
 	std::list<Point> mPath;
 
 public:
-	MoveCommand(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
+	MoveInRangeCommand(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
 	{
 		mPlayer = player;
 		mMap = map;
 	}
 
-	~MoveCommand() = default;
+	~MoveInRangeCommand() = default;
 
 	bool CanExecute()
 	{
@@ -33,13 +33,8 @@ public:
 			target.y = mPlayer->Target()->Pos().y / 32.0f;
 			target.z = mPlayer->MapPosition().z;
 
-			if (mPlayer->MapPosition() == target)
-				mPath.push_back(target);
-			else
-			{
-				static PathFinder pathFinder(*mMap);
-				mPath = pathFinder.GeneratePath(mPlayer->MapPosition(), target);
-			}
+			static PathFinder pathFinder(*mMap);
+			mPath = pathFinder.GeneratePath(mPlayer->MapPosition(), target);
 		}
 
 		return (mPath.size() > 0);
@@ -47,6 +42,13 @@ public:
 
 	void Execute()
 	{
+		int range = 1;
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::weapon).get()))
+			range = weapon->Reach();
+
+		for (int i = 0; i < range; i++)
+			mPath.pop_back();
+
 		mPlayer->SetAction(nullptr);
 		mPlayer->PathTo(mPath);
 		mPlayer->Target(nullptr);

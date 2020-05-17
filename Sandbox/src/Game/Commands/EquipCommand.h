@@ -98,6 +98,18 @@ public:
 			mPlayer->CalculateBonuses();
 		}
 
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
+		{
+			if (weapon->IsRanged())
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::ranged);
+			else if (weapon->Casts())
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::magic);
+			else
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::melee);
+		}
+		else
+			mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::melee);
+
 		mPlayer->Inventory().ActiveSlot(-1);
 	}
 };

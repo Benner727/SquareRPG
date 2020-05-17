@@ -18,7 +18,11 @@ std::vector<std::shared_ptr<GridObject>> GameGrid::GetGridObjects(Square::Vector
 	{
 		for (const auto& action : npc->Actions())
 		{
-			mGridObjects.push_back(std::make_shared<GridObject>(action, npc));
+			std::string command = action + " -> " + npc->Name();
+			if (NpcFighter* npcFighter = dynamic_cast<NpcFighter*>(npc.get()))
+				command += " (Lvl " + std::to_string(npcFighter->Level()) + ")";
+
+			mGridObjects.push_back(std::make_shared<GridObject>(command, npc));
 		}
 	}
 

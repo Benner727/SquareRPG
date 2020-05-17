@@ -8,6 +8,8 @@ class StatsInterface : public IMenuTab
 private:
 	Skills& mSkills;
 
+	int mExperience;
+
 	std::string GetAction();
 
 	void CreateActionMenu();

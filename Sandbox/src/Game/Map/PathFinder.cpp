@@ -147,3 +147,64 @@ std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
 
 	return path;
 }
+
+bool PathFinder::InAttackRange(const Map& map, Point p1, Point p2, int range)
+{
+	std::vector<Point> points;
+
+	int dx = p2.x - p1.x;
+	// if x1 == x2, then it does not matter what we set here
+	int ix((dx > 0) - (dx < 0));
+
+	dx = abs(dx) << 1;
+
+	int dy = p2.y - p1.y;
+	// if y1 == y2, then it does not matter what we set here
+	int iy((dy > 0) - (dy < 0));
+	dy = abs(dy) << 1;
+
+	if (dx >= dy)
+	{
+		// error may go below zero
+		int error(dy - (dx >> 1));
+
+		while (p1.x != p2.x)
+		{
+			if ((error >= 0) && (error || (ix > 0)))
+			{
+				error -= dx;
+				p1.y += iy;
+			}
+			// else do nothing
+
+			error += dy;
+			p1.x += ix;
+
+			if (map.TileCanAttackOver(p1)) points.push_back(p1);
+			else return false;
+		}
+	}
+	else
+	{
+		// error may go below zero
+		int error(dx - (dy >> 1));
+
+		while (p1.y != p2.y)
+		{
+			if ((error >= 0) && (error || (iy > 0)))
+			{
+				error -= dy;
+				p1.x += ix;
+			}
+			// else do nothing
+
+			error += dx;
+			p1.y += iy;
+
+			if (map.TileCanAttackOver(p1)) points.push_back(p1);
+			else return false;
+		}
+	}
+
+	return points.size() <= range;
+}

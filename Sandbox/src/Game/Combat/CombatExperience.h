@@ -3,10 +3,13 @@
 #include "Game/Player/Player.h"
 
 const int BASE_COMBAT_EXP = 12;
+const int BASE_HITPOINTS_EXP = 4;
 
 inline void AddCombatExperience(Player* player, int damage)
 {
-	switch (player->CombatStance())
+	player->Skills().AddExperience(Skills::SkillIndex::hitpoints, damage * BASE_HITPOINTS_EXP);
+
+	switch (player->GetCombatStance().Get())
 	{
 	case CombatOption::melee_accurate:
 		player->Skills().AddExperience(Skills::SkillIndex::attack, damage * BASE_COMBAT_EXP);

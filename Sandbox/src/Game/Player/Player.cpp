@@ -8,13 +8,13 @@ Player::Player()
 	mSpellBook = new StandardSpellBook();
 	mPrayerBook = new StandardPrayerBook();
 
-	mCombatStance = CombatOption::melee_accurate;
 	mTarget = nullptr;
 
 	mEatDelay = 0.0f;
 	mDrinkDelay = 0.0f;
 
 	mInCombat = false;
+	mCombatTimer = 0.0f;
 	mCombatDelay = 0.0f;
 
 	mAction = nullptr;
@@ -78,6 +78,12 @@ void Player::HandleDelays()
 
 	if (mCombatDelay > 0.0f)
 		mCombatDelay -= Square::Timer::Instance().DeltaTime();
+
+	if (mInCombat)
+	{
+		mCombatTimer -= Square::Timer::Instance().DeltaTime();
+		mInCombat = (mCombatTimer > 0.0f);
+	}
 }
 
 void Player::HandlePrayer()

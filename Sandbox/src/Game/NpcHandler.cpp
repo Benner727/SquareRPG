@@ -35,14 +35,12 @@ std::vector<std::shared_ptr<Npc>> NpcHandler::GetPos(Square::Vector2 pos, int z)
 		}
 	}
 
-	//std::cout << npcs.size() << std::endl;
-
 	return npcs;
 }
 
 void NpcHandler::Update()
 {
-	for (auto npcs : mNpcs)
+	for (auto& npcs : mNpcs)
 	{
 		for (std::vector<std::shared_ptr<Npc>>::iterator it = npcs.second.begin(); it != npcs.second.end();)
 		{

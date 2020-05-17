@@ -9,7 +9,7 @@ Map::Map()
 		for (int x = 0; x < 256; x++)
 		{
 			std::vector<std::string> actions = { "Walk Here" };
-			cells[0].push_back(new Cell(std::make_shared<Tile>(true, false, new Square::Sprite("Tile.png"), nullptr, actions)));
+			cells[0].push_back(new Cell(std::make_shared<Tile>(true, true, new Square::Sprite("Tile.png"), nullptr, actions)));
 		}
 	}
 

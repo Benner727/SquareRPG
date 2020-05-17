@@ -13,6 +13,11 @@ MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 	AddButton("Stats");
 	AddButton("Combat");
 
+	mTabs["Combat"] = new CombatInterface(*mPlayer);
+	mTabs["Combat"]->Parent(this);
+	mTabs["Combat"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Combat"]->Height()));
+	mTabs["Combat"]->Active(false);
+
 	mTabs["Stats"] = new StatsInterface(mPlayer->Skills());
 	mTabs["Stats"]->Parent(this);
 	mTabs["Stats"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Stats"]->Height()));
@@ -162,6 +167,16 @@ void MenuTabsInterface::UpdateStats()
 	}
 }
 
+void MenuTabsInterface::UpdateCombat()
+{
+	mTabs["Combat"]->Update();
+
+	if (mTabs["Combat"]->Active())
+	{
+		mCommand = mTabs["Combat"]->CurrentAction();
+	}
+}
+
 bool MenuTabsInterface::ContainsClick() const
 {
 	for (const auto& button : mButtons)
@@ -191,6 +206,7 @@ void MenuTabsInterface::Update()
 	UpdatePrayer();
 	UpdateMagic();
 	UpdateStats();
+	UpdateCombat();
 }
 
 void MenuTabsInterface::Render()

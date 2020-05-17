@@ -47,4 +47,5 @@ public:
 	
 	std::list<Point> GeneratePath(Point source, Point destination);
 
+	static bool InAttackRange(const Map& map, Point p1, Point p2, int range);
 };
