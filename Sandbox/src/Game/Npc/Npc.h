@@ -30,5 +30,6 @@ public:
 
 	inline Square::Vector2 Size() const { return mSprite->ScaledDimensions(); }
 
+	void Update();
 	void Render();
 };

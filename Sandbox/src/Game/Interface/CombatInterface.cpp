@@ -3,13 +3,27 @@
 CombatInterface::CombatInterface(Player& player)
 	: IMenuTab("Graphics/panel_brown.png", { 75, 40 }, false, false), mPlayer(player)
 {
-	mSlotPos.push_back({ 60, 85 });
-	mSlotPos.push_back({ 150, 85 });
+	mSlotPos.push_back({ 60, 100 });
+	mSlotPos.push_back({ 150, 100 });
 	mSlotPos.push_back({ 60, 160 });
 	mSlotPos.push_back({ 150, 160 });
 
+	mWeaponText = "";
+	mWeaponSprite = nullptr;
+
+	mCombatLevelText = "";
+	mCombatLevelSprite = nullptr;
+
+	UpdateText();
+
 	mCurrentCombatStyle = CombatStyle::none;
 	PrivateUpdate();
+}
+
+CombatInterface::~CombatInterface()
+{
+	delete mWeaponSprite;
+	delete mCombatLevelSprite;
 }
 
 
@@ -71,6 +85,33 @@ std::shared_ptr<Square::GameObject> CombatInterface::GetSlot(int slot, bool incl
 	return button;
 }
 
+void CombatInterface::UpdateText()
+{
+	std::string weaponText = "Unarmed";
+	if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer.Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
+		weaponText = weapon->Name();
+
+	if (mWeaponText != weaponText)
+	{
+		mWeaponText = weaponText;
+		delete mWeaponSprite;
+		mWeaponSprite = new Square::Text(mWeaponText, "Font/VeraMono.ttf", 16, { 255, 255, 255, 255 });
+		mWeaponSprite->Parent(this);
+		mWeaponSprite->Pos(Square::Vector2(104.0f, 25.0f));
+	}
+
+	std::string combatLevelText = "Combat Level: " + std::to_string(mPlayer.Skills().CombatLevel());
+	
+	if (mCombatLevelText != combatLevelText)
+	{
+		mCombatLevelText = combatLevelText;
+		delete mCombatLevelSprite;
+		mCombatLevelSprite = new Square::Text(mCombatLevelText, "Font/VeraMono.ttf", 12, { 255, 255, 255, 255 });
+		mCombatLevelSprite->Parent(this);
+		mCombatLevelSprite->Pos(Square::Vector2(104.0f, 50.0f));
+	}
+}
+
 void CombatInterface::MeleeSetup()
 {
 	mCombatButtons.clear();
@@ -115,6 +156,8 @@ void CombatInterface::MagicSetup()
 
 void CombatInterface::PrivateUpdate()
 {
+	UpdateText();
+
 	if (mCurrentCombatStyle != mPlayer.GetCombatStance().GetCombatStyle())
 	{
 		mCurrentCombatStyle = mPlayer.GetCombatStance().GetCombatStyle();
@@ -134,6 +177,12 @@ void CombatInterface::PrivateUpdate()
 			MeleeSetup();
 		}
 	}
+}
+
+void CombatInterface::PrivateRender()
+{
+	if (mWeaponSprite) mWeaponSprite->Render(true);
+	if (mCombatLevelSprite) mCombatLevelSprite->Render(true);
 }
 
 std::shared_ptr<Square::GameObject> CombatInterface::GetSlot(Square::Vector2 pos, bool includeActive)

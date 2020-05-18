@@ -1,14 +1,14 @@
 #include "NpcHandler.h"
 
-NpcHandler::NpcHandler(std::vector<std::shared_ptr<Npc>> npcs)
+NpcHandler::NpcHandler(std::vector<std::shared_ptr<NpcController>> npcs)
 {
 	for (auto npc : npcs)
 		AddNpc(npc);
 }
 
-void NpcHandler::AddNpc(std::shared_ptr<Npc> npc)
+void NpcHandler::AddNpc(std::shared_ptr<NpcController> npc)
 {
-	mNpcs[npc->MapPosition()].push_back(npc);
+	mNpcs[npc->GetNpc()->MapPosition()].push_back(npc);
 }
 
 std::vector<std::shared_ptr<Npc>> NpcHandler::GetPos(Square::Vector2 pos, int z)
@@ -26,11 +26,14 @@ std::vector<std::shared_ptr<Npc>> NpcHandler::GetPos(Square::Vector2 pos, int z)
 			s.y += y;
 			for (int i = 0; i < mNpcs[s].size(); i++)
 			{
-				if (pos.x <= mNpcs[s][i]->Pos().x + mNpcs[s][i]->Size().x * 0.5f &&
-					pos.x >= mNpcs[s][i]->Pos().x - mNpcs[s][i]->Size().x * 0.5f &&
-					pos.y <= mNpcs[s][i]->Pos().y + mNpcs[s][i]->Size().y * 0.5f &&
-					pos.y >= mNpcs[s][i]->Pos().y - mNpcs[s][i]->Size().y * 0.5f)
-					npcs.push_back(mNpcs[s][i]);
+				if (mNpcs[s][i]->GetNpc() != nullptr)
+				{
+					if (pos.x <= mNpcs[s][i]->GetNpc()->Pos().x + mNpcs[s][i]->GetNpc()->Size().x * 0.5f &&
+						pos.x >= mNpcs[s][i]->GetNpc()->Pos().x - mNpcs[s][i]->GetNpc()->Size().x * 0.5f &&
+						pos.y <= mNpcs[s][i]->GetNpc()->Pos().y + mNpcs[s][i]->GetNpc()->Size().y * 0.5f &&
+						pos.y >= mNpcs[s][i]->GetNpc()->Pos().y - mNpcs[s][i]->GetNpc()->Size().y * 0.5f)
+						npcs.push_back(mNpcs[s][i]->GetNpc());
+				}
 			}
 		}
 	}
@@ -40,21 +43,27 @@ std::vector<std::shared_ptr<Npc>> NpcHandler::GetPos(Square::Vector2 pos, int z)
 
 void NpcHandler::Update()
 {
+	std::vector<std::shared_ptr<NpcController>> npcList;
+
 	for (auto& npcs : mNpcs)
 	{
-		for (std::vector<std::shared_ptr<Npc>>::iterator it = npcs.second.begin(); it != npcs.second.end();)
+		for (std::vector<std::shared_ptr<NpcController>>::iterator it = npcs.second.begin(); it != npcs.second.end();)
 		{
-			if ((*it)->Dead())
+			(*it)->Update();
+			if ((*it)->NewPosition())
 			{
+				npcList.push_back(*it);
 				it = npcs.second.erase(it);
 			}
 			else
 			{
-				(*it)->Update();
 				++it;
 			}
 		}
 	}
+
+	for (auto& npc : npcList)
+		AddNpc(npc);
 }
 
 void NpcHandler::Render()

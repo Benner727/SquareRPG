@@ -7,21 +7,30 @@ CombatAction::CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> 
 {
 	mTarget = std::dynamic_pointer_cast<NpcFighter>(mPlayer->Target());
 
+	MoveInRange();
+}
+
+bool CombatAction::MoveInRange()
+{
 	int range = 1;
 	if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::weapon).get()))
 		range = weapon->Reach();
 
 	if (!PathFinder::InAttackRange(*mMap, mPlayer->MapPosition(), mTarget->MapPosition(), range))
-		Invoke(new MoveInRangeCommand(mPlayer, mMap));
+	{
+		if (mPlayer->CurrentPath().empty())
+			Invoke(new MoveInRangeCommand(mPlayer, mMap));
+
+		return true;
+	}
+
+	return false;
 }
 
 void CombatAction::Update()
 {
-	if (mPlayer->CurrentPath().empty())
-	{
-		if (!mPlayer->HasCombatDelay())
-			Invoke(new AutoAttackCommand(mPlayer, mTarget));
+	if (!MoveInRange() && !mPlayer->HasCombatDelay())
+		Invoke(new AutoAttackCommand(mPlayer, mTarget));
 
-		mComplete = mTarget->Dead();
-	}
+	mComplete = mTarget->Dead();
 }

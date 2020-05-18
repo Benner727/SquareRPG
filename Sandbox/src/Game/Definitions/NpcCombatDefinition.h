@@ -33,6 +33,7 @@ private:
 	int mHitpoints;
 	int mMaxHit;
 	float mAttackSpeed;
+	int mAttackRange;
 	int mCombatStyle;
 	int mWeakness;
 	std::array<int, NpcStats::TOTAL_STATS> mStats;
@@ -40,7 +41,7 @@ private:
 
 	NpcCombatDefinition(int index, float respawnTime, bool aggressive, 
 		bool poisonous, int level, int hitpoints, int maxHit, 
-		float attackSpeed, int combatStyles, int weakness,
+		float attackSpeed, int attackRange, int combatStyles, int weakness,
 		std::array<int, NpcStats::TOTAL_STATS> stats, std::array<int, NpcBonus::TOTAL_BONUSES> bonuses)
 	{
 		mIndex = index;
@@ -51,6 +52,7 @@ private:
 		mHitpoints = hitpoints;
 		mMaxHit = maxHit;
 		mAttackSpeed = attackSpeed;
+		mAttackRange = attackRange;
 		mCombatStyle = combatStyles;
 		mWeakness = weakness;
 		mStats = stats;
@@ -70,6 +72,7 @@ public:
 	inline int Hitpoints() const { return mHitpoints; }
 	inline int MaxHit() const { return mMaxHit; }
 	inline float AttackSpeed() const { return mAttackSpeed; }
+	inline int AttackRange() const { return mAttackRange; }
 	inline int CombatStyle() const { return mCombatStyle; }
 	inline int Weakness() const { return mWeakness; }
 	inline std::array<int, NpcStats::TOTAL_STATS> Stats() const { return mStats; }

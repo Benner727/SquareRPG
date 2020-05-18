@@ -50,6 +50,7 @@ protected:
 	virtual std::shared_ptr<Square::GameObject> GetSlot(int slot, bool includeActive = true) = 0;
 
 	virtual void PrivateUpdate() {}
+	virtual void PrivateRender() {}
 
 public:
 	IMenuTab(std::string backgroundPath, Square::Vector2 itemSize, bool canDrag = false, bool hasHover = false);

@@ -24,17 +24,19 @@ Skills::Skills()
 
 	if (mSkills.size() != SkillIndex::TOTAL_SKILLS)
 		LOG(ERROR) << "Skills size do nat match.";
+
+	CalculateCombatLevel();
 }
 
 void Skills::CalculateCombatLevel()
 {
-	int base = (mSkills[SkillIndex::defense]->Level() + mSkills[SkillIndex::hitpoints]->Level() + floor(mSkills[SkillIndex::prayer]->Level() * 0.5f)) * 0.25f;
+	float base = (mSkills[SkillIndex::defense]->Level() + mSkills[SkillIndex::hitpoints]->Level() + floor(mSkills[SkillIndex::prayer]->Level() * 0.5f)) * 0.25f;
 
-	int melee = (mSkills[SkillIndex::attack]->Level() + mSkills[SkillIndex::strength]->Level()) * 0.325f;
-	int range = (floor(mSkills[SkillIndex::ranged]->Level() * 1.5f)) * 0.325f;
-	int mage = (floor(mSkills[SkillIndex::magic]->Level() * 1.5f)) * 0.325f;
+	float melee = (mSkills[SkillIndex::attack]->Level() + mSkills[SkillIndex::strength]->Level()) * 0.325f;
+	float range = floor(mSkills[SkillIndex::ranged]->Level() * 1.5f) * 0.325f;
+	float mage = floor(mSkills[SkillIndex::magic]->Level() * 1.5f) * 0.325f;
 
-	mCombatLevel = base + std::max(melee, std::max(range, mage));
+	mCombatLevel = floor(base + std::max(melee, std::max(range, mage)));
 }
 
 void Skills::AddExperience(int skill, int amount)

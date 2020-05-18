@@ -13,6 +13,8 @@ private:
 
 	std::shared_ptr<NpcFighter> mTarget;
 
+	bool MoveInRange();
+
 public:
 	CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> map);
 

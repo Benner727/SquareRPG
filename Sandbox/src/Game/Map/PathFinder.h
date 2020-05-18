@@ -36,6 +36,8 @@ private:
 	std::list<Node> mOpenNodes;
 	std::list<Node> mClosedNodes;
 
+	bool mUseDiagonals;
+
 	bool CanWalkTo(Point p, int direction);
 	bool FillOpenNodes(Node& n);
 	bool UnviablePoint(Point p, int cost);
@@ -45,7 +47,7 @@ public:
 	PathFinder(const Map& map);
 	~PathFinder();
 	
-	std::list<Point> GeneratePath(Point source, Point destination);
+	std::list<Point> GeneratePath(Point source, Point destination, bool useDiagonals = true);
 
 	static bool InAttackRange(const Map& map, Point p1, Point p2, int range);
 };

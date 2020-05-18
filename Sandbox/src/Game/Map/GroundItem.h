@@ -22,10 +22,7 @@ public:
 			mActions.push_back(action + " -> " + mItem->Name());
 	}
 
-	~GroundItem()
-	{
-
-	}
+	~GroundItem() = default;
 
 	inline std::shared_ptr<Item> GetItem() const { return mItem; }
 	inline std::vector<std::string> Actions() const { return mActions; }

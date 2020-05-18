@@ -16,14 +16,13 @@ GameLayer::GameLayer()
 
 	mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(8));
 
-	mPlayer->MapPosition(Point(2, 2, 0));
+	mPlayer->MapPosition(Point(6, 2, 0));
 
 	mMap = std::make_shared<Map>();
 
 	mPlayerUI = new PlayerInterface(mPlayer, mMap, mNpcHandler);
 
-	std::shared_ptr<Npc> npc = NpcFactory::Instance().GetNpc(1);
-	npc->MapPosition(Point(4, 6));
+	std::shared_ptr<NpcController> npc = std::make_shared<NpcController>(1, Point(3, 3), mMap, mPlayer);
 	mNpcHandler.AddNpc(npc);
 }
 

@@ -26,7 +26,7 @@ public:
 		mExperience = experience;
 		mEffectiveLevel = effectiveLevel;
 		mLevel = level;
-		mUpdateTimer = 0.0f;
+		mUpdateTimer = 60.0f;
 
 		UpdateLevelText();
 	}

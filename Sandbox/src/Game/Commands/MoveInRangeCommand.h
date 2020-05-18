@@ -33,8 +33,27 @@ public:
 			target.y = mPlayer->Target()->Pos().y / 32.0f;
 			target.z = mPlayer->MapPosition().z;
 
-			static PathFinder pathFinder(*mMap);
-			mPath = pathFinder.GeneratePath(mPlayer->MapPosition(), target);
+			if (mPlayer->MapPosition() != target)
+			{
+				static PathFinder pathFinder(*mMap);
+				mPath = pathFinder.GeneratePath(mPlayer->MapPosition(), target, false);
+			}
+			else
+			{
+				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0 - 1} };
+				for (int i = 0; i < 4; i++)
+				{
+					if (Tile* tile = mMap->GetCell(target + direction[i])->GetTile().get())
+					{
+						if (tile->Walkable())
+						{
+							mPath.push_back(target + direction[i]);
+							mPath.push_back(target);
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		return (mPath.size() > 0);
@@ -46,11 +65,22 @@ public:
 		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::weapon).get()))
 			range = weapon->Reach();
 
-		for (int i = 0; i < range; i++)
-			mPath.pop_back();
+		Point target;
+		target.x = mPlayer->Target()->Pos().x / 32.0f;
+		target.y = mPlayer->Target()->Pos().y / 32.0f;
+		target.z = mPlayer->MapPosition().z;
 
-		mPlayer->SetAction(nullptr);
+		for (int i = 0; i < range; i++)
+		{
+			Point point = mPath.back();
+			mPath.pop_back();
+			if (!PathFinder::InAttackRange(*mMap, mPath.back(), target, range))
+			{
+				mPath.push_back(point);
+				break;
+			}
+		}
+
 		mPlayer->PathTo(mPath);
-		mPlayer->Target(nullptr);
 	}
 };

@@ -6,7 +6,7 @@
 #include "Game/Items/ItemFactory.h"
 #include "Game/Map/Map.h"
 #include "Game/Map/PathFinder.h"
-#include "Game/Player/Player.h"
+#include "Game/NpcController.h"
 
 class GameLayer : public Square::Layer
 {

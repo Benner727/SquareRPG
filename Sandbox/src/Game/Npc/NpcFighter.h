@@ -11,6 +11,8 @@ private:
 	NpcCombatDefinition* mNpcCombatDefinition;
 	NpcDropDefinition* mNpcDropDefinition;
 
+	std::shared_ptr<Square::GameObject> mTarget;
+
 	void Init()
 	{
 		mRemainingHitpoints = Hitpoints();
@@ -42,6 +44,7 @@ public:
 	inline int Hitpoints() const { return mNpcCombatDefinition->Hitpoints(); }
 	inline int MaxHit() const { return mNpcCombatDefinition->MaxHit(); }
 	inline float AttackSpeed() const { return mNpcCombatDefinition->AttackSpeed(); }
+	inline int AttackRange() const { return mNpcCombatDefinition->AttackRange(); }
 	inline int CombatStyle() const { return mNpcCombatDefinition->CombatStyle(); }
 	inline int Weakness() const { return mNpcCombatDefinition->Weakness(); }
 	inline std::array<int, NpcStats::TOTAL_STATS> Stats() const { return mStats; }
@@ -59,4 +62,7 @@ public:
 	inline void RestoreSkill(int skill) { mStats[skill] = mNpcCombatDefinition->Stats()[skill]; }
 
 	inline std::vector<WeightedDrop> Drops() const { return (mNpcDropDefinition != nullptr ? mNpcDropDefinition->Drops() : std::vector<WeightedDrop>()); }
+
+	inline void Target(std::shared_ptr<Square::GameObject> target) { mTarget = target; }
+	inline std::shared_ptr<Square::GameObject> Target() const { return mTarget; }
 };

@@ -74,7 +74,7 @@ struct Point
 		}
 	}
 
-	bool operator< (const Point& rhs) const
+	bool operator < (const Point& rhs) const
 	{
 		return x != rhs.x ? x < rhs.x : y < rhs.y;
 	}
@@ -82,6 +82,11 @@ struct Point
 	bool operator == (const Point& other)
 	{
 		return x == other.x && y == other.y && z == other.z;
+	}
+
+	bool operator != (const Point& other)
+	{
+		return x != other.x || y != other.y || z != other.z;
 	}
 
 	Point operator + (const Point& other)

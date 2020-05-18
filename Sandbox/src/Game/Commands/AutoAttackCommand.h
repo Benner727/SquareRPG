@@ -114,6 +114,7 @@ public:
 		mPlayer->InCombat(true);
 		mPlayer->SetCombatDelay();
 		mNpc->Damage(damage);
+		mNpc->Target(mPlayer);
 
 		std::cout << mNpc->RemainingHitpoints() << "/" << mNpc->Hitpoints() << std::endl;
 	}

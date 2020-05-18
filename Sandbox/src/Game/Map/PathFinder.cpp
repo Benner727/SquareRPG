@@ -16,7 +16,6 @@ bool PathFinder::CanWalkTo(Point p, int direction)
 	case Direction::west:
 		return mMap.TileWalkable(p + Point(-1, 0));
 		break;
-
 	case Direction::northeast:
 		return mMap.TileWalkable(p + Point(0, -1)) && mMap.TileWalkable(p + Point(1, 0)) && mMap.TileWalkable(p + Point(1, -1));
 		break;
@@ -38,7 +37,10 @@ bool PathFinder::FillOpenNodes(Node& n)
 	Point neighbor;
 	Node newNode;
 
-	for (int direction = 0; direction < Direction::TOTAL_DIRECTIONS; direction++)
+	int total_directions = 4;
+	if (mUseDiagonals) total_directions = 8;
+
+	for (int direction = 0; direction < total_directions; direction++)
 	{
 		if (CanWalkTo(n.position, direction))
 		{
@@ -100,10 +102,11 @@ PathFinder::~PathFinder()
 {
 }
 
-std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
+std::list<Point> PathFinder::GeneratePath(Point source, Point destination, bool useDiagonals)
 {
 	mStart = source;
 	mEnd = destination;
+	mUseDiagonals = useDiagonals;
 	std::list<Point> path;
 
 	mOpenNodes.clear();
@@ -150,6 +153,22 @@ std::list<Point> PathFinder::GeneratePath(Point source, Point destination)
 
 bool PathFinder::InAttackRange(const Map& map, Point p1, Point p2, int range)
 {
+	if (p1 == p2)
+		return false;
+
+	if (range == 1)
+	{
+		for (int direction = 0; direction < 4; direction++)
+		{
+			Point p = p2;
+			p.Translate(direction);
+			if (p1 == p)
+				return true;
+		}
+
+		return false;
+	}
+
 	std::vector<Point> points;
 
 	int dx = p2.x - p1.x;

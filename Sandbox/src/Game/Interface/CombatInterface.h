@@ -11,6 +11,12 @@ private:
 	std::vector<std::shared_ptr<CombatButton>> mCombatButtons;
 	CombatStyle mCurrentCombatStyle;
 
+	std::string mWeaponText;
+	Square::Text* mWeaponSprite;
+
+	std::string mCombatLevelText;
+	Square::Text* mCombatLevelSprite;
+
 	std::string GetAction();
 
 	void CreateActionMenu();
@@ -21,15 +27,18 @@ private:
 	inline void Swap(int slotOne, int slotTwo) { }
 	std::shared_ptr<Square::GameObject> GetSlot(int slot, bool includeActive = true);
 
+	void UpdateText();
+
 	void MeleeSetup();
 	void RangedSetup();
 	void MagicSetup();
 
 	void PrivateUpdate();
+	void PrivateRender();
 
 public:
 	CombatInterface(Player& player);
-	~CombatInterface() = default;
+	~CombatInterface();
 
 	std::shared_ptr<Square::GameObject> GetSlot(Square::Vector2 pos, bool includeActive = true);
 };

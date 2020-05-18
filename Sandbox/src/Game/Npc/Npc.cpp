@@ -14,6 +14,11 @@ Npc::~Npc()
 	delete mSprite;
 }
 
+void Npc::Update()
+{
+	HandleMovement();
+}
+
 void Npc::Render()
 {
 	mSprite->Render();

@@ -186,6 +186,7 @@ namespace CombatFormulas
 		rand.Init();
 
 		float chance = HitChance(attack, defense);
+		
 		return (rand.Float() <= chance);
 	}
 }

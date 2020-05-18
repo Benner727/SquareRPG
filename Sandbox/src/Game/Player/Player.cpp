@@ -20,6 +20,8 @@ Player::Player()
 	mAction = nullptr;
 
 	Pos(Square::Vector2(16.0, 16.0));
+
+	Run(true);
 }
 
 Player::~Player()

@@ -219,6 +219,8 @@ void IMenuTab::Render()
 			mIcons[i]->Render(true);
 	}
 
+	PrivateRender();
+
 	if (mActionsMenu) mActionsMenu->Render();
 	if (mTooltip) mTooltip->Render();
 }

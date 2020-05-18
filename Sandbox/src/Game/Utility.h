@@ -4,6 +4,11 @@
 #include <vector>
 #include <sstream>
 
+template <typename T> int sgn(T val)
+{
+	return (T(0) < val) - (val < T(0));
+}
+
 inline std::vector<std::string> DelimitedStringToVector(const std::string& str)
 {
 	std::vector<std::string> result;
