@@ -80,10 +80,10 @@ bool NpcController::MoveInRange()
 					if (!MoveTo(p))
 					{
 						p = mNpc->MapPosition();
-						if (abs(dx) <= abs(dy))
-							p.x -= sgn(dx);
-						else
+						if (abs(dx) > abs(dy))
 							p.y -= sgn(dy);
+						else
+							p.x -= sgn(dx);
 
 						MoveTo(p);
 					}
@@ -127,10 +127,7 @@ void NpcController::Update()
 	{
 		Point curPos = mNpc->MapPosition();
 
-		if (mNpc->CurrentPath().empty())
-			mNpc->MoveTo(mNpc->MapPosition() + Point(1, 0));
-
-		//HandleCombat();
+		HandleCombat();
 		mNpc->Update();
 
 		if (mNpc->Dead())

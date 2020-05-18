@@ -70,10 +70,11 @@ public:
 		target.y = mPlayer->Target()->Pos().y / 32.0f;
 		target.z = mPlayer->MapPosition().z;
 
-		for (int i = 0; i < range; i++)
+		for (int i = 0; i < range && mPath.size() > 1; i++)
 		{
 			Point point = mPath.back();
 			mPath.pop_back();
+			
 			if (!PathFinder::InAttackRange(*mMap, mPath.back(), target, range))
 			{
 				mPath.push_back(point);
