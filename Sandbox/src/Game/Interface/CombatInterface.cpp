@@ -1,7 +1,7 @@
 #include "CombatInterface.h"
 
 CombatInterface::CombatInterface(Player& player)
-	: IMenuTab("Graphics/panel_brown.png", { 75, 40 }, false, false), mPlayer(player)
+	: IMenuTab("Graphics/panel_brown.png", { 80, 40 }, false, false), mPlayer(player)
 {
 	mSlotPos.push_back({ 60, 100 });
 	mSlotPos.push_back({ 150, 100 });

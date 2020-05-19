@@ -22,10 +22,37 @@ void NpcController::SpawnNpc()
 	mNpc->MapPosition(mSpawnPoint);
 	mSpawnTimer = 0.0f;
 
+	mWanderTimer = 0.0f;
+
 	if (std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc))
 	{
 		mAttackDelay = npcFighter->AttackSpeed();
 		mSpawnTimer = npcFighter->RespawnTime();
+	}
+}
+
+void NpcController::Wander()
+{
+	if (!mInCombat && mNpc->CurrentPath().empty())
+	{
+		if (mWanderTimer <= 0.0f)
+		{
+			if (100.0f * Random::Float() <= 33.0f)
+			{
+				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0 - 1} };
+				Point pos = mNpc->MapPosition() + direction[rand() % 4];
+				if (Tile* tile = mMap->GetCell(pos)->GetTile().get())
+				{
+					if (tile->Walkable())
+						mNpc->MoveTo(pos);
+				}
+			}
+
+			if (rand() % 2)
+				mWanderTimer = 1.0f;
+		}
+		else
+			mWanderTimer -= Square::Timer::Instance().DeltaTime();
 	}
 }
 
@@ -119,6 +146,13 @@ void NpcController::HandleCombat()
 	}
 }
 
+void NpcController::HandleLoot()
+{
+	std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc);
+	for (auto& item : NpcDropFormula::Generate(npcFighter->Drops()))
+		mMap->GetCell(mNpc->MapPosition())->AddGroundItem(item);
+}
+
 void NpcController::Update()
 {
 	mNewPosition = false;
@@ -127,11 +161,13 @@ void NpcController::Update()
 	{
 		Point curPos = mNpc->MapPosition();
 
+		Wander();
 		HandleCombat();
 		mNpc->Update();
 
 		if (mNpc->Dead())
 		{
+			HandleLoot();
 			mNpc.reset();
 		}
 		else

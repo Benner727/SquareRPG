@@ -56,5 +56,10 @@ void MovableEntity::PathTo(std::list<Point> path)
 
 void MovableEntity::CancelMove()
 {
-	mCurrentPath.clear();
+	if (!mCurrentPath.empty())
+	{
+		Point point = mCurrentPath.front();
+		mCurrentPath.clear();
+		mCurrentPath.push_back(point);
+	}
 }

@@ -4,17 +4,10 @@ GameLayer::GameLayer()
 {
 	mPlayer = std::make_shared<Player>();
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 1; i < 10; i++)
 	{
-		mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(2));
-		mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(4));
+		mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(i));
 	}
-
-	mPlayer->Inventory().Remove(2);
-	mPlayer->Inventory().Remove(7);
-	mPlayer->Inventory().Remove(17);
-
-	mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(8));
 
 	mPlayer->MapPosition(Point(6, 2, 0));
 

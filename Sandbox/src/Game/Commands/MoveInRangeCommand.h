@@ -83,5 +83,6 @@ public:
 		}
 
 		mPlayer->PathTo(mPath);
+		mPlayer->Target(nullptr);
 	}
 };

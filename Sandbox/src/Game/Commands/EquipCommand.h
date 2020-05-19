@@ -66,7 +66,7 @@ public:
 				if (std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
 					unequipWeapon = weapon->TwoHanded();
 			}
-			else if (std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			else if (Weapon* weapon = dynamic_cast<Weapon*>(equipment.get()))
 				unequipShield = weapon->TwoHanded();
 
 			mPlayer->Inventory().SetNull(activeSlot);

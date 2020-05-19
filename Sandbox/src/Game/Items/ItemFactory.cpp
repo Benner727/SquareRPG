@@ -53,6 +53,7 @@ std::shared_ptr<Item> ItemFactory::GetItem(int index, int amount)
 
 	item->mItemDefinition = mItemRepository.FindItemDefinition(index);
 	item->mSprite = new Square::Sprite("Items/" + item->mItemDefinition->SpritePath());
+	item->mSprite->Scale(Square::Vector2(2.0f, 2.0f));
 	item->mSprite->Parent(item.get());
 
 	return item;

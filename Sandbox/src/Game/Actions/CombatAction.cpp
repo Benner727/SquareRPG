@@ -6,7 +6,7 @@ CombatAction::CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> 
 	: mPlayer(player), mMap(map)
 {
 	mTarget = std::dynamic_pointer_cast<NpcFighter>(mPlayer->Target());
-
+	mPlayer->CancelMove();
 	MoveInRange();
 }
 

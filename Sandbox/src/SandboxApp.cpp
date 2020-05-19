@@ -8,6 +8,8 @@ class Sandbox : public Square::Application
 public:
 	Sandbox()
 	{
+		Random::Init();
+
 		auto layer = new GameLayer();
 		PushLayer(layer);
 	}

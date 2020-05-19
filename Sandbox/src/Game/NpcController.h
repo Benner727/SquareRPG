@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Npc/NpcFactory.h"
+#include "Npc/NpcDropFormula.h"
 #include "Game/Commands/MoveInRangeCommand.h"
 #include "Game/Commands/NpcAttackCommand.h"
 #include "Game/Utility.h"
@@ -16,6 +17,8 @@ private:
 	Point mSpawnPoint;
 	float mSpawnTimer;
 
+	float mWanderTimer;
+
 	bool mInCombat;
 	float mAttackDelay;
 
@@ -25,10 +28,13 @@ private:
 
 	void SpawnNpc();
 	
+	void Wander();
+
 	bool MoveTo(Point p);
 	bool MoveInRange();
 
 	void HandleCombat();
+	void HandleLoot();
 
 public:
 	NpcController(int npcIndex, Point spawnPoint, std::shared_ptr<Map> map, std::shared_ptr<Player> player);
