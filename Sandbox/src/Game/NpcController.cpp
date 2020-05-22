@@ -7,6 +7,7 @@ NpcController::NpcController(int npcIndex, Point spawnPoint, std::shared_ptr<Map
 	mNewPosition = false;
 
 	SpawnNpc();
+	mNpcState = NpcState::Wandering;
 }
 
 void NpcController::Invoke(ICommand* command)
@@ -163,31 +164,59 @@ void NpcController::Update()
 	{
 		Point curPos = mNpc->MapPosition();
 
-		if (!mNpc->Dead())
-		{
-			Wander();
-			HandleCombat();
-		}
-
 		mNpc->Update();
 
-		if (mNpc->Dead())
+		switch (mNpcState)
 		{
+		case NpcState::Spawning:
+			if (mSpawnTimer <= 0.0f)
+			{
+				SpawnNpc();
+				mNpcState = NpcState::Wandering;
+			}
+			else
+				mSpawnTimer -= Square::Timer::Instance().DeltaTime();
+			break;
+		case NpcState::Wandering:
+			Wander();
+			if (mNpc->Dead()) mNpcState = NpcState::Dead;
+			else if (mNpc->InCombat()) mNpcState = NpcState::Fighting;
+			break;
+		case NpcState::Fighting:
+			HandleCombat();
+			if (mNpc->Dead()) mNpcState = NpcState::Dead;
+			else if (!mNpc->InCombat())
+			{
+				if (sqrt(pow(mSpawnPoint.x - mNpc->MapPosition().x, 2) +
+					pow(mSpawnPoint.y - mNpc->MapPosition().y, 2) * 1.0) >= 11.0f)
+				{
+					static PathFinder pathFinder(*mMap);
+					mNpc->PathTo(pathFinder.GeneratePath(mNpc->MapPosition(), mSpawnPoint));
+					mNpcState = NpcState::Returning;
+				}
+				else
+					mNpcState = NpcState::Wandering;
+			}
+			break;
+		case NpcState::Returning:
+			if (mNpc->CurrentPath().empty())
+			{
+				if (mNpc->InCombat()) mNpcState = NpcState::Fighting;
+				else mNpcState = NpcState::Wandering;
+			}
+			break;
+		case NpcState::Dead:
 			if (mDeathTimer <= 0.0f)
 			{
 				HandleLoot();
 				mNpc.reset();
+				mNpcState = NpcState::Spawning;
 			}
 			else
 				mDeathTimer -= Square::Timer::Instance().DeltaTime();
+			break;
 		}
-		else
-			mNewPosition = (curPos == mNpc->MapPosition());
 	}
-	else if (mSpawnTimer > 0.0f)
-		mSpawnTimer -= Square::Timer::Instance().DeltaTime();
-	else
-		SpawnNpc();
 }
 
 void NpcController::RenderNPC()

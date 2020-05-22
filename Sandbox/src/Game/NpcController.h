@@ -9,7 +9,8 @@
 class NpcController
 {
 private:
-	enum class NpcState {};
+	enum class NpcState { Spawning, Wandering, Fighting, Returning, Dead };
+	NpcState mNpcState;
 
 	std::shared_ptr<Npc> mNpc;
 	std::shared_ptr<Map> mMap;
@@ -30,7 +31,6 @@ private:
 	void Invoke(ICommand* command);
 
 	void SpawnNpc();
-	
 	void Wander();
 
 	bool MoveTo(Point p);
