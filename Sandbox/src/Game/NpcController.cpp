@@ -166,6 +166,9 @@ void NpcController::Update()
 
 		mNpc->Update();
 
+		if (curPos != mNpc->MapPosition())
+			mNewPosition = true;
+
 		switch (mNpcState)
 		{
 		case NpcState::Spawning:
