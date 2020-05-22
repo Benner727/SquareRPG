@@ -4,7 +4,6 @@ NpcController::NpcController(int npcIndex, Point spawnPoint, std::shared_ptr<Map
 	: mNpcIndex(npcIndex), mSpawnPoint(spawnPoint), mMap(map), mPlayer(player)
 {
 	mSpawnTimer = 0.0f;
-	mInCombat = false;
 	mNewPosition = false;
 
 	SpawnNpc();
@@ -22,29 +21,37 @@ void NpcController::SpawnNpc()
 	mNpc->MapPosition(mSpawnPoint);
 	mSpawnTimer = 0.0f;
 
+	mDeathTimer = 0.6f;
+
 	mWanderTimer = 0.0f;
 
 	if (std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc))
 	{
-		mAttackDelay = npcFighter->AttackSpeed();
+		mAttackDelay = 0.0f;
 		mSpawnTimer = npcFighter->RespawnTime();
 	}
 }
 
 void NpcController::Wander()
 {
-	if (!mInCombat && mNpc->CurrentPath().empty())
+	if (!mNpc->InCombat() && mNpc->CurrentPath().empty())
 	{
 		if (mWanderTimer <= 0.0f)
 		{
 			if (100.0f * Random::Float() <= 33.0f)
 			{
-				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0 - 1} };
+				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 				Point pos = mNpc->MapPosition() + direction[rand() % 4];
-				if (Tile* tile = mMap->GetCell(pos)->GetTile().get())
+
+				int dx = mSpawnPoint.x - pos.x;
+				int dy = mSpawnPoint.y - pos.y;
+
+				if (abs(dx) < 11 && abs(dy) < 11)
 				{
-					if (tile->Walkable())
+					if (mMap->TileWalkable(pos))
+					{
 						mNpc->MoveTo(pos);
+					}
 				}
 			}
 
@@ -58,13 +65,10 @@ void NpcController::Wander()
 
 bool NpcController::MoveTo(Point p)
 {
-	if (Tile* tile = mMap->GetCell(p)->GetTile().get())
+	if (mMap->TileWalkable(p))
 	{
-		if (tile->Walkable())
-		{
-			mNpc->MoveTo(p);
-			return true;
-		}
+		mNpc->MoveTo(p);
+		return true;
 	}
 
 	return false;
@@ -80,7 +84,7 @@ bool NpcController::MoveInRange()
 			{
 				if (mNpc->MapPosition() == mPlayer->MapPosition())
 				{
-					static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0 - 1} };
+					static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 					for (int i = 0; i < 4; i++)
 					{
 						if (Tile* tile = mMap->GetCell(mNpc->MapPosition() + direction[i])->GetTile().get())
@@ -126,9 +130,7 @@ bool NpcController::MoveInRange()
 
 void NpcController::HandleCombat()
 {
-	mInCombat = (std::dynamic_pointer_cast<NpcFighter>(mNpc)->Target() != nullptr);
-
-	if (mInCombat)
+	if (mNpc->InCombat())
 	{
 		std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc);
 
@@ -161,14 +163,23 @@ void NpcController::Update()
 	{
 		Point curPos = mNpc->MapPosition();
 
-		Wander();
-		HandleCombat();
+		if (!mNpc->Dead())
+		{
+			Wander();
+			HandleCombat();
+		}
+
 		mNpc->Update();
 
 		if (mNpc->Dead())
 		{
-			HandleLoot();
-			mNpc.reset();
+			if (mDeathTimer <= 0.0f)
+			{
+				HandleLoot();
+				mNpc.reset();
+			}
+			else
+				mDeathTimer -= Square::Timer::Instance().DeltaTime();
 		}
 		else
 			mNewPosition = (curPos == mNpc->MapPosition());
@@ -179,7 +190,13 @@ void NpcController::Update()
 		SpawnNpc();
 }
 
-void NpcController::Render()
+void NpcController::RenderNPC()
 {
 	if (mNpc) mNpc->Render();
+}
+
+
+void NpcController::RenderCombatUI()
+{
+	if (mNpc) mNpc->RenderHealthBar();
 }

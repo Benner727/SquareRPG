@@ -16,7 +16,7 @@ public:
 		mItem->Parent(this);
 		mItem->Pos(Square::VEC2_ZERO);
 
-		mLifeTimer = 30.0f;
+		mLifeTimer = 60.0f;
 
 		for (const auto& action : mItem->GroundActions())
 			mActions.push_back(action + " -> " + mItem->Name());

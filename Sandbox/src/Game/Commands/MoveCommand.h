@@ -25,6 +25,7 @@ public:
 	bool CanExecute()
 	{
 		mPath.clear();
+		mPlayer->CancelMove();
 
 		if (mMap && mPlayer->Target())
 		{

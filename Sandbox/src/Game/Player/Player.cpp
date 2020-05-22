@@ -78,12 +78,6 @@ void Player::HandleDelays()
 
 	if (mCombatDelay > 0.0f)
 		mCombatDelay -= Square::Timer::Instance().DeltaTime();
-
-	if (mInCombat)
-	{
-		mCombatTimer -= Square::Timer::Instance().DeltaTime();
-		mInCombat = (mCombatTimer > 0.0f);
-	}
 }
 
 void Player::HandlePrayer()
@@ -105,6 +99,14 @@ void Player::HandlePrayer()
 		if (mSkills.EffectiveLevel(Skills::SkillIndex::prayer) < 1)
 			mPrayerBook->ToggleAllOff();
 	}
+}
+
+void Player::CombatUpdate()
+{
+	Hitpoints(mSkills.Level(Skills::SkillIndex::hitpoints));
+	RemainingHitpoints(mSkills.EffectiveLevel(Skills::SkillIndex::hitpoints));
+
+	CombatEntity::Update();
 }
 
 void Player::CalculateBonuses()
@@ -130,6 +132,8 @@ void Player::Update()
 
 	HandleMovement();
 
+	CombatUpdate();
+
 	if (mAction)
 	{
 		mAction->Update();
@@ -146,4 +150,5 @@ void Player::Update()
 void Player::Render()
 {
 	mSprite->Render();
+	RenderHealthBar();
 }

@@ -7,3 +7,4 @@
 "Bronze Long Sword" 7 0 150 250 long_sword_bronze_icon.png "Equip" ""
 "Bronze 2h Sword" 8 0 250 350 two_hand_sword_bronze_icon.png "Equip" ""
 "Round Shield" 9 0 100 200 round_shield_icon.png "Equip" ""
+"Bones" 10 0 1 1 bones_icon.png "Bury" ""

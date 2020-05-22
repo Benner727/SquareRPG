@@ -23,6 +23,15 @@ Map::Map()
 	cells[0].at(4 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
 	cells[0].at(5 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
 
+	cells[0].at(10 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(10 + 6 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(10 + 7 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(11 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(11 + 7 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(12 + 5 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(12 + 6 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+	cells[0].at(12 + 7 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
+
 	mRegions.push_back(new Region(0, 0, cells));
 
 	Square::Graphics::Instance().SetLimit(Square::VEC2_ONE * mRegions.size() * Region::SIZE * 32.0f);
@@ -42,8 +51,11 @@ Cell* Map::GetCell(Point p) const
 	{
 		if (region->Contains(p))
 		{
-			cell = region->Cells(p.z)[p.x + p.y * Region::SIZE];
-			break;
+			if (!region->Cells(p.z).empty())
+			{
+				cell = region->Cells(p.z)[p.x + p.y * Region::SIZE];
+				break;
+			}
 		}
 	}
 
@@ -92,7 +104,7 @@ void Map::Update(int z)
 	{
 		for (auto cells : region->Cells(z))
 		{
-			cells->Update();
+			if (cells) cells->Update();
 		}
 	}
 }
@@ -103,7 +115,7 @@ void Map::Render(int z)
 	{
 		for (auto cells : region->Cells(z))
 		{
-			cells->Render();
+			if (cells) cells->Render();
 		}
 	}
 }

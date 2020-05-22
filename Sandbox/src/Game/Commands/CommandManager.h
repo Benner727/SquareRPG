@@ -13,6 +13,7 @@
 #include "Game/Commands/CastSpellCommand.h"
 #include "Game/Commands/MoveCommand.h"
 #include "Game/Commands/PickUpCommand.h"
+#include "Game/Commands/BuryCommand.h"
 
 class CommandManager
 {
@@ -53,6 +54,7 @@ public:
 		mCommands["Cast"] = new CastSpellCommand(mPlayer);
 		mCommands["Walk Here"] = new MoveCommand(mPlayer, mMap);
 		mCommands["Pick Up"] = new PickUpCommand(mPlayer, mMap);
+		mCommands["Bury"] = new BuryCommand(mPlayer);
 	}
 	
 	~CommandManager()

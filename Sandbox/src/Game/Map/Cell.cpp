@@ -38,6 +38,6 @@ void Cell::Render()
 {
 	mTile->Render();
 
-	for (auto groundItem : mGroundItems)
-		groundItem->Render();
+	for (std::vector<std::shared_ptr<GroundItem>>::reverse_iterator it = mGroundItems.rbegin(); it != mGroundItems.rend(); ++it)
+		(*it)->Render();
 }

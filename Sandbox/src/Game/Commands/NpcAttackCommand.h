@@ -56,9 +56,9 @@ public:
 			damage = std::min((int)((float)mNpc->MaxHit() * rand.Float()) + 1, mPlayer->Skills().EffectiveLevel(Skills::SkillIndex::hitpoints));
 		}
 
-		std::cout << "Npc hits: " << damage << std::endl;
-
 		mPlayer->InCombat(true);
-		mPlayer->Skills().TakeDamage(damage);
+		mPlayer->Damage(damage);
+
+		mNpc->InCombat(true);
 	}
 };

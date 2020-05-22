@@ -30,6 +30,7 @@ void Gear::Add(std::shared_ptr<Item> item)
 		if (std::shared_ptr<Equipment> equipment = std::dynamic_pointer_cast<Equipment>(item))
 		{
 			mItems[equipment->Slot()] = equipment;
+			equipment->Parent(nullptr);
 		}
 	}
 }
@@ -52,6 +53,7 @@ void Gear::Replace(int slot, std::shared_ptr<Item> item)
 	if (slot > -1 && slot < GEAR_SIZE)
 	{
 		mItems[slot] = item;
+		item->Parent(nullptr);
 	}
 }
 

@@ -40,17 +40,14 @@ public:
 			}
 			else
 			{
-				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0 - 1} };
+				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 				for (int i = 0; i < 4; i++)
 				{
-					if (Tile* tile = mMap->GetCell(target + direction[i])->GetTile().get())
+					if (mMap->TileWalkable(target + direction[i]))
 					{
-						if (tile->Walkable())
-						{
-							mPath.push_back(target + direction[i]);
-							mPath.push_back(target);
-							break;
-						}
+						mPath.push_back(target + direction[i]);
+						mPath.push_back(target);
+						break;
 					}
 				}
 			}
@@ -83,6 +80,5 @@ public:
 		}
 
 		mPlayer->PathTo(mPath);
-		mPlayer->Target(nullptr);
 	}
 };

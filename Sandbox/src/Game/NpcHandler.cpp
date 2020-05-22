@@ -66,11 +66,20 @@ void NpcHandler::Update()
 		AddNpc(npc);
 }
 
-void NpcHandler::Render()
+void NpcHandler::RenderNPC()
 {
 	for (auto npcs : mNpcs)
 	{
 		for (auto npc : npcs.second)
-			npc->Render();
+			npc->RenderNPC();
+	}
+}
+
+void NpcHandler::RenderCombatUI()
+{
+	for (auto npcs : mNpcs)
+	{
+		for (auto npc : npcs.second)
+			npc->RenderCombatUI();
 	}
 }

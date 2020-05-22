@@ -12,13 +12,10 @@ CombatAction::CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> 
 
 bool CombatAction::MoveTo(Point p)
 {
-	if (Tile* tile = mMap->GetCell(p)->GetTile().get())
+	if (mMap->TileWalkable(p))
 	{
-		if (tile->Walkable())
-		{
-			mPlayer->MoveTo(p);
-			return true;
-		}
+		mPlayer->MoveTo(p);
+		return true;
 	}
 
 	return false;
@@ -31,43 +28,49 @@ bool CombatAction::MoveInRange()
 		range = weapon->Reach();
 
 	if (!PathFinder::InAttackRange(*mMap, mPlayer->MapPosition(), mTarget->MapPosition(), range))
-		{
+	{
+		static Point target = mTarget->MapPosition();
 		if (mPlayer->CurrentPath().empty())
+		{
+			if (mPlayer->MapPosition() == mTarget->MapPosition())
 			{
-				if (mPlayer->MapPosition() == mTarget->MapPosition())
+				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+				for (int i = 0; i < 4; i++)
 				{
-					static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0 - 1} };
-					for (int i = 0; i < 4; i++)
+					if (mMap->TileWalkable(mPlayer->MapPosition() + direction[i]))
 					{
-						if (Tile* tile = mMap->GetCell(mPlayer->MapPosition() + direction[i])->GetTile().get())
-						{
-							if (tile->Walkable())
-							{
-								mPlayer->MoveTo(mPlayer->MapPosition() + direction[i]);
-								break;
-							}
-						}
+						mPlayer->MoveTo(mPlayer->MapPosition() + direction[i]);
+						break;
 					}
 				}
+			}
+			else
+			{
+				int dx = mPlayer->MapPosition().x - mTarget->MapPosition().x;
+				int dy = mPlayer->MapPosition().y - mTarget->MapPosition().y;
+
+				Point p = mPlayer->MapPosition();
+
+				if (abs(dx) > abs(dy))
+					p.x -= sgn(dx);
 				else
+					p.y -= sgn(dy);
+
+				if (!MoveTo(p))
 				{
-					int dx = mPlayer->MapPosition().x - mTarget->MapPosition().x;
-					int dy = mPlayer->MapPosition().y - mTarget->MapPosition().y;
-
-					Point p = mPlayer->MapPosition();
-
-					if (abs(dx) > abs(dy))
-						p.x -= sgn(dx);
-					else
-						p.y -= sgn(dy);
-
-					if (!MoveTo(p))
-						Invoke(new MoveInRangeCommand(mPlayer, mMap));
+					Invoke(new MoveInRangeCommand(mPlayer, mMap));
+					target = mTarget->MapPosition();
 				}
 			}
 		}
-		else
-			return false;
+		else if (mPlayer->CurrentPath().size() > 1 && target != mTarget->MapPosition())
+		{
+			Invoke(new MoveInRangeCommand(mPlayer, mMap));
+			target = mTarget->MapPosition();
+		}
+	}
+	else
+		return false;
 
 	return true;
 }

@@ -58,7 +58,8 @@ void Skills::AddExperience(int skill, int amount)
 
 	if (mSkills[skill]->Level() != level)
 	{
-		mSkills[skill]->EffectiveLevel(effectiveLevel);
+		if (SkillIndex::prayer != skill || mSkills[skill]->EffectiveLevel() > 0)
+			mSkills[skill]->EffectiveLevel(effectiveLevel);
 		mSkills[skill]->Level(level);
 
 		mSkills[skill]->UpdateLevelText();

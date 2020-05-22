@@ -17,6 +17,7 @@ Npc::~Npc()
 void Npc::Update()
 {
 	HandleMovement();
+	CombatEntity::Update();
 }
 
 void Npc::Render()

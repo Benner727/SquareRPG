@@ -58,6 +58,7 @@ void Inventory::Add(std::shared_ptr<Item> item)
 			if (mItems[i] == nullptr)
 			{
 				mItems[i] = item;
+				item->Parent(nullptr);
 				return;
 			}
 		}
@@ -82,6 +83,7 @@ void Inventory::Replace(int slot, std::shared_ptr<Item> item)
 	if (slot > -1 && slot < INVENTORY_SIZE)
 	{
 		mItems[slot] = item;
+		item->Parent(nullptr);
 	}
 }
 

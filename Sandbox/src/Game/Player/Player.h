@@ -9,16 +9,15 @@
 #include "Game/Player/Magic/StandardSpellBook.h"
 #include "Game/Player/Prayer/StandardPrayerBook.h"
 #include "Game/Player/CombatStance.h"
-#include "Game/MovableEntity.h"
+#include "Game/CombatEntity.h"
 #include "Game/Actions/IAction.h"
 
-class Player : public MovableEntity
+class Player : public CombatEntity
 {
 private:
 	Square::Sprite* mSprite;
 
 	CombatStance mCombatStance;
-	bool mAutoAttack;
 
 	std::shared_ptr<Square::GameObject> mTarget;
 
@@ -44,6 +43,8 @@ private:
 	void HandleDelays();
 	void HandlePrayer();
 
+	void CombatUpdate();
+
 public:
 	Player();
 	~Player();
@@ -62,8 +63,8 @@ public:
 
 	inline CombatStance& GetCombatStance() { return mCombatStance; }
 
-	inline bool AutoAttack() const { return mAutoAttack; }
-	inline void AutoAttack(bool autoAttack) { mAutoAttack = autoAttack; }
+	inline void Damage(int amount) override { CombatEntity::Damage(amount); mSkills.TakeDamage(amount); }
+	inline void Heal(int amount) override { CombatEntity::Heal(amount); mSkills.Heal(amount); }
 
 	inline void Target(std::shared_ptr<Square::GameObject> target) { mTarget = target; }
 	inline std::shared_ptr<Square::GameObject> Target() const { return mTarget; }
@@ -74,15 +75,12 @@ public:
 	inline bool HasDrinkDelay() const { return (mDrinkDelay > 0.0f); }
 	void SetDrinkDelay();
 
-	inline void InCombat(bool inCombat) { mInCombat = inCombat; if (inCombat) mCombatTimer = 10.0f; }
 	inline bool HasCombatDelay() const { return (mCombatDelay > 0.0f); }
 	void SetCombatDelay();
 
 	inline void ResetDelays() { mCombatDelay = mEatDelay = mDrinkDelay = 0.0f; }
 
 	void CalculateBonuses();
-
-	inline bool Dead() const { return mSkills.EffectiveLevel(Skills::SkillIndex::hitpoints) < 1; }
 
 	void Update();
 	void Render();

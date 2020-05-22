@@ -6,9 +6,11 @@
 #include "Game/Commands/NpcAttackCommand.h"
 #include "Game/Utility.h"
 
-class NpcController : public Square::GameObject
+class NpcController
 {
 private:
+	enum class NpcState {};
+
 	std::shared_ptr<Npc> mNpc;
 	std::shared_ptr<Map> mMap;
 	std::shared_ptr<Player> mPlayer;
@@ -17,9 +19,10 @@ private:
 	Point mSpawnPoint;
 	float mSpawnTimer;
 
+	float mDeathTimer;
+
 	float mWanderTimer;
 
-	bool mInCombat;
 	float mAttackDelay;
 
 	bool mNewPosition;
@@ -45,5 +48,7 @@ public:
 	inline bool NewPosition() const { return mNewPosition; }
 
 	void Update();
-	void Render();
+
+	void RenderNPC();
+	void RenderCombatUI();
 };

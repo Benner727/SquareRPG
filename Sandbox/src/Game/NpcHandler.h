@@ -18,5 +18,7 @@ public:
 	std::vector<std::shared_ptr<Npc>> GetPos(Square::Vector2 pos, int z);
 
 	void Update();
-	void Render();
+	
+	void RenderNPC();
+	void RenderCombatUI();
 };

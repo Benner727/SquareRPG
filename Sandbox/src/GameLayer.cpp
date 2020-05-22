@@ -35,7 +35,10 @@ void GameLayer::OnUpdate()
 void GameLayer::OnRender()
 {
 	mMap->Render(mPlayer->MapPosition().z);
-	mNpcHandler.Render();
+	
+	mNpcHandler.RenderNPC();
 	mPlayer->Render();
+	mNpcHandler.RenderCombatUI();
+
 	mPlayerUI->Render();
 }
