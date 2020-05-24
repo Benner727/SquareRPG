@@ -75,58 +75,64 @@ bool NpcController::MoveTo(Point p)
 	return false;
 }
 
+void NpcController::MoveOffPlayer()
+{
+	static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+	for (int i = 0; i < 4; i++)
+	{
+		if (MoveTo(mNpc->MapPosition() + direction[i]))
+			break;
+	}
+}
+
+void NpcController::MoveTowardsPlayer()
+{
+	int dx = mNpc->MapPosition().x - mPlayer->MapPosition().x;
+	int dy = mNpc->MapPosition().y - mPlayer->MapPosition().y;
+
+	Point p = mNpc->MapPosition();
+	if (abs(dx) > abs(dy))
+		p.x -= sgn(dx);
+	else
+		p.y -= sgn(dy);
+
+	if (!MoveTo(p))
+	{
+		p = mNpc->MapPosition();
+		if (abs(dx) > abs(dy))
+			p.y -= sgn(dy);
+		else
+			p.x -= sgn(dx);
+
+		MoveTo(p);
+	}
+}
+
 bool NpcController::MoveInRange()
 {
-	if (std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc))
+	std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc);
+
+	if (!PathFinder::InAttackRange(*mMap, mNpc->MapPosition(), mPlayer->MapPosition(), npcFighter->AttackRange()))
 	{
-		if (!PathFinder::InAttackRange(*mMap, mNpc->MapPosition(), mPlayer->MapPosition(), npcFighter->AttackRange()))
+		if (mNpc->CurrentPath().empty())
 		{
-			if (mNpc->CurrentPath().empty())
-			{
-				if (mNpc->MapPosition() == mPlayer->MapPosition())
-				{
-					static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
-					for (int i = 0; i < 4; i++)
-					{
-						if (Tile* tile = mMap->GetCell(mNpc->MapPosition() + direction[i])->GetTile().get())
-						{
-							if (tile->Walkable())
-							{
-								mNpc->MoveTo(mNpc->MapPosition() + direction[i]);
-								break;
-							}
-						}
-					}
-				}
-				else
-				{
-					int dx = mNpc->MapPosition().x - mPlayer->MapPosition().x;
-					int dy = mNpc->MapPosition().y - mPlayer->MapPosition().y;
-
-					Point p = mNpc->MapPosition();
-					if (abs(dx) > abs(dy))
-						p.x -= sgn(dx);
-					else
-						p.y -= sgn(dy);
-
-					if (!MoveTo(p))
-					{
-						p = mNpc->MapPosition();
-						if (abs(dx) > abs(dy))
-							p.y -= sgn(dy);
-						else
-							p.x -= sgn(dx);
-
-						MoveTo(p);
-					}
-				}
-			}
+			if (mNpc->MapPosition() == mPlayer->MapPosition())
+				MoveOffPlayer();
+			else
+				MoveTowardsPlayer();
 		}
-		else
-			return false;
+
+		return true;
 	}
 
-	return true;
+	return false;
+}
+
+void NpcController::ReturnToSpawn()
+{
+	static PathFinder pathFinder(*mMap);
+	mNpc->PathTo(pathFinder.GeneratePath(mNpc->MapPosition(), mSpawnPoint));
+	mNpcState = NpcState::Returning;
 }
 
 void NpcController::HandleCombat()
@@ -188,18 +194,24 @@ void NpcController::Update()
 		break;
 	case NpcState::Fighting:
 		HandleCombat();
-		if (mNpc->Dead()) mNpcState = NpcState::Dead;
+		if (mNpc->Dead()) mNpcState = NpcState::Dead;	
 		else if (!mNpc->InCombat())
 		{
-			if (sqrt(pow(mSpawnPoint.x - mNpc->MapPosition().x, 2) +
-				pow(mSpawnPoint.y - mNpc->MapPosition().y, 2) * 1.0) >= 11.0f)
-			{
-				static PathFinder pathFinder(*mMap);
-				mNpc->PathTo(pathFinder.GeneratePath(mNpc->MapPosition(), mSpawnPoint));
-				mNpcState = NpcState::Returning;
-			}
+			float distanceFromSpawn = sqrt(pow(mSpawnPoint.x - mNpc->MapPosition().x, 2) +
+				pow(mSpawnPoint.y - mNpc->MapPosition().y, 2) * 1.0);
+
+			if (distanceFromSpawn >= 11.0f)
+				ReturnToSpawn();
 			else
 				mNpcState = NpcState::Wandering;
+		}
+		else
+		{
+			int dx = mSpawnPoint.x - mNpc->MapPosition().x;
+			int dy = mSpawnPoint.y - mNpc->MapPosition().y;
+
+			if (abs(dx) > 16 || abs(dy) > 16)
+				ReturnToSpawn();
 		}
 		break;
 	case NpcState::Returning:

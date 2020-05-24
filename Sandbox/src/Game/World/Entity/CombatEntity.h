@@ -7,6 +7,8 @@
 class CombatEntity : public MovableEntity
 {
 private:
+	static const int COMBAT_COOLDOWN_TIME = 10;
+
 	int mHitpoints;
 	int mRemainingHitpoints;
 
@@ -30,7 +32,7 @@ public:
 	inline int RemainingHitpoints() const { return mRemainingHitpoints; }
 
 	inline bool InCombat() const { return mInCombat; }
-	inline void InCombat(bool inCombat) { mInCombat = inCombat; if (inCombat) mCombatTimer = 10.0f; }
+	inline void InCombat(bool inCombat) { mInCombat = inCombat; if (inCombat) mCombatTimer = COMBAT_COOLDOWN_TIME; }
 
 	virtual void Damage(int amount);
 	virtual void Heal(int amount);

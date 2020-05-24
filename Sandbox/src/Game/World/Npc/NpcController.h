@@ -34,7 +34,10 @@ private:
 	void Wander();
 
 	bool MoveTo(Point p);
+	void MoveOffPlayer();
+	void MoveTowardsPlayer();
 	bool MoveInRange();
+	void ReturnToSpawn();
 
 	void HandleCombat();
 	void HandleLoot();
