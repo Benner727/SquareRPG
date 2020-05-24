@@ -14,17 +14,12 @@ private:
 
 	inline bool HasAmmo() const
 	{
-		bool hasAmmo = true;
-		bool hasRangedCombatStance = 
-			(mPlayer->CombatStance() == CombatOption::ranged_accurate ||
-			mPlayer->CombatStance() == CombatOption::ranged_rapid ||
-			mPlayer->CombatStance() == CombatOption::ranged_longrange);
+		bool hasAmmo = false;
 
 		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 		{
 			if (weapon->Type() == 1)
 			{
-				hasAmmo = false;
 				for (const auto& ammo : weapon->AmmoIndex())
 				{
 					if (mPlayer->Gear().HasItem(ammo))
@@ -34,34 +29,40 @@ private:
 					}
 				}
 			}
+			else
+				hasAmmo = true;
 		}
 
-		return hasAmmo && hasRangedCombatStance;
+		return hasAmmo;
 	}
 
-	inline bool HasRunes() const
+	inline bool CanCastSpell() const
 	{
-		bool hasMagicCombatStance = (mPlayer->CombatStance() == CombatOption::magic_standard || mPlayer->CombatStance() == CombatOption::magic_defensive);
-		bool hasActiveSpell = (mPlayer->SpellBook().ActiveSpell() != -1);
-		bool hasRunes = mPlayer->Inventory().HasItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->CastReq());
+		bool hasAutoCastSpell = (mPlayer->SpellBook().AutoCastSpell() != nullptr);
+		bool hasRunes = (hasAutoCastSpell && mPlayer->Inventory().HasItems(mPlayer->SpellBook().AutoCastSpell()->CastReq()));
 
-		return hasMagicCombatStance && hasActiveSpell && hasRunes;
+		return hasRunes;
 	}
 
 public:
-	AutoAttackCommand(std::shared_ptr<Player> player)
+	AutoAttackCommand(std::shared_ptr<Player> player, std::shared_ptr<NpcFighter> npc)
 	{
 		mPlayer = player;
-		//mNpc = std::dynamic_pointer_cast<NpcFighter>(player->Target());
+		mNpc = npc;
 	}
 
 	~AutoAttackCommand() = default;
 
 	bool CanExecute()
 	{
-		bool canAttack = HasAmmo() && HasRunes();
+		bool canAttack = true;
 
-		return canAttack && (mNpc != nullptr);
+		if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::ranged)
+			canAttack = HasAmmo();
+		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::magic)
+			canAttack = CanCastSpell();
+
+		return (mNpc != nullptr) && canAttack;
 	}
 
 	void Execute()
@@ -70,7 +71,7 @@ public:
 		float attackRoll = 0.0f;
 		float defenseRoll = 0.0f;
 
-		if (HasAmmo())
+		if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::ranged)
 		{
 			attackRoll = RangedFormulas::AttackRoll(*mPlayer);
 			defenseRoll = RangedFormulas::DefenseRoll(*mNpc);
@@ -84,7 +85,7 @@ public:
 					mPlayer->Gear().Remove(Gear::EquipmentSlot::weapon);
 			}
 		}
-		else if (HasRunes())
+		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::magic)
 		{
 			attackRoll = MagicFormulas::AttackRoll(*mPlayer);
 			defenseRoll = MagicFormulas::DefenseRoll(*mNpc);
@@ -92,7 +93,7 @@ public:
 
 			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->CastReq());
 		}
-		else
+		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::melee)
 		{
 			attackRoll = MeleeFormulas::AttackRoll(*mPlayer);
 			defenseRoll = MeleeFormulas::DefenseRoll(*mNpc);
@@ -110,6 +111,11 @@ public:
 		else
 			damage = 0;
 
+		mPlayer->InCombat(true);
+		mPlayer->SetCombatDelay();
+
 		mNpc->Damage(damage);
+		mNpc->Target(mPlayer);
+		mNpc->InCombat(true);
 	}
 };

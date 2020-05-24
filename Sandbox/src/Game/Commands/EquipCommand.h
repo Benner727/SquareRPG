@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
+#include "Game/World/Player/Player.h"
 #include "Game/Items/ItemFactory.h"
 
 class EquipCommand : public ICommand
@@ -66,7 +66,7 @@ public:
 				if (std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
 					unequipWeapon = weapon->TwoHanded();
 			}
-			else if (std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon)))
+			else if (Weapon* weapon = dynamic_cast<Weapon*>(equipment.get()))
 				unequipShield = weapon->TwoHanded();
 
 			mPlayer->Inventory().SetNull(activeSlot);
@@ -97,6 +97,18 @@ public:
 
 			mPlayer->CalculateBonuses();
 		}
+
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
+		{
+			if (weapon->IsRanged())
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::ranged);
+			else if (weapon->Casts())
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::magic);
+			else
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::melee);
+		}
+		else
+			mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::melee);
 
 		mPlayer->Inventory().ActiveSlot(-1);
 	}

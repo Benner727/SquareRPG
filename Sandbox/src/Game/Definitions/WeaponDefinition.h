@@ -7,13 +7,15 @@ private:
 	bool mTwoHanded;
 	float mSpeed;
 	int mReach;
+	bool mCasts;
 
-	WeaponDefinition(int index, bool twoHanded, float speed, int reach)
+	WeaponDefinition(int index, bool twoHanded, float speed, int reach, bool casts)
 	{
 		mIndex = index;
 		mTwoHanded = twoHanded;
 		mSpeed = speed;
 		mReach = reach;
+		mCasts = casts;
 	}
 
 	~WeaponDefinition() = default;
@@ -25,4 +27,5 @@ public:
 	inline bool TwoHanded() const { return mTwoHanded; }
 	inline float Speed() const { return mSpeed; }
 	inline int Reach() const { return mReach; }
+	inline bool Casts() const { return mCasts; }
 };

@@ -26,6 +26,7 @@ public:
 	inline bool TwoHanded() const { return mWeaponDefinition->TwoHanded(); }
 	inline float Speed() const { return mWeaponDefinition->Speed(); }
 	inline int Reach() const { return mWeaponDefinition->Reach(); }
+	inline bool Casts() const { return mWeaponDefinition->Casts(); }
 
 	inline bool IsRanged() const { return mRangedDefinition != nullptr; }
 	inline int Type() const { return (IsRanged() ? mRangedDefinition->Type() : -1); }

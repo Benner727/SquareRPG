@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/Interface/IMenuTab.h"
-#include "Game/Player/Magic/ISpellBook.h"
+#include "Game/World/Player/Magic/ISpellBook.h"
 
 class MagicInterface : public IMenuTab
 {

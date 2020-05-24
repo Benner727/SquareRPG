@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Game/MovableEntity.h"
+#include "Game/World/Entity/CombatEntity.h"
 #include "Game/Definitions/NpcDefinition.h"
 #include "Game/Definitions/NpcCombatDefinition.h"
 #include "Game/Definitions/NpcDropDefinition.h"
 
-class Npc : public MovableEntity
+class Npc : public CombatEntity
 {
 private:
 	int mIndex;
@@ -26,5 +26,8 @@ public:
 	inline std::string Name() const { return mNpcDefinition->Name(); }
 	inline std::vector<std::string> Actions() const { return mNpcDefinition->Actions(); }
 
+	inline Square::Vector2 Size() const { return mSprite->ScaledDimensions(); }
+
+	void Update();
 	void Render();
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
+#include "Game/World/Player/Player.h"
 #include "Game/Items/ItemFactory.h"
 
 class UnequipCommand : public ICommand
@@ -39,6 +39,18 @@ public:
 			mPlayer->Inventory().Add(equipment);
 			mPlayer->CalculateBonuses();
 		}
+
+		if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
+		{
+			if (weapon->IsRanged())
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::ranged);
+			else if (weapon->Casts())
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::magic);
+			else
+				mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::melee);
+		}
+		else
+			mPlayer->GetCombatStance().UpdateCombatStyle(CombatStyle::melee);
 
 		mPlayer->Gear().ActiveSlot(-1);
 	}

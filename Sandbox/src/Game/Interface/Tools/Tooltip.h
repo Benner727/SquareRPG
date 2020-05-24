@@ -20,8 +20,6 @@ public:
 	Tooltip(std::vector<std::string> info, Square::Vector2 pos);
 	~Tooltip();
 
-	bool ContainsMouse() const;
-	
 	void Update();
 	void Render();
 };

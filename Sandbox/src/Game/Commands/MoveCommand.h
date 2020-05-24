@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
-#include "Game/Map/Pathfinder.h"
+#include "Game/World/Player/Player.h"
+#include "Game/World/Map/Pathfinder.h"
 
 #include <list>
 
@@ -25,6 +25,7 @@ public:
 	bool CanExecute()
 	{
 		mPath.clear();
+		mPlayer->CancelMove();
 
 		if (mMap && mPlayer->Target())
 		{
@@ -33,8 +34,13 @@ public:
 			target.y = mPlayer->Target()->Pos().y / 32.0f;
 			target.z = mPlayer->MapPosition().z;
 
-			static PathFinder pathFinder(*mMap);
-			mPath = pathFinder.GeneratePath(mPlayer->MapPosition(), target);
+			if (mPlayer->MapPosition() == target)
+				mPath.push_back(target);
+			else
+			{
+				static PathFinder pathFinder(*mMap);
+				mPath = pathFinder.GeneratePath(mPlayer->MapPosition(), target);
+			}
 		}
 
 		return (mPath.size() > 0);

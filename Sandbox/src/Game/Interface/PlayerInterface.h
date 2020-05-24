@@ -2,7 +2,7 @@
 
 #include "Game/Commands/CommandManager.h"
 #include "Game/Interface/MenuTabsInterface.h"
-#include "Game/GameGrid.h"
+#include "Game/World/Shared/GameGrid.h"
 #include "Game/Interface/MessageLog.h"
 
 class PlayerInterface : public Square::GameObject
@@ -38,7 +38,7 @@ private:
 	void HandleInteraction();
 
 public:
-	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map);
+	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map, NpcHandler& npcHandler);
 	~PlayerInterface();
 
 	void Update();

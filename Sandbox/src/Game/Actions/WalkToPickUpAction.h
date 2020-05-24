@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Game/Actions/IAction.h"
-#include "Game/Player/Player.h"
-#include "Game/Map/Map.h"
+#include "Game/World/Player/Player.h"
+#include "Game/World/Map/Map.h"
 
 class WalkToPickUpAction : public IAction
 {

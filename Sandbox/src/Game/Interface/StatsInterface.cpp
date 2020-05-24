@@ -1,7 +1,7 @@
 #include "StatsInterface.h"
 
 StatsInterface::StatsInterface(Skills& skills)
-	: IMenuTab("Graphics/panel_brown.png", 16, false, true), mSkills(skills)
+	: IMenuTab("Graphics/panel_brown.png", { 16, 16 }, false, true), mSkills(skills)
 {
 	for (int x = 0; x < 3; x++)
 	{
@@ -10,6 +10,8 @@ StatsInterface::StatsInterface(Skills& skills)
 			mSlotPos.push_back(Square::Vector2(x * 64.0f + 32.0f, y * 32.0f + 32.0f));
 		}
 	}
+
+	mExperience = 0;
 }
 
 std::string StatsInterface::GetAction()
@@ -37,8 +39,12 @@ void StatsInterface::CreateTooltip()
 	{
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 
-		if (!mTooltip && mHoverTimer > 0.5f)
-			mTooltip = new Tooltip({ skill->SkillName() + " EXP:" + std::to_string(skill->Experience()) }, skill->Pos() + 16.0f);
+		if ((!mTooltip || mExperience != skill->Experience()) && mHoverTimer > 0.5f)
+		{
+			mExperience = skill->Experience();
+			delete mTooltip;
+			mTooltip = new Tooltip({ skill->SkillName() + " EXP:" + std::to_string(mExperience) }, skill->Pos() + 16.0f);
+		}
 	}
 	else
 		mSelectedSlot = -1;

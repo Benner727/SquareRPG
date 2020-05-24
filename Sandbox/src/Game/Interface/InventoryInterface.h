@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/Interface/IMenuTab.h"
-#include "Game/Player/Inventory.h"
+#include "Game/World/Player/Inventory.h"
 
 class InventoryInterface : public IMenuTab
 {

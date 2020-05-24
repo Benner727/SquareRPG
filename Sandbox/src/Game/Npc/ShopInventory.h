@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/Player/IItemContainer.h"
+#include "Game/World/Player/IItemContainer.h"
 #include "Game/Definitions/ItemStock.h"
 #include "Game/Items/ItemFactory.h"
 

@@ -1,7 +1,7 @@
 #include "GearInterface.h"
 
 GearInterface::GearInterface(Gear& gear)
-	: IMenuTab("Graphics/panel_gear.png", 32, false, false), mGear(gear)
+	: IMenuTab("Graphics/panel_gear.png", { 32, 32 }, false, false), mGear(gear)
 {
 	InitializeGearPositions();
 }

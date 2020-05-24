@@ -1,7 +1,7 @@
 #include "MagicInterface.h"
 
 MagicInterface::MagicInterface(ISpellBook& spellBook)
-	: IMenuTab("Graphics/panel_brown.png", 32, false, true), mSpellBook(spellBook)
+	: IMenuTab("Graphics/panel_brown.png", { 32, 32 }, false, true), mSpellBook(spellBook)
 {
 	for (int y = 0; y < 5; y++)
 	{

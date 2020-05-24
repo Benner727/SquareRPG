@@ -1,7 +1,7 @@
 #include "PrayerInterface.h"
 
 PrayerInterface::PrayerInterface(IPrayerBook& prayerBook)
-	: IMenuTab("Graphics/panel_brown.png", 32, false, true), mPrayerBook(prayerBook)
+	: IMenuTab("Graphics/panel_brown.png", { 32, 32 }, false, true), mPrayerBook(prayerBook)
 {
 	for (int y = 0; y < 5; y++)
 	{

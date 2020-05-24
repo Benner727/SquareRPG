@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/Interface/IMenuTab.h"
-#include "Game/Player/Gear.h"
+#include "Game/World/Player/Gear.h"
 
 class GearInterface : public IMenuTab
 {

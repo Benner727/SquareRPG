@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Game/Interface/IMenuTab.h"
-#include "Game/Player/Skills.h"
+#include "Game/World/Player/Skills.h"
 
 class StatsInterface : public IMenuTab
 {
 private:
 	Skills& mSkills;
+
+	int mExperience;
 
 	std::string GetAction();
 

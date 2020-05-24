@@ -213,10 +213,11 @@ void ItemRepository::LoadWeaponDefinitions()
 	bool twoHanded;
 	float speed;
 	int reach;
+	bool casts;
 
-	while (infile >> index >> twoHanded >> speed >> reach)
+	while (infile >> index >> twoHanded >> speed >> reach >> casts)
 	{
-		mWeaponDefinitions[index] = new WeaponDefinition(index, twoHanded, speed, reach);
+		mWeaponDefinitions[index] = new WeaponDefinition(index, twoHanded, speed, reach, casts);
 	}
 
 	infile.close();

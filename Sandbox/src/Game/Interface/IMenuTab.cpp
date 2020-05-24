@@ -1,6 +1,6 @@
 #include "IMenuTab.h"
 
-IMenuTab::IMenuTab(std::string backgroundPath, int itemSize, bool canDrag, bool hasHover)
+IMenuTab::IMenuTab(std::string backgroundPath, Square::Vector2 itemSize, bool canDrag, bool hasHover)
 	: mItemSize(itemSize), mCanDrag (canDrag), mHasHover(hasHover)
 {
 	mBackground = new Square::Sprite(backgroundPath);
@@ -40,10 +40,10 @@ int IMenuTab::PosToSlot(Square::Vector2 pos)
 	int slot = -1;
 	for (int i = 0; i < mSlotPos.size(); i++)
 	{
-		if (pos.x >= Pos().x + mSlotPos[i].x - mItemSize * 0.5f &&
-			pos.x <= Pos().x + mSlotPos[i].x + mItemSize * 0.5f &&
-			pos.y >= Pos().y + mSlotPos[i].y - mItemSize * 0.5f &&
-			pos.y <= Pos().y + mSlotPos[i].y + mItemSize * 0.5f)
+		if (pos.x >= Pos().x + mSlotPos[i].x - mItemSize.x * 0.5f &&
+			pos.x <= Pos().x + mSlotPos[i].x + mItemSize.x * 0.5f &&
+			pos.y >= Pos().y + mSlotPos[i].y - mItemSize.y * 0.5f &&
+			pos.y <= Pos().y + mSlotPos[i].y + mItemSize.y * 0.5f)
 		{
 			slot = i;
 			break;
@@ -187,6 +187,8 @@ void IMenuTab::Update()
 
 	HandleLeftClick();
 	HandleMenus();
+
+	PrivateUpdate();
 }
 
 void IMenuTab::Render()
@@ -209,13 +211,15 @@ void IMenuTab::Render()
 			}
 
 			if (IsActiveSlot(i))
-				Square::Graphics::Instance().DrawRectangle(obj->Pos() - mItemSize * 0.5f, mItemSize, mItemSize, mActiveColor);
+				Square::Graphics::Instance().DrawRectangle(obj->Pos() - mItemSize * 0.5f, mItemSize.x, mItemSize.y, mActiveColor);
 
 			obj->Render(true);
 		}
 		else if (i < mIcons.size())
 			mIcons[i]->Render(true);
 	}
+
+	PrivateRender();
 
 	if (mActionsMenu) mActionsMenu->Render();
 	if (mTooltip) mTooltip->Render();
