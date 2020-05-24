@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
-#include "Game/Map/Pathfinder.h"
+#include "Game/World/Player/Player.h"
+#include "Game/World/Map/Pathfinder.h"
 
 #include <list>
 

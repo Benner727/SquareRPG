@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Game/Utility.h"
-#include "Game/GridObject.h"
+#include "Game/World/Shared/GridObject.h"
 
 class ActionsMenu : public Square::GameObject
 {

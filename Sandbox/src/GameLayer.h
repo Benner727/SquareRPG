@@ -4,9 +4,9 @@
 
 #include "Game/Interface/PlayerInterface.h"
 #include "Game/Items/ItemFactory.h"
-#include "Game/Map/Map.h"
-#include "Game/Map/PathFinder.h"
-#include "Game/NpcController.h"
+#include "Game/World/Map/Map.h"
+#include "Game/World/Map/PathFinder.h"
+#include "Game/World/Npc/NpcController.h"
 
 class GameLayer : public Square::Layer
 {

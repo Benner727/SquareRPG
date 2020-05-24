@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
+#include "Game/World/Player/Player.h"
 
 class BuryCommand : public ICommand
 {

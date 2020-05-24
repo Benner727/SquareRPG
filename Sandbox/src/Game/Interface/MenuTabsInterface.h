@@ -2,8 +2,8 @@
 
 #include <Square.h>
 
-#include "Game/Player/Player.h"
-#include "Game/Map/Map.h"
+#include "Game/World/Player/Player.h"
+#include "Game/World/Map/Map.h"
 #include "Game/Interface/InventoryInterface.h"
 #include "Game/Interface/GearInterface.h"
 #include "Game/Interface/PrayerInterface.h"

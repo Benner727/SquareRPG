@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Game/Commands/ICommand.h"
-#include "Game/Player/Player.h"
-#include "Game/Map/Map.h"
+#include "Game/World/Player/Player.h"
+#include "Game/World/Map/Map.h"
 
 class DropCommand : public ICommand
 {

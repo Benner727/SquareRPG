@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Npc/NpcFighter.h"
-#include "Items/ItemFactory.h"
-#include "Map/GroundItem.h"
+#include "Game/Npc/NpcFighter.h"
+#include "Game/Items/ItemFactory.h"
+#include "Game/World/Map/GroundItem.h"
 #include "Random.h"
 
 namespace NpcDropFormula

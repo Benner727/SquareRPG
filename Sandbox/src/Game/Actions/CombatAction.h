@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Game/Actions/IAction.h"
-#include "Game/Player/Player.h"
-#include "Game/Map/PathFinder.h"
+#include "Game/World/Player/Player.h"
+#include "Game/World/Map/PathFinder.h"
 #include "Game/Npc/NpcFighter.h"
 
 class CombatAction : public IAction

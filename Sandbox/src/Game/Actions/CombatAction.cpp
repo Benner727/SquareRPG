@@ -34,7 +34,7 @@ bool CombatAction::MoveInRange()
 		{
 			if (mPlayer->MapPosition() == mTarget->MapPosition())
 			{
-				static Point direction[4] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+				static Point direction[4] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0} };
 				for (int i = 0; i < 4; i++)
 				{
 					if (mMap->TileWalkable(mPlayer->MapPosition() + direction[i]))

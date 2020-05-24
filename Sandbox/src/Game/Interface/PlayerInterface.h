@@ -2,7 +2,7 @@
 
 #include "Game/Commands/CommandManager.h"
 #include "Game/Interface/MenuTabsInterface.h"
-#include "Game/GameGrid.h"
+#include "Game/World/Shared/GameGrid.h"
 #include "Game/Interface/MessageLog.h"
 
 class PlayerInterface : public Square::GameObject

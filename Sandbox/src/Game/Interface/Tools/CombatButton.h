@@ -2,7 +2,7 @@
 
 #include <Square.h>
 
-#include "Game/Player/Player.h"
+#include "Game/World/Player/Player.h"
 
 class CombatButton : public Square::GameObject
 {

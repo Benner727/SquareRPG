@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/CombatEntity.h"
+#include "Game/World/Entity/CombatEntity.h"
 #include "Game/Definitions/NpcDefinition.h"
 #include "Game/Definitions/NpcCombatDefinition.h"
 #include "Game/Definitions/NpcDropDefinition.h"

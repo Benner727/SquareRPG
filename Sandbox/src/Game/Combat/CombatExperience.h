@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/Player/Player.h"
+#include "Game/World/Player/Player.h"
 
 const int BASE_COMBAT_EXP = 12;
 const int BASE_HITPOINTS_EXP = 4;
