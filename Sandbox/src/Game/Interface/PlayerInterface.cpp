@@ -1,20 +1,21 @@
 #include "PlayerInterface.h"
 
 PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map, NpcHandler& npcHandler)
-	: mPlayer(player), mMap(map), mCommandManager(mPlayer, mMap), mGameGrid(mMap, npcHandler)
+	: mPlayer(player), mMap(map), mMessageLog(std::make_shared<MessageLog>(50, 8, "Font/VeraMono.ttf", 14, Square::Vector2(15.0f, -15.0f))),
+	mCommandManager(mPlayer, mMap, mMessageLog), mGameGrid(mMap, npcHandler)
 {
-	mMenuTabsInterface = new MenuTabsInterface(mPlayer);
-
-	mMessageLog = new MessageLog(50, 8, "Font/VeraMono.ttf", 14, { 15.0f, -15.0f });
 	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
 
-	mMessageLog->AddMessage("1.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.Thisisatestmessage.", { 0, 0, 0, 255 });
+	mMenuTabsInterface = new MenuTabsInterface(mPlayer);
+
+	/*
 	mMessageLog->AddMessage("2. This is a test message.", {128, 0, 0, 255 });
 	mMessageLog->AddMessage("3. This is a test message.", { 0, 128, 0, 255 });
 	mMessageLog->AddMessage("4. This is a test message.", { 0, 0, 128, 255 });
 	mMessageLog->AddMessage("5. This is a test message.", { 128, 128, 128, 255 });
 	mMessageLog->AddMessage("6. This is a test message.", { 128, 0, 128, 255 });
 	mMessageLog->AddMessage("7. This is a test message.", { 0, 128, 128, 255 });
+	*/
 
 	mCommand = "";
 
@@ -31,7 +32,6 @@ PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr
 PlayerInterface::~PlayerInterface()
 {
 	delete mMenuTabsInterface;
-	delete mMessageLog;
 
 	delete mHoverSprite;
 
@@ -252,9 +252,33 @@ void PlayerInterface::HandleInteraction()
 	}
 }
 
+void PlayerInterface::HandlePlayerDeath()
+{
+	if (mPlayer->Dead())
+	{
+		mCommand = "Kill Player";
+		mCommandManager.Invoke(mCommand);
+		mCommand.clear();
+
+		mWaitingForInteraction = false;
+
+		mHoverText = "";
+
+		delete mHoverSprite;
+		mHoverSprite = nullptr;
+
+		delete mActionsMenu;
+		mActionsMenu = nullptr;
+
+		mTargetObject = nullptr;
+	}
+}
+
 void PlayerInterface::Update()
 {
 	bool menuOpened = (mActionsMenu != nullptr);
+
+	HandlePlayerDeath();
 
 	if (Square::InputHandler::Instance().KeyPressed(SDL_SCANCODE_Z))
 		mMessageLog->Active(!mMessageLog->Active());

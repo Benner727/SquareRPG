@@ -2,11 +2,13 @@
 
 #include "Game/Commands/ICommand.h"
 #include "Game/World/Player/Player.h"
+#include "Game/Interface/MessageLog.h"
 
 class BuryCommand : public ICommand
 {
 private:
 	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<MessageLog> mMessageLog;
 
 	bool CanBury(int itemIndex)
 	{
@@ -37,9 +39,10 @@ private:
 	}
 
 public:
-	BuryCommand(std::shared_ptr<Player> player)
+	BuryCommand(std::shared_ptr<Player> player, std::shared_ptr<MessageLog> messageLog)
 	{
 		mPlayer = player;
+		mMessageLog = messageLog;
 	}
 
 	~BuryCommand() = default;
@@ -62,6 +65,7 @@ public:
 		{
 			mPlayer->Skills().AddExperience(Skills::SkillIndex::prayer, PrayerExperience(item->Index()));
 			mPlayer->Inventory().Remove(activeSlot);
+			mMessageLog->AddMessage("You burried the bone. What are you, a dog?", { 128, 128, 128, 255 });
 		}
 
 		mPlayer->Inventory().ActiveSlot(-1);

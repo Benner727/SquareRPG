@@ -14,7 +14,7 @@ public:
 	CastSpellCommand(std::shared_ptr<Player> player)
 	{
 		mPlayer = player;
-		//mNpc = std::dynamic_pointer_cast<NpcFighter>(player->Target());
+		mNpc = std::dynamic_pointer_cast<NpcFighter>(player->Target());
 	}
 
 	~CastSpellCommand() = default;

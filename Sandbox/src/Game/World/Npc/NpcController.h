@@ -23,6 +23,7 @@ private:
 	float mDeathTimer;
 
 	float mWanderTimer;
+	float mAggressionTimer;
 
 	float mAttackDelay;
 
@@ -31,6 +32,8 @@ private:
 	void Invoke(ICommand* command);
 
 	void SpawnNpc();
+	
+	bool NoticePlayer();
 	void Wander();
 
 	bool MoveTo(Point p);

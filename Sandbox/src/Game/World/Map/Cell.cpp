@@ -11,9 +11,12 @@ Cell::Cell(std::shared_ptr<Tile> tile, std::vector<std::shared_ptr<Item>> ground
 
 void Cell::AddGroundItem(std::shared_ptr<Item> item)
 { 
-	mGroundItems.insert(mGroundItems.begin(), std::make_shared<GroundItem>(item));
-	mGroundItems.front()->Parent(this);
-	mGroundItems.front()->Pos(Square::VEC2_ZERO);
+	if (item)
+	{
+		mGroundItems.insert(mGroundItems.begin(), std::make_shared<GroundItem>(item));
+		mGroundItems.front()->Parent(this);
+		mGroundItems.front()->Pos(Square::VEC2_ZERO);
+	}
 }
 
 void Cell::Update()

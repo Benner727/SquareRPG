@@ -16,10 +16,12 @@ private:
 	int mEnergy;
 
 protected:
-	inline int BaseMovementSpeed() const { return mMoveSpeed; }
-	inline void BaseMovementSpeed(int speed) { mMoveSpeed = speed; }
+	inline float BaseMovementSpeed() const { return mMoveSpeed; }
+	inline void BaseMovementSpeed(float speed) { mMoveSpeed = speed; }
 
 	void HandleMovement();
+	
+	inline void ResetPath() { mCurrentPath.clear(); }
 
 public:
 	MovableEntity();

@@ -3,16 +3,19 @@
 #include "Game/Commands/ICommand.h"
 #include "Game/World/Player/Player.h"
 #include "Game/Items/ItemFactory.h"
+#include "Game/Interface/MessageLog.h"
 
 class UnequipCommand : public ICommand
 {
 private:
 	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<MessageLog> mMessageLog;
 
 public:
-	UnequipCommand(std::shared_ptr<Player> player)
+	UnequipCommand(std::shared_ptr<Player> player, std::shared_ptr<MessageLog> messageLog)
 	{
 		mPlayer = player;
+		mMessageLog = messageLog;
 	}
 
 	~UnequipCommand() = default;
@@ -23,7 +26,15 @@ public:
 
 		if (Equipment* equipment = dynamic_cast<Equipment*>(mPlayer->Gear().GetItem(activeSlot).get()))
 		{
-			return mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(activeSlot));
+			if (mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(activeSlot)))
+			{
+				return true;
+			}
+			else
+			{
+				mMessageLog->AddMessage("If you took that off, where would you even put it?", { 128, 128, 128, 255 });
+				return false;
+			}
 		}
 
 		return false;

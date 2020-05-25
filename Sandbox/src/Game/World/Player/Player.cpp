@@ -1,6 +1,12 @@
 #include "Player.h"
 
 Player::Player()
+	: Player(Point(0, 0))
+{
+}
+
+Player::Player(Point spawn)
+	: mSpawn(spawn)
 {
 	mSprite = new Square::Sprite("Player.png");
 	mSprite->Parent(this);
@@ -20,6 +26,7 @@ Player::Player()
 	mAction = nullptr;
 
 	Pos(Square::Vector2(16.0, 16.0));
+	MapPosition(mSpawn);
 }
 
 Player::~Player()
@@ -120,6 +127,26 @@ void Player::CalculateBonuses()
 			mStatBonus += equipment->Bonuses();
 		}
 	}
+}
+
+void Player::HandleDeath()
+{
+	mTarget = nullptr;
+
+	mEatDelay = 0.0f;
+	mDrinkDelay = 0.0f;
+
+	mInCombat = false;
+	mCombatTimer = 0.0f;
+	mCombatDelay = 0.0f;
+
+	delete mAction;
+	mAction = nullptr;
+
+	mSkills.Reset();
+
+	ResetPath();
+	MapPosition(mSpawn);
 }
 
 void Player::Update()

@@ -3,16 +3,19 @@
 #include "Game/Commands/ICommand.h"
 #include "Game/World/Player/Player.h"
 #include "Game/Items/ItemFactory.h"
+#include "Game/Interface/MessageLog.h"
 
 class EquipCommand : public ICommand
 {
 private:
 	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<MessageLog> mMessageLog;
 
 public:
-	EquipCommand(std::shared_ptr<Player> player)
+	EquipCommand(std::shared_ptr<Player> player, std::shared_ptr<MessageLog> messageLog)
 	{
 		mPlayer = player;
+		mMessageLog = messageLog;
 	}
 
 	~EquipCommand() = default;
@@ -25,28 +28,32 @@ public:
 		{
 			for (auto requirement : equipment->Requirements())
 			{
-				if (mPlayer->Skills().Level(requirement.Level()) < requirement.Level())
+				if (mPlayer->Skills().Level(requirement.SkillIndex()) < requirement.Level())
 				{
-					// Add message saying player doesn't have required level
+					mMessageLog->AddMessage("Why did you think you'd be able to equip that?", { 128, 128, 128, 255 });
 					return false;
 				}
 			}
-
+			
+			bool canUnequip = true;
 			if (Weapon* weapon = dynamic_cast<Weapon*>(equipment))
 			{
 				if (weapon->TwoHanded() && mPlayer->Gear().GetItem(Gear::EquipmentSlot::shield) != nullptr)
-					return mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(Gear::EquipmentSlot::shield));
+					canUnequip = mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(Gear::EquipmentSlot::shield));
 			}
 			else if (equipment->Slot() == Gear::EquipmentSlot::shield)
 			{
 				if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon).get()))
 				{
 					if (weapon->TwoHanded())
-						return mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon));
+						canUnequip = mPlayer->Inventory().CanAdd(mPlayer->Gear().GetItem(Gear::EquipmentSlot::weapon));
 				}
 			}
 
-			return true;
+			if (!canUnequip) 
+				mMessageLog->AddMessage("Where did you plan on putting your other equipment?", { 128, 128, 128, 255 });
+
+			return canUnequip;
 		}
 
 		return false;

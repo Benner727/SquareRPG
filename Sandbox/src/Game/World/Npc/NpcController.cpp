@@ -25,6 +25,9 @@ void NpcController::SpawnNpc()
 	mDeathTimer = 0.6f;
 
 	mWanderTimer = 0.0f;
+	mAggressionTimer = 0.0f;
+
+	mNewPosition = true;
 
 	if (std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc))
 	{
@@ -33,11 +36,37 @@ void NpcController::SpawnNpc()
 	}
 }
 
+bool NpcController::NoticePlayer()
+{
+	std::shared_ptr<NpcFighter> npcFighter = std::dynamic_pointer_cast<NpcFighter>(mNpc);
+
+	if (npcFighter && npcFighter->Aggressive())
+	{
+		if (mAggressionTimer <= 0.0f)
+		{
+			mAggressionTimer = 1.0f;
+
+			float distanceFromPlayer = sqrt(pow(mPlayer->MapPosition().x - mNpc->MapPosition().x, 2) +
+				pow(mPlayer->MapPosition().y - mNpc->MapPosition().y, 2) * 1.0);
+
+			if (distanceFromPlayer <= 5.0f)
+			{
+				mNpc->InCombat(true);
+				return true;
+			}
+		}
+		else
+			mAggressionTimer -= Square::Timer::Instance().DeltaTime();
+	}
+
+	return false;
+}
+
 void NpcController::Wander()
 {
 	if (!mNpc->InCombat() && mNpc->CurrentPath().empty())
 	{
-		if (mWanderTimer <= 0.0f)
+		if (!NoticePlayer() && mWanderTimer <= 0.0f)
 		{
 			if (100.0f * Random::Float() <= 33.0f)
 			{
@@ -48,12 +77,7 @@ void NpcController::Wander()
 				int dy = mSpawnPoint.y - pos.y;
 
 				if (abs(dx) < 11 && abs(dy) < 11)
-				{
-					if (mMap->TileWalkable(pos))
-					{
-						mNpc->MoveTo(pos);
-					}
-				}
+					MoveTo(pos);
 			}
 
 			if (rand() % 2)
@@ -152,6 +176,8 @@ void NpcController::HandleCombat()
 				mAttackDelay = npcFighter->AttackSpeed();
 			}
 		}
+
+		mNpc->InCombat(!mPlayer->Dead());
 	}
 }
 

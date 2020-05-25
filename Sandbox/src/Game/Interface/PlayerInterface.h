@@ -10,11 +10,11 @@ class PlayerInterface : public Square::GameObject
 private:
 	std::shared_ptr<Player> mPlayer;
 	std::shared_ptr<Map> mMap;
+	std::shared_ptr<MessageLog> mMessageLog;
 
 	GameGrid mGameGrid;
 
 	MenuTabsInterface* mMenuTabsInterface;
-	MessageLog* mMessageLog;
 
 	CommandManager mCommandManager;
 	std::string mCommand;
@@ -36,6 +36,8 @@ private:
 	void HandleActionsMenu();
 
 	void HandleInteraction();
+
+	void HandlePlayerDeath();
 
 public:
 	PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map, NpcHandler& npcHandler);

@@ -2,15 +2,12 @@
 
 GameLayer::GameLayer()
 {
-	mPlayer = std::make_shared<Player>();
+	mPlayer = std::make_shared<Player>(Point(6, 2, 0));
 
 	for (int i = 1; i < 10; i++)
 	{
 		mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(i));
 	}
-
-	mPlayer->MapPosition(Point(6, 2, 0));
-
 	mMap = std::make_shared<Map>();
 
 	mPlayerUI = new PlayerInterface(mPlayer, mMap, mNpcHandler);

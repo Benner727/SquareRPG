@@ -36,6 +36,8 @@ public:
 	void BoostSkill(int skill, int add, int modifier, bool restoreOnly);
 	void RestoreSkill(int skill);
 
+	void Reset();
+
 	std::vector<std::shared_ptr<Skill>> GetSkills() { return mSkills; }
 
 	void Update();

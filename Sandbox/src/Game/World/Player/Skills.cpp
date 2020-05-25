@@ -23,7 +23,7 @@ Skills::Skills()
 	mSkills.push_back(std::make_shared<Skill>("Magic"));
 
 	if (mSkills.size() != SkillIndex::TOTAL_SKILLS)
-		LOG(ERROR) << "Skills size do nat match.";
+		LOG(ERROR) << "Skills size do not match.";
 
 	CalculateCombatLevel();
 }
@@ -129,6 +129,13 @@ void Skills::RestoreSkill(int skill)
 {
 	mSkills[skill]->EffectiveLevel(mSkills[skill]->Level());
 	mSkills[skill]->UpdateTimer(60.0f);
+	mSkills[skill]->UpdateLevelText();
+}
+
+void Skills::Reset()
+{
+	for (int i = 0; i < SkillIndex::TOTAL_SKILLS; i++)
+		RestoreSkill(i);
 }
 
 void Skills::Update()

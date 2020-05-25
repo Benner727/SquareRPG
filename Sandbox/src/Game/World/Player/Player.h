@@ -16,6 +16,7 @@ class Player : public CombatEntity
 {
 private:
 	Square::Sprite* mSprite;
+	Point mSpawn;
 
 	CombatStance mCombatStance;
 
@@ -47,6 +48,7 @@ private:
 
 public:
 	Player();
+	Player(Point spawn);
 	~Player();
 
 	inline Skills& Skills() { return mSkills; }
@@ -78,9 +80,9 @@ public:
 	inline bool HasCombatDelay() const { return (mCombatDelay > 0.0f); }
 	void SetCombatDelay();
 
-	inline void ResetDelays() { mCombatDelay = mEatDelay = mDrinkDelay = 0.0f; }
-
 	void CalculateBonuses();
+
+	void HandleDeath();
 
 	void Update();
 	void Render();
