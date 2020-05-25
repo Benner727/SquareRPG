@@ -156,6 +156,7 @@ void NpcController::ReturnToSpawn()
 {
 	static PathFinder pathFinder(*mMap);
 	mNpc->PathTo(pathFinder.GeneratePath(mNpc->MapPosition(), mSpawnPoint));
+	mNpc->InCombat(false);
 	mNpcState = NpcState::Returning;
 }
 
