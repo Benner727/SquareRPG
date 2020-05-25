@@ -43,6 +43,6 @@ public:
 
 		mPlayer->HandleDeath();
 
-		mMessageLog->AddMessage("You died, dumb bitch...", { 128, 0, 0, 255 });
+		mMessageLog->AddMessage("You managed to get yourself killed. Nice...", { 128, 0, 0, 255 });
 	}
 };

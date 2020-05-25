@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/Interface/IMenuTab.h"
+#include "Game/Interface/Tabs/IMenuTab.h"
 #include "Game/World/Player/Prayer/IPrayerBook.h"
 
 class PrayerInterface : public IMenuTab

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/Interface/IMenuTab.h"
+#include "Game/Interface/Tabs/IMenuTab.h"
 #include "Game/Interface/Tools/CombatButton.h"
 
 class CombatInterface : public IMenuTab
