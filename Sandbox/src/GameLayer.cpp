@@ -2,29 +2,25 @@
 
 GameLayer::GameLayer()
 {
-	mPlayer = std::make_shared<Player>(Point(6, 2, 0));
-
-	for (int i = 1; i < 10; i++)
-	{
-		mPlayer->Inventory().Add(ItemFactory::Instance().GetItem(i));
-	}
+	mMessageLog = std::make_shared<MessageLog>(50, 8, "Font/VeraMono.ttf", 14, Square::Vector2(15.0f, -15.0f));
 	mMap = std::make_shared<Map>();
+	mNpcHandler = std::make_shared<NpcHandler>();
 
-	mPlayerUI = new PlayerInterface(mPlayer, mMap, mNpcHandler);
+	mPlayer = mPlayerFactory.NewPlayer(mPlayerUI, mMap, mMessageLog, mNpcHandler);
 
 	std::shared_ptr<NpcController> npc = std::make_shared<NpcController>(1, Point(3, 3), mMap, mPlayer);
-	mNpcHandler.AddNpc(npc);
+	mNpcHandler->AddNpc(npc);
 }
 
 GameLayer::~GameLayer()
 {
-	delete mPlayerUI;
+
 }
 
 void GameLayer::OnUpdate()
 {
 	mMap->Update(mPlayer->MapPosition().z);
-	mNpcHandler.Update();
+	mNpcHandler->Update();
 	mPlayer->Update();
 	mPlayerUI->Update();
 }
@@ -33,9 +29,9 @@ void GameLayer::OnRender()
 {
 	mMap->Render(mPlayer->MapPosition().z);
 	
-	mNpcHandler.RenderNPC();
+	mNpcHandler->RenderNPC();
 	mPlayer->Render();
-	mNpcHandler.RenderCombatUI();
+	mNpcHandler->RenderCombatUI();
 
 	mPlayerUI->Render();
 }

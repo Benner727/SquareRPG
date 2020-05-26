@@ -2,7 +2,9 @@
 
 #include <Square.h>
 
-class Skill : public Square::GameObject
+#include "Game/Observers/ISubject.h"
+
+class Skill : public Square::GameObject, public ISubject<Skill>
 {
 private:
 	std::string mSkillName;

@@ -143,6 +143,7 @@ void Player::HandleDeath()
 	delete mAction;
 	mAction = nullptr;
 
+	mPrayerBook->ToggleAllOff();
 	mSkills.Reset();
 
 	ResetPath();
@@ -170,6 +171,8 @@ void Player::Update()
 			mAction = nullptr;
 		}
 	}
+
+	if (Dead()) NotifyObservers();
 
 	Square::Graphics::Instance().Camera(Pos());
 }

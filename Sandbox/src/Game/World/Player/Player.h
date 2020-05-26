@@ -12,7 +12,7 @@
 #include "Game/World/Entity/CombatEntity.h"
 #include "Game/Actions/IAction.h"
 
-class Player : public CombatEntity
+class Player : public CombatEntity, public ISubject<Player>
 {
 private:
 	Square::Sprite* mSprite;

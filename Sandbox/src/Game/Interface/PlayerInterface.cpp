@@ -1,7 +1,7 @@
 #include "PlayerInterface.h"
 
-PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<Map> map, NpcHandler& npcHandler)
-	: mPlayer(player), mMap(map), mMessageLog(std::make_shared<MessageLog>(50, 8, "Font/VeraMono.ttf", 14, Square::Vector2(15.0f, -15.0f))),
+PlayerInterface::PlayerInterface(std::shared_ptr<Player> player, std::shared_ptr<MessageLog> messageLog, std::shared_ptr<Map> map, std::shared_ptr<NpcHandler> npcHandler)
+	: mPlayer(player), mMessageLog(messageLog), mMap(map),
 	mCommandManager(mPlayer, mMap, mMessageLog), mGameGrid(mMap, npcHandler)
 {
 	mMessageLog->Translate(Square::Vector2(0.0f, Square::Graphics::SCREEN_HEIGHT));
@@ -36,6 +36,23 @@ PlayerInterface::~PlayerInterface()
 	delete mHoverSprite;
 
 	delete mActionsMenu;
+}
+
+void PlayerInterface::Reset()
+{
+	mCommand.clear();
+
+	mWaitingForInteraction = false;
+
+	mHoverText = "";
+
+	delete mHoverSprite;
+	mHoverSprite = nullptr;
+
+	delete mActionsMenu;
+	mActionsMenu = nullptr;
+
+	mTargetObject = nullptr;
 }
 
 void PlayerInterface::SetHoverText()
@@ -252,33 +269,9 @@ void PlayerInterface::HandleInteraction()
 	}
 }
 
-void PlayerInterface::HandlePlayerDeath()
-{
-	if (mPlayer->Dead())
-	{
-		mCommand = "Kill Player";
-		mCommandManager.Invoke(mCommand);
-		mCommand.clear();
-
-		mWaitingForInteraction = false;
-
-		mHoverText = "";
-
-		delete mHoverSprite;
-		mHoverSprite = nullptr;
-
-		delete mActionsMenu;
-		mActionsMenu = nullptr;
-
-		mTargetObject = nullptr;
-	}
-}
-
 void PlayerInterface::Update()
 {
 	bool menuOpened = (mActionsMenu != nullptr);
-
-	HandlePlayerDeath();
 
 	if (Square::InputHandler::Instance().KeyPressed(SDL_SCANCODE_Z))
 		mMessageLog->Active(!mMessageLog->Active());

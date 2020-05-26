@@ -64,6 +64,8 @@ void Skills::AddExperience(int skill, int amount)
 
 		mSkills[skill]->UpdateLevelText();
 		CalculateCombatLevel();
+		
+		mSkills[skill]->NotifyObservers();
 	}
 }
 

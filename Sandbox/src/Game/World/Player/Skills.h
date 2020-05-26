@@ -38,7 +38,7 @@ public:
 
 	void Reset();
 
-	std::vector<std::shared_ptr<Skill>> GetSkills() { return mSkills; }
+	std::vector<std::shared_ptr<Skill>>& GetSkills() { return mSkills; }
 
 	void Update();
 };

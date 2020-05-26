@@ -1,6 +1,6 @@
 #include "GameGrid.h"
 
-GameGrid::GameGrid(std::shared_ptr<Map> map, NpcHandler& npcHandler)
+GameGrid::GameGrid(std::shared_ptr<Map> map, std::shared_ptr<NpcHandler> npcHandler)
 	: mMap(map), mNpcHandler(npcHandler)
 {
 }
@@ -14,7 +14,7 @@ std::vector<std::shared_ptr<GridObject>> GameGrid::GetGridObjects(Square::Vector
 	Point p(pos, z);
 	std::vector<std::shared_ptr<GridObject>> mGridObjects;
 
-	for (const auto& npc : mNpcHandler.GetPos(pos, z))
+	for (const auto& npc : mNpcHandler->GetPos(pos, z))
 	{
 		for (const auto& action : npc->Actions())
 		{
