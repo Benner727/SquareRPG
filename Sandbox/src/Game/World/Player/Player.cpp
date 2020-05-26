@@ -70,7 +70,12 @@ void Player::SetDrinkDelay()
 void Player::SetCombatDelay()
 {
 	if (Weapon* weapon = dynamic_cast<Weapon*>(mGear.GetItem(Gear::EquipmentSlot::weapon).get()))
-		mCombatDelay += weapon->Speed();
+	{
+		if (GetCombatStance().Get() == CombatOption::magic_standard || GetCombatStance().Get() == CombatOption::magic_defensive)
+			mCombatDelay += 3.0f;
+		else
+			mCombatDelay += weapon->Speed();
+	}
 	else
 		mCombatDelay += 2.4f;
 }

@@ -10,6 +10,20 @@ CombatAction::CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> 
 	MoveInRange();
 }
 
+int CombatAction::GetRange()
+{
+	int range = 1;
+	if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::weapon).get()))
+		range = weapon->Reach();
+
+	if (mPlayer->GetCombatStance().Get() == CombatOption::magic_standard || mPlayer->GetCombatStance().Get() == CombatOption::magic_defensive)
+		range = 10;
+	else if (mPlayer->GetCombatStance().Get() == CombatOption::ranged_longrange)
+		range += 2;
+
+	return range;
+}
+
 bool CombatAction::MoveTo(Point p)
 {
 	if (mMap->TileWalkable(p))
@@ -23,9 +37,7 @@ bool CombatAction::MoveTo(Point p)
 
 bool CombatAction::MoveInRange()
 {
-	int range = 1;
-	if (Weapon* weapon = dynamic_cast<Weapon*>(mPlayer->Gear().GetItem(Gear::weapon).get()))
-		range = weapon->Reach();
+	int range = GetRange();
 
 	if (!PathFinder::InAttackRange(*mMap, mPlayer->MapPosition(), mTarget->MapPosition(), range))
 	{

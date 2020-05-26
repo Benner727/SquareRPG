@@ -5,12 +5,14 @@
 #include "Game/Combat/RangedFormulas.h"
 #include "Game/Combat/MagicFormulas.h"
 #include "Game/Combat/CombatExperience.h"
+#include "Game/Interface/MessageLog.h"
 
 class AutoAttackCommand : public ICommand
 {
 private:
 	std::shared_ptr<Player> mPlayer;
 	std::shared_ptr<NpcFighter> mNpc;
+	std::shared_ptr<MessageLog> mMessageLog;
 
 	inline bool HasAmmo() const
 	{

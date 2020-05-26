@@ -13,6 +13,8 @@ private:
 
 	std::shared_ptr<NpcFighter> mTarget;
 
+	int GetRange();
+
 	bool MoveTo(Point p);
 	bool MoveInRange();
 
