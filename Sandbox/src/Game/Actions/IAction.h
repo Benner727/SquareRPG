@@ -7,10 +7,15 @@ class IAction
 protected:
 	bool mComplete;
 
-	void Invoke(ICommand* command)
+	bool Invoke(ICommand* command)
 	{
 		if (command->CanExecute())
+		{
 			command->Execute();
+			return true;
+		}
+
+		return false;
 	}
 
 public:

@@ -78,7 +78,7 @@ bool CombatAction::MoveInRange()
 void CombatAction::Update()
 {
 	if (!MoveInRange() && !mPlayer->HasCombatDelay())
-		Invoke(new AutoAttackCommand(mPlayer, mTarget));
+		mComplete = !Invoke(new AutoAttackCommand(mPlayer, mTarget));
 
-	mComplete = mTarget->Dead();
+	if (!mComplete) mComplete = mTarget->Dead();
 }

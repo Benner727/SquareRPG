@@ -26,6 +26,6 @@ namespace MagicFormulas
 
 	inline float BaseDamage(Player& player)
 	{
-		return player.SpellBook().Spells()[player.SpellBook().ActiveSpell()]->Damage();
+		return player.SpellBook().AutoCastSpell()->Damage();
 	}
 }

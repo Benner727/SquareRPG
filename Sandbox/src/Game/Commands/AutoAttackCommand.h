@@ -91,7 +91,7 @@ public:
 			defenseRoll = MagicFormulas::DefenseRoll(*mNpc);
 			damage = MagicFormulas::BaseDamage(*mPlayer);
 
-			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().Spells()[mPlayer->SpellBook().ActiveSpell()]->CastReq());
+			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().AutoCastSpell()->CastReq());
 		}
 		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::melee)
 		{

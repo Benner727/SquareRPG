@@ -13,10 +13,11 @@ private:
 	std::vector<std::shared_ptr<Item>> mCastReq;
 	int mDamage;
 	int mBaseExperience;
+	bool mCanAutoCast;
 	Square::Sprite* mSprite;
 
 public:
-	Spell(int index, std::string name, int levelReq, std::vector<std::shared_ptr<Item>> castReq, int damage, int baseExperience, std::string spritePath)
+	Spell(int index, std::string name, int levelReq, std::vector<std::shared_ptr<Item>> castReq, int damage, int baseExperience, bool canAutoCast, std::string spritePath)
 	{
 		mIndex = index;
 		mName = name;
@@ -24,6 +25,7 @@ public:
 		mCastReq = castReq;
 		mDamage = damage;
 		mBaseExperience = baseExperience;
+		mCanAutoCast = canAutoCast;
 
 		mSprite = new Square::Sprite(spritePath);
 		mSprite->Parent(this);
@@ -40,6 +42,7 @@ public:
 	inline std::vector<std::shared_ptr<Item>> const CastReq() { return mCastReq; }
 	inline int Damage() const { return mDamage; }
 	inline int BaseExperience() const { return mBaseExperience; }
+	inline bool CanAutoCast() const { return mCanAutoCast; }
 	
 	inline void Render(bool ignoreCamera = false) { mSprite->Render(ignoreCamera); }
 };

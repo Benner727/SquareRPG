@@ -35,11 +35,11 @@ inline void AddCombatExperience(Player* player, int damage)
 		break;
 	case CombatOption::magic_standard:
 		player->Skills().AddExperience(Skills::SkillIndex::magic, (damage * BASE_COMBAT_EXP / 2) 
-			+ player->SpellBook().Spells()[player->SpellBook().ActiveSpell()]->BaseExperience());
+			+ player->SpellBook().AutoCastSpell()->BaseExperience());
 		break;
 	case CombatOption::magic_defensive:
 		player->Skills().AddExperience(Skills::SkillIndex::magic, (damage * BASE_COMBAT_EXP / 3) 
-			+ player->SpellBook().Spells()[player->SpellBook().ActiveSpell()]->BaseExperience());
+			+ player->SpellBook().AutoCastSpell()->BaseExperience());
 		player->Skills().AddExperience(Skills::SkillIndex::defense, damage * BASE_COMBAT_EXP / 3);
 		break;
 	}
