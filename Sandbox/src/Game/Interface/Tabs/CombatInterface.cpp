@@ -64,7 +64,7 @@ void CombatInterface::CreateTooltip()
 			if (combatOption == CombatOption::magic_standard || combatOption == CombatOption::magic_defensive)
 			{
 				if (Spell* spell = dynamic_cast<Spell*>(mPlayer.SpellBook().AutoCastSpell().get()))
-					mTooltip = new Tooltip({ spell->Name() }, button->Pos() + 16.0f);
+					mTooltip = new Tooltip({ spell->Name() }, button->Pos() + Square::Vector2(0.0f, 16.0f));
 			}
 		}
 	}

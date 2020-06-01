@@ -24,10 +24,9 @@ public:
 		bool canCast = false;
 		int activeSpell = mPlayer->SpellBook().ActiveSpell();
 
+		mPlayer->SpellBook().AutoCastSpell(-1);
 		if (activeSpell != -1)
 		{
-			mPlayer->SpellBook().AutoCastSpell(-1);
-
 			if (mPlayer->SpellBook().CombatSpells()[activeSpell]->LevelReq() <= mPlayer->Skills().GetSkills()[Skills::SkillIndex::magic]->Level())
 			{
 				if (mPlayer->Inventory().HasItems(mPlayer->SpellBook().CombatSpells()[activeSpell]->CastReq()))

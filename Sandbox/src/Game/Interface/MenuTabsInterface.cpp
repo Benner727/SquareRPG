@@ -200,8 +200,10 @@ void MenuTabsInterface::UpdateCombat()
 	else if (mTabs["Combat"]->InUse() && !mSelectingSpell)
 	{
 		mTabs["Combat"]->Active(true);
-		mTabs["Spell"]->Active(false);
 		mTabs["Combat"]->InUse(false);
+		mTabs["Spell"]->Active(false);
+		
+		mCommand.clear();
 	}
 }
 
