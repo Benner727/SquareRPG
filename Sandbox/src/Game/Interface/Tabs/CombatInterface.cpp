@@ -1,12 +1,14 @@
 #include "CombatInterface.h"
 
 CombatInterface::CombatInterface(Player& player)
-	: IMenuTab("Graphics/panel_brown.png", { 80, 40 }, false, false), mPlayer(player)
+	: IMenuTab("Interface/panel_brown.png", { 80, 40 }, false, true), mPlayer(player)
 {
 	mSlotPos.push_back({ 60, 100 });
 	mSlotPos.push_back({ 150, 100 });
 	mSlotPos.push_back({ 60, 160 });
 	mSlotPos.push_back({ 150, 160 });
+	mSlotPos.push_back({ 60, 220 });
+	mSlotPos.push_back({ 150, 220 });
 
 	mWeaponText = "";
 	mWeaponSprite = nullptr;
@@ -35,7 +37,11 @@ std::string CombatInterface::GetAction()
 
 	if (CombatButton* button = dynamic_cast<CombatButton*>(GetSlot(pos).get()))
 	{
-		action = "Set Combat Stance";
+		if (button->GetCombatOption() == CombatOption::magic_standard ||
+			button->GetCombatOption() == CombatOption::magic_defensive)
+			action = "Autocast";
+		else
+			action = "Set Combat Stance";
 	}
 
 	return action;
@@ -48,7 +54,22 @@ void CombatInterface::CreateActionMenu()
 
 void CombatInterface::CreateTooltip()
 {
+	if (CombatButton* button = dynamic_cast<CombatButton*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
+	{
+		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 
+		if (!mTooltip && mHoverTimer > 0.5f)
+		{
+			CombatOption combatOption = mPlayer.GetCombatStance().Get();
+			if (combatOption == CombatOption::magic_standard || combatOption == CombatOption::magic_defensive)
+			{
+				if (Spell* spell = dynamic_cast<Spell*>(mPlayer.SpellBook().AutoCastSpell().get()))
+					mTooltip = new Tooltip({ spell->Name() }, button->Pos() + 16.0f);
+			}
+		}
+	}
+	else
+		mSelectedSlot = -1;
 }
 
 inline void CombatInterface::SetActiveSlot(int slot)
@@ -144,8 +165,11 @@ void CombatInterface::RangedSetup()
 void CombatInterface::MagicSetup()
 {
 	mCombatButtons.clear();
-	mCombatButtons.push_back(std::make_shared<CombatButton>("Standard", CombatOption::magic_standard));
-	mCombatButtons.push_back(std::make_shared<CombatButton>("Defensive", CombatOption::magic_defensive));
+	mCombatButtons.push_back(std::make_shared<CombatButton>("Accurate", CombatOption::melee_accurate));
+	mCombatButtons.push_back(std::make_shared<CombatButton>("Cast", CombatOption::magic_standard));
+	mCombatButtons.push_back(std::make_shared<CombatButton>("Aggressive", CombatOption::melee_aggressive));
+	mCombatButtons.push_back(std::make_shared<CombatButton>("Safe Cast", CombatOption::magic_defensive));
+	mCombatButtons.push_back(std::make_shared<CombatButton>("Defensive", CombatOption::melee_defensive));
 
 	for (auto& button : mCombatButtons)
 	{

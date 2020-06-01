@@ -15,6 +15,7 @@
 #include "Game/Commands/PickUpCommand.h"
 #include "Game/Commands/BuryCommand.h"
 #include "Game/Commands/KillPlayerCommand.h"
+#include "game/Commands/SelectSpellCommand.h"
 
 class CommandManager
 {
@@ -44,7 +45,7 @@ public:
 	CommandManager(std::shared_ptr<Player> player, std::shared_ptr<Map> map, std::shared_ptr<MessageLog> messageLog)
 		: mPlayer(player), mMap(map), mMessageLog(messageLog)
 	{
-		mCommands["Attack"] = new AttackCommand(mPlayer, mMap);
+		mCommands["Attack"] = new AttackCommand(mPlayer, mMap, mMessageLog);
 		mCommands["Drink"] = new DrinkCommand(mPlayer);
 		mCommands["Drop"] = new DropCommand(mPlayer, mMap);
 		mCommands["Eat"] = new EatCommand(mPlayer);
@@ -58,6 +59,7 @@ public:
 		mCommands["Pick Up"] = new PickUpCommand(mPlayer, mMap, mMessageLog);
 		mCommands["Bury"] = new BuryCommand(mPlayer, mMessageLog);
 		mCommands["Kill Player"] = new KillPlayerCommand(mPlayer, mMap, mMessageLog);
+		mCommands["Select Spell"] = new SelectSpellCommand(mPlayer, mMessageLog);
 	}
 	
 	~CommandManager()

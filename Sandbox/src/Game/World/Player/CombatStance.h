@@ -17,17 +17,24 @@ private:
 
 	CombatStyle mCombatStyle;
 
+	CombatOption mActiveOption;
+
 public:
 	CombatStance()
 	{
 		mMeleeOption = CombatOption::melee_accurate;
 		mRangedOption = CombatOption::ranged_accurate;
-		mMagicOption = CombatOption::magic_standard;
+		mMagicOption = CombatOption::melee_accurate;
 
 		mCombatStyle = CombatStyle::melee;
+
+		mActiveOption = CombatOption::melee_accurate;
 	}
 
 	~CombatStance() = default;
+
+	void NewOption(CombatOption activeOption) { mActiveOption = activeOption; }
+	CombatOption NewOption() const { return mActiveOption; }
 
 	CombatOption Get() const
 	{
@@ -49,23 +56,19 @@ public:
 
 	void Set(CombatOption option)
 	{
-		switch (option)
+		switch (mCombatStyle)
 		{
-		case CombatOption::melee_accurate:
-		case CombatOption::melee_aggressive:
-		case CombatOption::melee_defensive:
-		case CombatOption::melee_controlled:
+		case CombatStyle::melee:
 			mMeleeOption = option;
 			break;
-		case CombatOption::ranged_accurate:
-		case CombatOption::ranged_rapid:
-		case CombatOption::ranged_longrange:
+		case CombatStyle::ranged:
 			mRangedOption = option;
 			break;
-		case CombatOption::magic_standard:
-		case CombatOption::magic_defensive:
+		case CombatStyle::magic:
 			mMagicOption = option;
 			break;
+		default:
+			mMeleeOption = option;
 		}
 	}
 

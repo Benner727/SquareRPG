@@ -2,8 +2,8 @@
 #include "Game/Commands/MoveInRangeCommand.h"
 #include "Game/Commands/AutoAttackCommand.h"
 
-CombatAction::CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> map)
-	: mPlayer(player), mMap(map)
+CombatAction::CombatAction(std::shared_ptr<Player> player, std::shared_ptr<Map> map, std::shared_ptr<MessageLog> messageLog)
+	: mPlayer(player), mMap(map), mMessageLog(messageLog)
 {
 	mTarget = std::dynamic_pointer_cast<NpcFighter>(mPlayer->Target());
 	mPlayer->CancelMove();
@@ -90,7 +90,7 @@ bool CombatAction::MoveInRange()
 void CombatAction::Update()
 {
 	if (!MoveInRange() && !mPlayer->HasCombatDelay())
-		mComplete = !Invoke(new AutoAttackCommand(mPlayer, mTarget));
+		mComplete = !Invoke(new AutoAttackCommand(mPlayer, mTarget, mMessageLog));
 
 	if (!mComplete) mComplete = mTarget->Dead();
 }

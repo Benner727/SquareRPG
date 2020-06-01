@@ -19,13 +19,13 @@ public:
 	CombatButton(std::string text, CombatOption combatOption)
 		: mCombatOption(combatOption), mSelected(false)
 	{
-		mDefaultSprite = new Square::Sprite("Graphics/button_default.png");
+		mDefaultSprite = new Square::Sprite("Interface/button_default.png");
 		mDefaultSprite->Parent(this);
 
-		mSelectedSprite = new Square::Sprite("Graphics/button_selected.png");
+		mSelectedSprite = new Square::Sprite("Interface/button_selected.png");
 		mSelectedSprite->Parent(this);
 
-		mText = new Square::Text(text, "Font/VeraMono.ttf", 12, { 0, 0, 0, 255 });
+		mText = new Square::Text(text, "Font/VeraMono.ttf", 11, { 0, 0, 0, 255 });
 		mText->Parent(this);
 	}
 	

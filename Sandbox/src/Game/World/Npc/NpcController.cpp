@@ -245,9 +245,9 @@ void NpcController::Update()
 		if (mNpc->CurrentPath().empty())
 		{
 			if (mNpc->InCombat()) mNpcState = NpcState::Fighting;
-			else if (mNpc->Dead()) mNpcState = NpcState::Dead;
 			else mNpcState = NpcState::Wandering;
 		}
+		if (mNpc->Dead()) mNpcState = NpcState::Dead;
 		break;
 	case NpcState::Dead:
 		if (mDeathTimer <= 0.0f)

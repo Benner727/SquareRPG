@@ -9,7 +9,7 @@
 class Region
 {
 public:
-	static const int SIZE = 256;
+	static const int SIZE = 128;
 
 private:
 	int mTopLeftX;

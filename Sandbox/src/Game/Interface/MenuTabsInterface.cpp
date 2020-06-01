@@ -5,6 +5,7 @@ MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 {
 	mCommand = "";
 	mWaitingForInteraction = false;
+	mSelectingSpell = false;
 
 	AddButton("Magic");
 	AddButton("Prayer");
@@ -13,6 +14,28 @@ MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 	AddButton("Stats");
 	AddButton("Combat");
 
+	Init();
+}
+
+MenuTabsInterface::~MenuTabsInterface()
+{
+	for (auto button : mButtons)
+		delete button.second;
+
+	for (auto tab : mTabs)
+		delete tab.second;
+}
+
+void MenuTabsInterface::AddButton(std::string button)
+{
+	mButtons[button] = new Button("Interface/buttonSquare_brown.png");
+	mButtons[button]->Parent(this);
+	mButtons[button]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - mButtons[button]->Width() * 0.5f - (mButtons[button]->Width() * (mButtons.size() - 1)),
+		Square::Graphics::SCREEN_HEIGHT - mButtons[button]->Height() * 0.5f));
+}
+
+void MenuTabsInterface::Init()
+{
 	mTabs["Combat"] = new CombatInterface(*mPlayer);
 	mTabs["Combat"]->Parent(this);
 	mTabs["Combat"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Combat"]->Height()));
@@ -42,23 +65,11 @@ MenuTabsInterface::MenuTabsInterface(std::shared_ptr<Player> player)
 	mTabs["Magic"]->Parent(this);
 	mTabs["Magic"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Magic"]->Height()));
 	mTabs["Magic"]->Active(false);
-}
 
-MenuTabsInterface::~MenuTabsInterface()
-{
-	for (auto button : mButtons)
-		delete button.second;
-
-	for (auto tab : mTabs)
-		delete tab.second;
-}
-
-void MenuTabsInterface::AddButton(std::string button)
-{
-	mButtons[button] = new Button("Graphics/buttonSquare_brown.png");
-	mButtons[button]->Parent(this);
-	mButtons[button]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - mButtons[button]->Width() * 0.5f - (mButtons[button]->Width() * (mButtons.size() - 1)),
-		Square::Graphics::SCREEN_HEIGHT - mButtons[button]->Height() * 0.5f));
+	mTabs["Spell"] = new SpellInterface(mPlayer->SpellBook());
+	mTabs["Spell"]->Parent(this);
+	mTabs["Spell"]->Pos(Square::Vector2(Square::Graphics::SCREEN_WIDTH - 208, Square::Graphics::SCREEN_HEIGHT - 256 - mButtons["Magic"]->Height()));
+	mTabs["Spell"]->Active(false);
 }
 
 void MenuTabsInterface::HandleButtons()
@@ -97,6 +108,9 @@ void MenuTabsInterface::SwitchTab(std::string key)
 		else
 		{
 			tab.second->Active(false);
+			tab.second->InUse(false);
+			mWaitingForInteraction = false;
+			mSelectingSpell = false;
 		}
 	}
 }
@@ -171,9 +185,36 @@ void MenuTabsInterface::UpdateCombat()
 {
 	mTabs["Combat"]->Update();
 
-	if (mTabs["Combat"]->Active())
+	if (mTabs["Combat"]->Active() && !mTabs["Combat"]->InUse())
 	{
 		mCommand = mTabs["Combat"]->CurrentAction();
+
+		if (mCommand == "Autocast")
+		{
+			mTabs["Combat"]->Active(false);
+			mTabs["Spell"]->Active(true);
+			mTabs["Combat"]->InUse(true);
+			mSelectingSpell = true;
+		}
+	}
+	else if (mTabs["Combat"]->InUse() && !mSelectingSpell)
+	{
+		mTabs["Combat"]->Active(true);
+		mTabs["Spell"]->Active(false);
+		mTabs["Combat"]->InUse(false);
+	}
+}
+
+void MenuTabsInterface::UpdateSpell()
+{
+	mTabs["Spell"]->Update();
+
+	if (mTabs["Spell"]->Active())
+	{
+		mCommand = mTabs["Spell"]->CurrentAction();
+
+		if (mCommand == "Select Spell")
+			mSelectingSpell = false;
 	}
 }
 
@@ -207,6 +248,7 @@ void MenuTabsInterface::Update()
 	UpdateMagic();
 	UpdateStats();
 	UpdateCombat();
+	UpdateSpell();
 }
 
 void MenuTabsInterface::Render()

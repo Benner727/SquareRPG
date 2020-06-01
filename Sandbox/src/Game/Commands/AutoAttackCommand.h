@@ -35,6 +35,9 @@ private:
 				hasAmmo = true;
 		}
 
+		if (!hasAmmo)
+			mMessageLog->AddMessage("With what ammo would you like to hit with?", { 0, 0, 0, 255 });
+
 		return hasAmmo;
 	}
 
@@ -43,14 +46,20 @@ private:
 		bool hasAutoCastSpell = (mPlayer->SpellBook().AutoCastSpell() != nullptr);
 		bool hasRunes = (hasAutoCastSpell && mPlayer->Inventory().HasItems(mPlayer->SpellBook().AutoCastSpell()->CastReq()));
 
+		if (!hasAutoCastSpell)
+			mMessageLog->AddMessage("What spell are you trying to cast?", { 0, 0, 0, 255 });
+		else if (!hasRunes)
+			mMessageLog->AddMessage("How are you planning on casting that spell?", { 0, 0, 0, 255 });
+
 		return hasRunes;
 	}
 
 public:
-	AutoAttackCommand(std::shared_ptr<Player> player, std::shared_ptr<NpcFighter> npc)
+	AutoAttackCommand(std::shared_ptr<Player> player, std::shared_ptr<NpcFighter> npc, std::shared_ptr<MessageLog> messageLog)
 	{
 		mPlayer = player;
 		mNpc = npc;
+		mMessageLog = messageLog;
 	}
 
 	~AutoAttackCommand() = default;
@@ -59,9 +68,12 @@ public:
 	{
 		bool canAttack = true;
 
-		if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::ranged)
+		if (mPlayer->GetCombatStance().Get() == CombatOption::ranged_accurate || 
+			mPlayer->GetCombatStance().Get() == CombatOption::ranged_rapid ||
+			mPlayer->GetCombatStance().Get() == CombatOption::ranged_longrange)
 			canAttack = HasAmmo();
-		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::magic)
+		else if (mPlayer->GetCombatStance().Get() == CombatOption::magic_standard ||
+			mPlayer->GetCombatStance().Get() == CombatOption::magic_defensive)
 			canAttack = CanCastSpell();
 
 		return (mNpc != nullptr) && canAttack;
@@ -73,7 +85,9 @@ public:
 		float attackRoll = 0.0f;
 		float defenseRoll = 0.0f;
 
-		if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::ranged)
+		if (mPlayer->GetCombatStance().Get() == CombatOption::ranged_accurate ||
+			mPlayer->GetCombatStance().Get() == CombatOption::ranged_rapid ||
+			mPlayer->GetCombatStance().Get() == CombatOption::ranged_longrange)
 		{
 			attackRoll = RangedFormulas::AttackRoll(*mPlayer);
 			defenseRoll = RangedFormulas::DefenseRoll(*mNpc);
@@ -87,7 +101,8 @@ public:
 					mPlayer->Gear().Remove(Gear::EquipmentSlot::weapon);
 			}
 		}
-		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::magic)
+		else if (mPlayer->GetCombatStance().Get() == CombatOption::magic_standard ||
+			mPlayer->GetCombatStance().Get() == CombatOption::magic_defensive)
 		{
 			attackRoll = MagicFormulas::AttackRoll(*mPlayer);
 			defenseRoll = MagicFormulas::DefenseRoll(*mNpc);
@@ -95,7 +110,7 @@ public:
 
 			mPlayer->Inventory().RemoveItems(mPlayer->SpellBook().AutoCastSpell()->CastReq());
 		}
-		else if (mPlayer->GetCombatStance().GetCombatStyle() == CombatStyle::melee)
+		else
 		{
 			attackRoll = MeleeFormulas::AttackRoll(*mPlayer);
 			defenseRoll = MeleeFormulas::DefenseRoll(*mNpc);

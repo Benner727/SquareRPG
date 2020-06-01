@@ -2,6 +2,7 @@
 
 Map::Map()
 {
+	/*
 	std::map<int, std::vector<Cell*>> cells;
 
 	for (int y = 0; y < 256; y++)
@@ -57,6 +58,9 @@ Map::Map()
 	cells[0].at(20 + 11 * 256) = new Cell(std::make_shared<Tile>(false, false, new Square::Sprite("Wall.png"), nullptr, std::vector<std::string>()));
 
 	mRegions.push_back(new Region(0, 0, cells));
+	*/
+
+	LoadRegions();
 
 	Square::Graphics::Instance().SetLimit(Square::VEC2_ONE * mRegions.size() * Region::SIZE * 32.0f);
 }
@@ -65,6 +69,39 @@ Map::~Map()
 {
 	for (auto region : mRegions)
 		delete region;
+}
+
+void Map::LoadRegions()
+{
+	std::string fullPath = SDL_GetBasePath();
+	fullPath.append("Assets/Map/");
+
+	std::ifstream infile(fullPath + "map.txt", std::ifstream::in);
+	if (!infile) std::cerr << "map.txt could not be opened!" << std::endl;
+	else std::cout << "Loading map..." << std::endl;
+
+	std::string line;
+
+	std::map<int, std::vector<Cell*>> cells;
+	std::vector<std::string> actions = { "Walk Here" };
+
+	while (std::getline(infile, line))
+	{
+		std::istringstream iss(line);
+		int tileNum;
+		char c;
+
+		while (iss >> tileNum >> c)
+		{
+			int x = (tileNum % (TILESET_WIDTH / TILE_SIZE)) * TILE_SIZE;
+			int y = (tileNum / (TILESET_WIDTH / TILE_SIZE)) * TILE_SIZE;
+
+			cells[0].push_back(new Cell(std::make_shared<Tile>(true, true, new Square::Sprite("Map/Tileset.png", x, y, TILE_SIZE, TILE_SIZE), nullptr, actions)));
+			cells[0].back()->Scale(Square::Vector2(2.0f, 2.0f));
+		}
+	}
+
+	mRegions.push_back(new Region(0, 0, cells));
 }
 
 Cell* Map::GetCell(Point p) const

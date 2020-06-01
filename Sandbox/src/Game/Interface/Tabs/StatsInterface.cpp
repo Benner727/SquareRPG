@@ -1,7 +1,7 @@
 #include "StatsInterface.h"
 
 StatsInterface::StatsInterface(Skills& skills)
-	: IMenuTab("Graphics/panel_brown.png", { 16, 16 }, false, true), mSkills(skills)
+	: IMenuTab("Interface/panel_brown.png", { 16, 16 }, false, true), mSkills(skills)
 {
 	for (int x = 0; x < 3; x++)
 	{

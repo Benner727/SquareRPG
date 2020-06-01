@@ -5,7 +5,7 @@ MessageLog::MessageLog(int width, int height, std::string fontPath, int fontSize
 {
 	Pos(offset);
 
-	mBackground = new Square::Sprite("Graphics/panelInset_beigeLight.png");
+	mBackground = new Square::Sprite("Interface/panelInset_beigeLight.png");
 	mBackground->Parent(this);
 	mBackground->Scale(Square::Vector2(width * (fontSize - 1) / 150.0f, height * fontSize / 75.0f));
 	mBackground->Pos(Square::Vector2(mBackground->ScaledDimensions().x * 0.5f - offset.x, (-mBackground->ScaledDimensions().y * 0.5f + 1.0f) - offset.y));

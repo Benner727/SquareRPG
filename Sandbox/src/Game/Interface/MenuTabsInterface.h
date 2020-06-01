@@ -10,6 +10,7 @@
 #include "Game/Interface/Tabs/MagicInterface.h"
 #include "Game/Interface/Tabs/StatsInterface.h"
 #include "Game/Interface/Tabs/CombatInterface.h"
+#include "Game/Interface/Tabs/SpellInterface.h"
 #include "Game/Interface/Tools/Button.h"
 
 class MenuTabsInterface : public Square::GameObject
@@ -22,8 +23,10 @@ private:
 
 	std::string mCommand;
 	bool mWaitingForInteraction;
+	bool mSelectingSpell;
 
 	void AddButton(std::string button);
+	void Init();
 
 	void HandleButtons();
 	void SwitchTab(std::string key);
@@ -34,6 +37,7 @@ private:
 	void UpdateMagic();
 	void UpdateStats();
 	void UpdateCombat();
+	void UpdateSpell();
 
 public:
 	MenuTabsInterface(std::shared_ptr<Player> player);

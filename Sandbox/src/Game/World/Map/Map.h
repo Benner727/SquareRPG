@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 #include "Game/World/Map/Region.h"
 #include "Game/Point.h"
@@ -10,10 +11,16 @@
 class Map
 {
 private:
+	const int TILE_SIZE = 16;
+	const int TILESET_WIDTH = 192;
+
 	int mWidth;
 	int mHeight;
 
 	std::vector<Region*> mRegions;
+
+	void LoadTileset();
+	void LoadRegions();
 
 public:
 	Map();

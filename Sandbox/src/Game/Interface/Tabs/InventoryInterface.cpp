@@ -1,7 +1,7 @@
 #include "InventoryInterface.h"
 
 InventoryInterface::InventoryInterface(Inventory& inventory)
-	: IMenuTab("Graphics/panel_brown.png", { 32, 32 }, true, false), mInventory(inventory)
+	: IMenuTab("Interface/panel_brown.png", { 32, 32 }, true, false), mInventory(inventory)
 {
 	for (int y = 0; y < 5; y++)
 	{

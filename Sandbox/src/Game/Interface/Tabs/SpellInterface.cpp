@@ -1,6 +1,6 @@
-#include "MagicInterface.h"
+#include "SpellInterface.h"
 
-MagicInterface::MagicInterface(ISpellBook& spellBook)
+SpellInterface::SpellInterface(ISpellBook& spellBook)
 	: IMenuTab("Interface/panel_brown.png", { 32, 32 }, false, true), mSpellBook(spellBook)
 {
 	for (int y = 0; y < 5; y++)
@@ -12,7 +12,7 @@ MagicInterface::MagicInterface(ISpellBook& spellBook)
 	}
 }
 
-std::string MagicInterface::GetAction()
+std::string SpellInterface::GetAction()
 {
 	std::string action = "";
 
@@ -20,17 +20,17 @@ std::string MagicInterface::GetAction()
 
 	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(pos).get()))
 	{
-		action = "Cast";
+		action = "Select Spell";
 	}
 
 	return action;
 }
 
-void MagicInterface::CreateActionMenu()
+void SpellInterface::CreateActionMenu()
 {
 	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
-		mActionsMenu = new ActionsMenu(spell->Name(), { "Cast" }, Square::InputHandler::Instance().MousePos());
+		mActionsMenu = new ActionsMenu(spell->Name(), { "Select Spell" }, Square::InputHandler::Instance().MousePos());
 		mSelectedSlot = PosToSlot(Square::InputHandler::Instance().MousePos());
 
 		delete mTooltip;
@@ -38,7 +38,7 @@ void MagicInterface::CreateActionMenu()
 	}
 }
 
-void MagicInterface::CreateTooltip()
+void SpellInterface::CreateTooltip()
 {
 	if (Spell* spell = dynamic_cast<Spell*>(GetSlot(Square::InputHandler::Instance().MousePos()).get()))
 	{
@@ -49,7 +49,7 @@ void MagicInterface::CreateTooltip()
 			std::vector<std::string> tooltipText;
 
 			tooltipText.push_back("Level " + std::to_string(spell->LevelReq()) + ": " + spell->Name());
-			
+
 			for (auto req : spell->CastReq())
 				tooltipText.push_back(req->Name() + " x" + std::to_string(req->Amount()));
 
@@ -60,20 +60,22 @@ void MagicInterface::CreateTooltip()
 		mSelectedSlot = -1;
 }
 
-std::shared_ptr<Square::GameObject> MagicInterface::GetSlot(int slot, bool includeActive)
+std::shared_ptr<Square::GameObject> SpellInterface::GetSlot(int slot, bool includeActive)
 {
 	std::shared_ptr<Spell> spell = nullptr;
-
-	if (slot >= 0 && slot < mSpellBook.Spells().size())
+	
+	if (slot >= 0 && slot < mSpellBook.CombatSpells().size())
 	{
 		if (includeActive || (slot != mSpellBook.ActiveSpell() && !includeActive))
-			spell = mSpellBook.Spells()[slot];
+		{
+			spell = mSpellBook.CombatSpells()[slot];
+		}
 	}
 
 	return spell;
 }
 
-std::shared_ptr<Square::GameObject> MagicInterface::GetSlot(Square::Vector2 pos, bool includeActive)
+std::shared_ptr<Square::GameObject> SpellInterface::GetSlot(Square::Vector2 pos, bool includeActive)
 {
 	int slot = PosToSlot(pos);
 
